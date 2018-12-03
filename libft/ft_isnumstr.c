@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_arrdel.c                                        :+:      :+:    :+:   */
+/*   ft_isnumstr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 18:57:53 by omaslova          #+#    #+#             */
-/*   Updated: 2018/11/21 18:57:56 by omaslova         ###   ########.fr       */
+/*   Created: 2018/12/03 12:55:28 by omaslova          #+#    #+#             */
+/*   Updated: 2018/12/03 12:55:33 by omaslova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_arrdel(char **arr)
+int		ft_isnumstr(char *str)
 {
 	int i;
+	int num;
 
 	i = 0;
-	if (arr)
+	num = ft_atoi(str);
+	if (num < 0 || num > 2147483647)
+		return (0);
+	while (str[i] != '\0')
 	{
-		while (arr[i])
-		{
-			free(arr[i]);
-			arr[i] = NULL;
-			++i;
-		}
-		free(arr);
-		arr = NULL;
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
 	}
+	return (1);
 }

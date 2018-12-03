@@ -3,6 +3,7 @@
 # include "./libft/ft_printf/ft_printf.h"
 
 int					g_fd;
+int					g_ants;
 
 typedef struct		s_link
 {
@@ -22,7 +23,9 @@ typedef struct		s_coords
 }					t_coords;
 
 t_coords			*vertex_create(char **arr, int pos);
-void				add_vertex(t_coords **list, t_coords *vertex);
 t_link				*link_add(t_link *list, char *s);
+void				add_vertex(t_coords **list, t_coords *vertex);
+void				clear_vertex(t_coords **vertex);
+void				error_handling(int num, char **arr, t_coords **v);
 
 #endif

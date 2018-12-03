@@ -97,9 +97,12 @@ int					ft_lst_push_back(t_list **alst, t_list *new);
 void				ft_lst_print(t_list *elem);
 t_list				*ft_lst_split(char const *s, char c);
 void				ft_lst_swap(t_list **first, t_list **second);
-void				ft_arrdel(char **arr, int size);
+void				ft_arrdel(char **arr);
 int					ft_sqrt(int nb);
 int					ft_digitnum(int num);
+int					ft_isnumstr(char *str);
+int					ft_emptyline(char *str);
+int					ft_countchar(char *str, char c);
 int					get_next_line(const int fd, char **line);
 
 #endif

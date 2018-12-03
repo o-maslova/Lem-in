@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_arrdel.c                                        :+:      :+:    :+:   */
+/*   ft_countchar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 18:57:53 by omaslova          #+#    #+#             */
-/*   Updated: 2018/11/21 18:57:56 by omaslova         ###   ########.fr       */
+/*   Created: 2018/12/03 17:02:42 by omaslova          #+#    #+#             */
+/*   Updated: 2018/12/03 17:02:43 by omaslova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_arrdel(char **arr)
+int			ft_countchar(char *str, char c)
 {
 	int i;
+	int res;
 
 	i = 0;
-	if (arr)
+	res = 0;
+	while (str[i] != '\0')
 	{
-		while (arr[i])
-		{
-			free(arr[i]);
-			arr[i] = NULL;
-			++i;
-		}
-		free(arr);
-		arr = NULL;
+		if (str[i] == c)
+			res++;
+		i++;
 	}
+	return (res);
 }
