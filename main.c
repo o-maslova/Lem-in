@@ -9,7 +9,11 @@ void		print_graph(t_coords *vertex)
 	while (tmp)
 	{
 		tmp_links = tmp->links;
-		ft_printf("name = %s, (%d, %d), connect to:\n", tmp->name, tmp->x, tmp->y);
+		ft_printf("name = %s, pos = %d, (%d, %d), connect to:\n", tmp->name, tmp->pos, tmp->x, tmp->y);
+		if (tmp->is_start == 1)
+			ft_printf("IS START\n");
+		if (tmp->is_end == 1)
+			ft_printf("IS END\n");
 		while (tmp_links)
 		{
 			ft_printf("%40s\n", tmp_links->name);
@@ -19,75 +23,55 @@ void		print_graph(t_coords *vertex)
 	}
 }
 
-int			check_link(char *line)
-{
-	int			w_amount;
-
-	w_amount = 0;
-	w_amount = ft_countchar(line, '-');
-	if (w_amount != 1)
-		return (-1);
-	if (ft_strchr(line, ' '))
-		return (-1);
-	return (0);
-}
-
 int			making_links(char *line, t_coords **list, t_coords	*tmp)
 {
 	char		**arr;
-	int			st_counter;
-	int			end_counter;
 
 	tmp = *list;
-	st_counter = 0;
-	end_counter = 0;
 	if (check_link(line) < 0)
 		return (-1);
 	arr = ft_strsplit(line, '-');
 	// dprintf(g_fd, "w_amount = %d\n", w_amount);
 	while (tmp)
 	{
-		st_counter = tmp->is_start == 1 ? st_counter + 1 : st_counter;
-		end_counter = tmp->is_end == 1 ? end_counter + 1 : end_counter;
+		g_amount = tmp->pos;
 		if ((ft_strcmp(arr[0], tmp->name)) == 0)
-			tmp->links = link_add(tmp->links, arr[1]);
+			tmp->links = link_add(tmp->links, arr[1], tmp->pos);
+		else if ((ft_strcmp(arr[1], tmp->name)) == 0)
+			tmp->links = link_add(tmp->links, arr[0], tmp->pos);
 		tmp = tmp->next;
 	}
-	if (st_counter > 1 || st_counter == 0)
-		error_handling(1, arr, list);
-	if (end_counter > 1 || end_counter == 0)
-		error_handling(2, arr, list);
 	ft_arrdel(arr);
 	return (1);
 }
 
-void		list_fulling(int fd, t_coords **list, char **line, int pos)
+int		list_fulling(int fd, t_coords **list, char **line, int pos)
 {
+	t_coords	*path;
 	char		**arr;
 	t_coords	*tmp;
 	int			w_amount;
 
-	w_amount = 0;
+	path = NULL;
 	if (pos == 1 || pos == 2)
-	{
-		free(*line);
-		get_next_line(fd, line);
-	}
+		check_s_e(fd, line, list, pos);
 	w_amount = ft_countchar(*line, ' ');
-	if (w_amount > 2 && *line[0] == '#')
-		return ;
-	else if (*line[0] != '#' && w_amount != 2 && w_amount != 0)
-		error_handling(4, NULL, list);
-	else if ((pos == 1 || pos == 2) && w_amount == 0)
-		error_handling(pos, NULL, list);
+	if (w_amount != 2 && *line[0] == '#')
+		return (0);
+	if ((check_err(*line, list, w_amount, pos)) == -1)
+		return (-1);
 	arr = ft_strsplit(*line, ' ');
 	if (!ft_isnumstr(arr[1]) || !ft_isnumstr(arr[2]))
 		error_handling(3, arr, list);
 	tmp = vertex_create(arr, pos);
 	if (tmp->name[0] == 'L' || tmp->name[0] == '#')
 		error_handling(4, arr, list);
+	if (tmp->is_start == 1)
+		path = vertex_create(arr, pos);
 	add_vertex(list, tmp);
 	ft_arrdel(arr);
+	dprintf(g_fd, "tmp = %s\n", tmp->name);
+	return (1);
 }
 
 void	parsing(int fd, t_coords **vertex)
@@ -100,22 +84,22 @@ void	parsing(int fd, t_coords **vertex)
 	v_tmp = NULL;
 	while (get_next_line(fd, &line) > 0)
 	{
-		if (ft_emptyline(line))
-			error_handling(6, NULL, vertex);
 		if ((ft_strcmp(line, "##start")) == 0)
-			list_fulling(fd, vertex, &line, 1);
+			i = list_fulling(fd, vertex, &line, 1);
 		else if ((ft_strcmp(line, "##end")) == 0)
-			list_fulling(fd, vertex, &line, 2);
+			i = list_fulling(fd, vertex, &line, 2);
 		else if (!ft_strchr(line, '#') && ft_strchr(line, '-'))
 			i = making_links(line, vertex, v_tmp);
 		else
-			list_fulling(fd, vertex, &line, 0);
+			i = list_fulling(fd, vertex, &line, 0);
 		free(line);
 		if (i < 0)
 			break ;
 	}
+	g_amount = (g_amount + 1) / 2;
+	dprintf(g_fd, "amount = %d\n", g_amount);
 	print_graph(*vertex);
-	clear_vertex(vertex);
+	clear_list(vertex);
 }
 
 int main(int argc, char **argv)
@@ -129,13 +113,13 @@ int main(int argc, char **argv)
 	vertex = NULL;
 	fd = open(argv[1], O_RDONLY);
 	g_fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
+	g_amount = 0;
+	// dprintf(g_fd, "%d\n", g_fd);
 	get_next_line(fd, &line);
-	if (ft_isnumstr(line))
-		g_ants = ft_atoi(line);
-	else
+	if (!ft_isnumstr(line))
 		error_handling(7, NULL, &vertex);
+	g_ants = ft_atoi(line);
 	free(line);
-	// dprintf(g_fd, "ants = %d\n", g_ants);
 	parsing(fd, &vertex);
 	system("leaks lem-in");
 	return (0);

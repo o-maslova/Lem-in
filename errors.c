@@ -2,6 +2,7 @@
 
 void	error_handling(int num, char **arr, t_coords **vert)
 {
+	dprintf(g_fd, "here\n");
 	if (num == 1)
 		perror("Error! Undefined start position!\n");
 	if (num == 2)
@@ -17,6 +18,6 @@ void	error_handling(int num, char **arr, t_coords **vert)
 	if (num == 7)
 		perror("Error! Wrong number of ants!\n");
 	ft_arrdel(arr);
-	clear_vertex(vert);
+	clear_list(vert);
 	exit(0);
 }

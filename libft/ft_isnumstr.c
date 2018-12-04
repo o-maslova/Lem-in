@@ -21,6 +21,8 @@ int		ft_isnumstr(char *str)
 	num = ft_atoi(str);
 	if (num < 0 || num > 2147483647)
 		return (0);
+	if (num == 0 && str[i] == '\0')
+		return (0);
 	while (str[i] != '\0')
 	{
 		if (!ft_isdigit(str[i]))
