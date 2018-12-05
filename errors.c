@@ -1,6 +1,6 @@
 #include "lem_in.h"
 
-void	error_handling(int num, char **arr, t_coords **vert)
+void	error_handling(int num, char **arr, t_vert **graph)
 {
 	dprintf(g_fd, "here\n");
 	if (num == 1)
@@ -18,6 +18,6 @@ void	error_handling(int num, char **arr, t_coords **vert)
 	if (num == 7)
 		perror("Error! Wrong number of ants!\n");
 	ft_arrdel(arr);
-	clear_list(vert);
+	clear_list(graph);
 	exit(0);
 }

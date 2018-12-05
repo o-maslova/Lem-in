@@ -1,6 +1,6 @@
 #include "lem_in.h"
 
-int			check_err(char *line, t_coords **list, int n, int pos)
+int			check_err(char *line, t_vert **graph, int n, int pos)
 {
 	// if (n > 2 && *line == '#')
 	// 	return (0);
@@ -9,9 +9,9 @@ int			check_err(char *line, t_coords **list, int n, int pos)
 	else if (ft_emptyline(line))
 		return (-1);
 	else if (*line != '#' && n != 2 && n != 0)
-		error_handling(3, NULL, list);
+		error_handling(3, NULL, graph);
 	else if ((pos == 1 || pos == 2) && n == 0)
-		error_handling(pos, NULL, list);
+		error_handling(pos, NULL, graph);
 	return (1);
 }
 
@@ -28,7 +28,7 @@ int			check_link(char *line)
 	return (0);
 }
 
-void		check_s_e(int fd, char **line, t_coords **list, int n)
+void		check_s_e(int fd, char **line, t_vert **graph, int n)
 {
 	static int start;
 	static int end;
@@ -37,11 +37,11 @@ void		check_s_e(int fd, char **line, t_coords **list, int n)
 	end = n == 2 ? end + 1 : end;
 	if (start > 1)
 	{
-		error_handling(1, NULL, list);
+		error_handling(1, NULL, graph);
 	}
 	else if (end > 1)
 	{
-		error_handling(2, NULL, list);
+		error_handling(2, NULL, graph);
 	}
 	free(*line);
 	get_next_line(fd, line);

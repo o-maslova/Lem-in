@@ -1,6 +1,6 @@
 #include "lem_in.h"
 
-void		clear_vertex(t_coords *vertex)
+void		clear_vertex(t_vert *vertex)
 {
 	t_link		*tmp;
 
@@ -18,9 +18,9 @@ void		clear_vertex(t_coords *vertex)
 	free(vertex);
 }
 
-void		clear_list(t_coords **list)
+void		clear_list(t_vert **list)
 {
-	t_coords	*v_tmp;
+	t_vert	*v_tmp;
 
 	while (*list)
 	{
