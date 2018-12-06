@@ -32,3 +32,15 @@ void		clear_list(t_vert **list)
 	}
 	free(*list);
 }
+
+void		clear_visits(t_vert **graph)
+{
+	t_vert	*v_tmp;
+
+	v_tmp = *graph;
+	while (v_tmp)
+	{
+		v_tmp->if_visit = 0;
+		v_tmp = v_tmp->next;
+	}
+}

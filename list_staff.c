@@ -5,10 +5,11 @@ void		link_add(t_link **list, char *s, int pos)
 	t_link *tmp;
 
 	tmp = NULL;
-	if ((*list)->name == NULL)
+	if (!(*list)->name)
 	{
 		(*list)->name = ft_strdup(s);
 		(*list)->pos = pos;
+		// dprintf(g_fd, "POS = %d\n", (*list)->pos);
 		(*list)->next = NULL;
 	}
 	else
@@ -19,6 +20,7 @@ void		link_add(t_link **list, char *s, int pos)
 		tmp->next = (t_link *)ft_memalloc(sizeof(t_link));
 		tmp->next->name = ft_strdup(s);
 		tmp->next->pos = pos;
+		// dprintf(g_fd, "POS = %d\n", tmp->next->pos);
 		tmp->next->next = NULL;
 	}
 	// return (list);
@@ -49,45 +51,51 @@ t_vert	*vertex_create(char **arr, int pos)
 	return (vrt);
 }
 
-void		add_vertex_front(t_vert **graph, t_vert *new)
-{
-	t_vert *tmp;
-	t_vert *tmp2;
+// void		add_vertex(t_vert **graph, t_vert *new) //with sort
+// {
+// 	t_vert *tmp;
+// 	t_vert *tmp2;
 
-	tmp = NULL;
-	if (new->is_start == 1)
-		START = new->pos;
-	if (!(*graph) && new)
-		*graph = new;
-	else if (new)
-	{
-		tmp = *graph;
-		while (tmp->next && tmp->x < new->x)
-			tmp = tmp->next;
-		tmp2 = tmp->next;
-		new->next = tmp2;
-		tmp->next = new;
-	}
-}
+// 	tmp = NULL;
+// 	tmp2 = NULL;
+// 	dprintf(g_fd, "push front\n");
+// 	if (!(*graph) && new)
+// 		*graph = new;
+// 	else if (new)
+// 	{
+// 		tmp = *graph;
+// 		while (tmp->next && tmp->x < new->x)
+// 		{
+// 			tmp2 = tmp;
+// 			tmp = tmp->next;
+// 		}
+// 		new->next = tmp;
+// 		if (tmp2)
+// 			tmp2->next = new;
+// 		else
+// 			*graph = new;
+// 	}
+// }
 
-void		add_vertex_back(t_vert **graph, t_vert *new)
+void		add_vertex(t_vert **graph, t_vert *new) //start is first
 {
 	t_vert *tmp;
 	t_vert *tmp2;
 
 	tmp = NULL;
 	tmp2 = NULL;
-	if (new->is_start == 1)
-			START = new->pos;
 	if (!(*graph) && new)
 		*graph = new;
-	else if (new)
+	else if (new->is_start)
+	{
+		new->next = *graph;
+		*graph = new;
+	}
+	else
 	{
 		tmp = *graph;
-		while (tmp->next && tmp->x > new->x)
+		while (tmp->next)
 			tmp = tmp->next;
-		tmp2 = tmp->next;
-		new->next = tmp2;
 		tmp->next = new;
 	}
 }

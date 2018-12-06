@@ -5,7 +5,7 @@
 
 int					g_fd;
 int					g_ants;
-int					g_amount;
+int					g_start;
 
 
 typedef struct		s_link
@@ -38,12 +38,11 @@ typedef struct		s_path
 
 t_vert				*vertex_create(char **arr, int pos);
 void				link_add(t_link **list, char *s, int pos);
-void				add_vertex_front(t_vert **graph, t_vert *nw);
-void				add_vertex_back(t_vert **graph, t_vert *nw);
-// void				add_vertex(t_vert **graph, t_vert *vrt);
+void				add_vertex(t_vert **graph, t_vert *nw);
 void				add_path(t_path **variants, t_link *path, int val);
 void				clear_list(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
+void				clear_visits(t_vert **graph);
 void				error_handling(int num, char **arr, t_vert **graph);
 void				check_s_e(int fd, char **line, t_vert **graph, int n);
 int					check_err(char *line, t_vert **graph, int n, int pos);
