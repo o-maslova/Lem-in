@@ -39,9 +39,9 @@ int			making_links(char *line, t_vert **graph)
 	{
 		// g_amount = tmp->pos;
 		if ((ft_strcmp(arr[0], tmp->name)) == 0)
-			link_add(&(tmp->links), arr[1], tmp->pos);
+			link_add_1(*graph, &(tmp->links), arr[1]);
 		else if ((ft_strcmp(arr[1], tmp->name)) == 0)
-			link_add(&(tmp->links), arr[0], tmp->pos);
+			link_add_1(*graph, &(tmp->links), arr[0]);
 		tmp = tmp->next;
 	}
 	ft_arrdel(arr);
@@ -109,7 +109,7 @@ void	parsing(int fd, t_vert **graph)
 	print_graph(*graph);
 	dprintf(g_fd, "\nstart = %d\n", g_start);
 	algorithm(graph);
-	clear_list(graph);
+	clear_graph(graph);
 }
 
 int main(int argc, char **argv)

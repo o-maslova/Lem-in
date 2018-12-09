@@ -18,6 +18,6 @@ void	error_handling(int num, char **arr, t_vert **graph)
 	if (num == 7)
 		perror("Error! Wrong number of ants!\n");
 	ft_arrdel(arr);
-	clear_list(graph);
+	clear_graph(graph);
 	exit(0);
 }
