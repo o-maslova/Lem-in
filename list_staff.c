@@ -1,50 +1,30 @@
 #include "lem_in.h"
 
-void		link_add_2(t_link **list, int pos)
+t_link		*create_link(int pos)
 {
-	t_link *tmp;
+	t_link *node;
 
-	tmp = NULL;
-	if (!(*list)->name)
-	{
-		(*list)->pos = pos;
-		// dprintf(g_fd, "POS = %d\n", (*list)->pos);
-		(*list)->next = NULL;
-	}
-	else
-	{
-		tmp = *list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = (t_link *)ft_memalloc(sizeof(t_link));
-		tmp->next->pos = pos;
-		dprintf(g_fd, "POS = %d\n", tmp->next->pos);
-		tmp->next->next = NULL;
-	}
+	node = (t_link *)ft_memalloc(sizeof(t_link));
+	node->pos = pos;
+	node->next = NULL;
+	return (node);
 }
 
-void		link_add_1(t_vert *graph, t_link **list, char *s)
+void		add_link(t_link **path, int pos)
 {
 	t_link *tmp;
 
 	tmp = NULL;
-	if (!(*list)->name)
-	{
-		(*list)->name = ft_strdup(s);
-		(*list)->pos = search_by_name(graph, s);
-		// dprintf(g_fd, "POS = %d\n", (*list)->pos);
-		(*list)->next = NULL;
-	}
+	if (!(*path))
+		*path = create_link(pos);
 	else
 	{
-		tmp = *list;
+		tmp = *path;
 		if (tmp->next)
 			while (tmp->next)
 				tmp = tmp->next;
-		tmp->next = (t_link *)ft_memalloc(sizeof(t_link));
-		tmp->next->name = ft_strdup(s);
-		tmp->next->pos = search_by_name(graph, s);
-		tmp->next->next = NULL;
+		tmp->next = create_link(pos);
+		// dprintf(g_fd, "POS = %d\n", tmp->pos);
 	}
 }
 
@@ -57,19 +37,18 @@ t_vert		*vertex_create(char **arr, int pos)
 	if (arr)
 	{
 		vrt = (t_vert *)ft_memalloc(sizeof(t_vert));
-		vrt->links = (t_link *)ft_memalloc(sizeof(t_link));
-		// vrt->links->name = NULL;
 		vrt->name = ft_strdup(arr[0]);
 		vrt->x = ft_atoi(arr[1]);
 		vrt->y = ft_atoi(arr[2]);
 		vrt->is_start = pos == 1 ? 1 : 0;
 		vrt->is_end = pos == 2 ? 1 : 0;
-		if (pos == 1 || pos == 2)
-			vrt->pos = i * -1;
+		// if (pos == 1 || pos == 2)
+			// vrt->pos = i * -1;
 		// else if (pos == 2)
 		// 	vrt->pos = -2;
-		else
-			vrt->pos = i;
+		// else
+		vrt->pos = i;
+		g_amount = vrt->pos;
 		vrt->next = NULL;
 	}
 	i++;
@@ -125,56 +104,49 @@ void		add_vertex(t_vert **graph, t_vert *new) //start is first
 	}
 }
 
-t_link		**dup_list(t_link *list, t_link **new_path)
+int			count_elem(t_link *list)
 {
-	// t_link *new_path;
-	t_link *tmp;
-	// t_link *tmp2;
+	int		res;
+	t_link	*tmp;
 
-	// new_path = (t_link *)ft_memalloc(sizeof(t_link));
+	res = 0;
 	if (list)
 	{
 		tmp = list;
-		// tmp2 = new_path;
-		*new_path = (t_link *)ft_memalloc(sizeof(t_link));
 		while (tmp)
 		{
-			// if (tmp->is_start == 1)
-			// 	tmp2->is_start = 1;
-			// tmp2->name = NULL;
-			// tmp2->pos = tmp->pos;
-			link_add_2(new_path, tmp->pos);
-			dprintf(g_fd, "new_list pos %d\n", (*new_path)->pos);
-			// tmp2 = tmp2->next;
+			res++;
 			tmp = tmp->next;
-
 		}
-		// tmp2->next = NULL;
 	}
-	return (new_path);
+	return (res);
 }
 
-t_path		*create_path(t_link *link, int val)
+t_path		*create_path(t_link *link)
 {
-	t_link *l_tmp;
-	t_path *tmp;
+	t_link	*l_tmp;
+	t_path	*tmp;
+	int		i;
 
 	tmp = NULL;
 	if (link)
 	{
 		tmp = (t_path *)ft_memalloc(sizeof(t_path));
-		tmp->path = (t_link **)ft_memalloc(sizeof(t_link *));
-		tmp->path = dup_list(link, tmp->path);
-		l_tmp = *(tmp->path);
+		i = count_elem(link);
+		tmp->path_val = i;
+		tmp->path = (int *)ft_memalloc(sizeof(int) * (i + 1));
+		l_tmp = link;
+		i = 0;
 		while (l_tmp)
 		{
-			dprintf(g_fd, "node #%d\n", l_tmp->pos);
+			tmp->path[i] = l_tmp->pos;
 			l_tmp = l_tmp->next;
+			i++;
 		}
-		// tmp->path = link;
-		tmp->path_val = val;
+		tmp->path[i] = -1;
 		tmp->next = NULL;
 	}
+	// print_path_2(tmp);
 	return (tmp);
 }
 

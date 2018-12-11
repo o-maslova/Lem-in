@@ -8,13 +8,13 @@ t_vert		*search_by_pos(t_vert *graph, int pos)
 	tmp = tmp->next;
 	while (tmp)
 	{
-		dprintf(g_fd, "tmp = %s, is_visit %d\n", tmp->name, tmp->if_visit);
-		if (tmp->pos == pos && !tmp->is_start)
+		// dprintf(g_fd, "tmp = %s, is_visit %d\n", tmp->name, tmp->if_visit);
+		if (tmp->pos == pos)
 		{
-			if (tmp->if_visit == 0 || tmp->is_end)
-			{
+			// if (tmp->if_visit == 0 || tmp->is_end)
+			// {
 				return (tmp);
-			}
+			// }
 		}
 		tmp = tmp->next;
 	}

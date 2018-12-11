@@ -1,48 +1,65 @@
 #include "lem_in.h"	
 
+void		print_matrix(int **links)
+{
+	int i;
+	int j;
+
+	i = 0;
+	dprintf(g_fd, " ");
+	while (i < g_amount)
+	{
+		dprintf(g_fd, "%5d", i++);
+	}
+	dprintf(g_fd, "\n");
+	i = 0;
+	while (i < g_amount)
+	{
+		j = 0;
+		while (j < g_amount)
+		{
+			if (j == 0)
+				dprintf(g_fd, "%d", i);
+			dprintf(g_fd, "%5d", links[i][j]);
+			j++;
+		}
+		dprintf(g_fd, "\n");
+		i++;
+	}
+}
+
 void		print_graph(t_vert *graph)
 {
 	t_vert		*tmp;
-	t_link		*tmp_links;
 
 	tmp = graph;
 	while (tmp)
 	{
-		tmp_links = tmp->links;
-		ft_printf("\nname = %s, pos = %d, (%d, %d), connect to:\n", tmp->name, tmp->pos, tmp->x, tmp->y);
+		ft_printf("\nname = %s, pos = %d, (%d, %d)\n", tmp->name, tmp->pos, tmp->x, tmp->y);
 		if (tmp->is_start == 1)
 			ft_printf("IS START\n");
 		if (tmp->is_end == 1)
 			ft_printf("IS END\n");
-		while (tmp_links)
-		{
-			ft_printf("%40s, %d\n", tmp_links->name, tmp_links->pos);
-			tmp_links = tmp_links->next;
-		}
-		// dprintf(g_fd, "sizeof node = %lu\n", sizeof(t_vert));
 		tmp = tmp->next;
 	}
-	// dprintf(g_fd, "sizeof list = %lu\n", sizeof(*graph));
 }
 
-int			making_links(char *line, t_vert **graph)
+int			making_links(char *line, t_vert **graph, int **links)
 {
 	t_vert	*tmp;
 	char	**arr;
+	int		vertex[2];
 
 	tmp = *graph;
 	if (check_link(line) < 0)
 		return (-1);
 	arr = ft_strsplit(line, '-');
-	// dprintf(g_fd, "w_amount = %d\n", w_amount);
-	while (tmp)
+	vertex[0] = search_by_name(*graph, arr[0]);
+	vertex[1] = search_by_name(*graph, arr[1]);
+	if (vertex[0] >= 0 && vertex[1] >= 0)
 	{
-		// g_amount = tmp->pos;
-		if ((ft_strcmp(arr[0], tmp->name)) == 0)
-			link_add_1(*graph, &(tmp->links), arr[1]);
-		else if ((ft_strcmp(arr[1], tmp->name)) == 0)
-			link_add_1(*graph, &(tmp->links), arr[0]);
-		tmp = tmp->next;
+		links[vertex[0]][vertex[1]] = 1;
+		links[vertex[1]][vertex[0]] = 1;
 	}
 	ft_arrdel(arr);
 	return (1);
@@ -81,15 +98,31 @@ int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 	return (1);
 }
 
+int		**memory_allocate(int *check)
+{
+	int i;
+	int **tmp;
+
+	i = 0;
+	*check += 1;
+	g_amount += 1;
+	tmp = (int **)ft_memalloc(sizeof(int *) * g_amount);
+	while (i < g_amount)
+	{
+		tmp[i] = (int *)ft_memalloc(sizeof(int) * g_amount);
+		i++;
+	}
+	return (tmp);
+}
+
 void	parsing(int fd, t_vert **graph)
 {
 	int			i;
+	int			**links;
+	static int	check;
 	char		*line;
-	t_link		*path;
-
+	
 	i = 0;
-	path = (t_link *)ft_memalloc(sizeof(t_link));
-	path->name = NULL;
 	while (get_next_line(fd, &line) > 0)
 	{
 		if ((ft_strcmp(line, "##start")) == 0)
@@ -97,7 +130,11 @@ void	parsing(int fd, t_vert **graph)
 		else if ((ft_strcmp(line, "##end")) == 0)
 			i = list_fulling(fd, graph, &line, 2);
 		else if (!ft_strchr(line, '#') && ft_strchr(line, '-'))
-			i = making_links(line, graph);
+		{
+			if (check == 0)
+				links = memory_allocate(&check);
+			i = making_links(line, graph, links);
+		}
 		else
 			i = list_fulling(fd, graph, &line, 0);
 		free(line);
@@ -108,8 +145,10 @@ void	parsing(int fd, t_vert **graph)
 	// dprintf(g_fd, "amount = %d\n", g_amount);
 	print_graph(*graph);
 	dprintf(g_fd, "\nstart = %d\n", g_start);
-	algorithm(graph);
+	print_matrix(links);
+	new_algo(graph, links);
 	clear_graph(graph);
+	clear_matrix(links);
 }
 
 int main(int argc, char **argv)
