@@ -143,7 +143,7 @@ t_path		*create_path(t_link *link)
 			l_tmp = l_tmp->next;
 			i++;
 		}
-		tmp->path[i] = -1;
+		// tmp->path[i] = -1;
 		tmp->next = NULL;
 	}
 	// print_path_2(tmp);

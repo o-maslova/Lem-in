@@ -55,4 +55,6 @@ t_vert				*search_by_pos(t_vert *graph, int pos);
 void				new_algo(t_vert **graph, int **links);
 void				print_graph(t_vert *graph);
 
+void		print_matrix(int **links);
+
 #endif
