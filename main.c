@@ -94,7 +94,6 @@ int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 		error_handling(3, arr, graph);
 	add_node(graph, arr, pos);
 	ft_arrdel(arr);
-	// dprintf(g_fd, "tmp = %s\n", tmp->name);
 	return (1);
 }
 

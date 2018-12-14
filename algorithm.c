@@ -15,6 +15,22 @@ void		print_path(t_link *path)
 	}
 }
 
+void		print_variants(t_path *path)
+{
+	int i;
+	t_path *tmp;
+
+	tmp = path;
+	while (tmp)
+	{
+		i = -1;
+		while (++i < tmp->path_val)
+			dprintf(g_fd, "%d\n", tmp->path[i]);
+		dprintf(g_fd, "\n");
+		tmp = tmp->next;
+	}
+}
+
 int			check_path(t_link *path)
 {
 	int		check;
@@ -29,15 +45,6 @@ int			check_path(t_link *path)
 		tmp = tmp->next;
 	}
 	return (check);
-}
-
-void		swap(int *a, int *b)
-{
-	int tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
 }
 
 // void		going_deeper(int **links, t_link **path, int row, int col)
@@ -88,39 +95,51 @@ void		swap(int *a, int *b)
 // }
 
 
+void		match_visited(int **links, int i, int j, int order)
+{
+	if (order == 1)
+	{
+		while (j < g_amount)
+		{
+			if (links[j][i] == 1)
+				links[j][i] = -1;
+			j++;
+		}
+	}
+	else if (order == 2)
+	{
+		while (j < g_amount)
+		{
+			if (links[i][j] == 1)
+				links[i][j] = -1;
+			j++;
+		}
+	}
+}
+
 void		going_deeper(int **links, t_link **path, int i, int j)
 {
-	t_path	*list;
-	t_path	*variant;
-	// int			tmp;
-
-	list = NULL;
 	while (++j < g_amount)
 	{
+		if (links[i][g_amount - 1] == 1)
+		{
+			add_link(path, g_amount);
+			match_visited(links, i, j, 2);
+			break ;
+		}
 		if (links[i][j] == 1)
 		{
 			add_link(path, j + 1);
-			links[i][j] = -1;
-			if (links[i][g_amount - 1] == 1)
-			{
-				links[i][g_amount - 1] = -1;
-				break ;
-			}
+			match_visited(links, j, i, 1);
 			return (going_deeper(links, path, j, i));
 		}
-		// j++;
 	}
-	print_path(*path);
-	// dprintf(g_fd, "i = %d, tmp = %d\n", i, tmp);
-	variant = create_path(*path);
-	add_path(&list, variant);
-	clear_link(path);
-	print_matrix(links);
 }
 
 void		new_algo(t_vert **graph, int **links)
 {
 	t_path	*list;
+	t_path	*variant;
 	t_link	*path;
 	int		i;
 	int		j;
@@ -138,28 +157,17 @@ void		new_algo(t_vert **graph, int **links)
 			{
 				add_link(&path, j + 1);
 				links[0][j] = -1;
-				// j -= 1;
 				going_deeper(links, &path, j, i);
-				// print_path(path);
-				// if (check_path(path))
-				// {
-				// 	variant = create_path(path);
-				// 	add_path(&list, variant);
-				// }
-				// clear_link(&path);
-				// j = 1;
-			// }
-				// if (links[i][j] == 1)
-				// {
-					// i = 1;
+				variant = create_path(path);
+				add_path(&list, variant);
+				// clear_path(&variant);
+				clear_link(&path);
 				dprintf(g_fd,"\n");
-				// break ;
 			}
 			j++;
 		}
+		print_variants(list);
 		break ;
 	}
-	// vert = *graph;
-	// vert = search_vertex(*graph, START);
-	// 
+	clear_path(&list);
 }

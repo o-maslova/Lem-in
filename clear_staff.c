@@ -15,25 +15,12 @@ void		clear_graph(t_vert **graph)
 
 	while (*graph)
 	{
-		// dprintf(g_fd, "name = %s\n", (*graph)->name);
 		ft_strdel(&((*graph)->name));
 		v_tmp = *graph;
 		*graph = (*graph)->next;
 		clear_vertex(v_tmp);
 	}
 	free(*graph);
-}
-
-void		clear_visits(t_vert **graph)
-{
-	t_vert	*v_tmp;
-
-	v_tmp = *graph;
-	while (v_tmp)
-	{
-		v_tmp->if_visit = 0;
-		v_tmp = v_tmp->next;
-	}
 }
 
 void		clear_matrix(int **links)
@@ -60,4 +47,24 @@ void		clear_link(t_link **link)
 		free(*link);
 		*link = tmp->next;
 	}
+}
+
+void		clear_path(t_path **path)
+{
+	t_path *clear;
+
+	clear = NULL;
+	if ((*path)->next)
+	{
+		while ((*path)->next)
+		{
+			clear = (*path);
+			free((*path)->path);
+			free((*path));
+			(*path) = clear->next;
+		}
+	}
+	free((*path)->path);
+	free(*path);
+	*path = NULL;
 }

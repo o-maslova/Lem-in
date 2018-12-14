@@ -24,7 +24,6 @@ void		add_link(t_link **path, int pos)
 			while (tmp->next)
 				tmp = tmp->next;
 		tmp->next = create_link(pos);
-		// dprintf(g_fd, "POS = %d\n", tmp->pos);
 	}
 }
 
@@ -42,11 +41,6 @@ t_vert		*vertex_create(char **arr, int pos)
 		vrt->y = ft_atoi(arr[2]);
 		vrt->is_start = pos == 1 ? 1 : 0;
 		vrt->is_end = pos == 2 ? 1 : 0;
-		// if (pos == 1 || pos == 2)
-			// vrt->pos = i * -1;
-		// else if (pos == 2)
-		// 	vrt->pos = -2;
-		// else
 		vrt->pos = i;
 		g_amount = vrt->pos;
 		vrt->next = NULL;
@@ -143,10 +137,8 @@ t_path		*create_path(t_link *link)
 			l_tmp = l_tmp->next;
 			i++;
 		}
-		// tmp->path[i] = -1;
 		tmp->next = NULL;
 	}
-	// print_path_2(tmp);
 	return (tmp);
 }
 

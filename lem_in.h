@@ -44,7 +44,7 @@ t_path				*create_path(t_link *link);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
 void				clear_link(t_link **link);
-// void				clear_visits(t_vert **graph);
+void				clear_path(t_path **path);
 void				clear_matrix(int **links);
 void				error_handling(int num, char **arr, t_vert **graph);
 void				check_s_e(int fd, char **line, t_vert **graph, int n);
