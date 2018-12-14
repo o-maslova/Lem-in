@@ -32,6 +32,8 @@ int			search_by_name(t_vert *graph, char *name)
 	{
 		res = ft_strcmp(tmp->name, name);
 		// dprintf(g_fd, "tmp = %s, is_visit %d\n", tmp->name, tmp->if_visit);
+		// if (res == 0 && tmp->is_start)
+		// 	return (0);
 		if (res == 0)
 			return (tmp->pos);
 		tmp = tmp->next;

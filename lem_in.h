@@ -1,12 +1,14 @@
 #ifndef LEM_IN
 # define LEM_IN
 # define START (*graph)->pos
+# define END (*graph)
 # define VRTX_NUM vrt->pos
 # include "./libft/ft_printf/ft_printf.h"
 
 int					g_fd;
 int					g_ants;
 int					g_start;
+int					g_end;
 int					g_amount;
 
 typedef struct		s_vert
@@ -52,7 +54,7 @@ int					check_err(char *line, t_vert **graph, int n, int pos);
 int					check_link(char *line);
 int					search_by_name(t_vert *graph, char *name);
 t_vert				*search_by_pos(t_vert *graph, int pos);
-void				new_algo(t_vert **graph, int **links);
+void				new_algo(int **links);
 void				print_graph(t_vert *graph);
 
 void		print_matrix(int **links);

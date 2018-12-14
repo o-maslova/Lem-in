@@ -1,4 +1,4 @@
-#include "lem_in.h"	
+#include "lem_in.h"
 
 void		print_matrix(int **links)
 {
@@ -51,6 +51,7 @@ int			making_links(char *line, t_vert **graph, int **links)
 	int		vertex[2];
 
 	tmp = *graph;
+	// add_node()
 	if (check_link(line) < 0)
 		return (-1);
 	arr = ft_strsplit(line, '-');
@@ -67,20 +68,26 @@ int			making_links(char *line, t_vert **graph, int **links)
 
 void	add_node(t_vert **graph, char **arr, int pos)
 {
-	t_vert		*tmp;
+	// static t_vert	*end;
+	t_vert			*tmp;
 	 
 	tmp = vertex_create(arr, pos);
 	if (tmp->name[0] == 'L' || tmp->name[0] == '#')
 		error_handling(4, arr, graph);
-	add_vertex(graph, tmp);
 	if (pos == 1)
 		g_start = tmp->pos;
+	else if(pos == 2)
+	{
+		// end = tmp;
+		g_end = tmp->pos;
+	}
+	add_vertex(graph, tmp);
 }
 
 int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 {
-	char		**arr;
-	int			w_amount;
+	char			**arr;
+	int				w_amount;
 
 	if (pos == 1 || pos == 2)
 		check_s_e(fd, line, graph, pos);
@@ -92,6 +99,7 @@ int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 	arr = ft_strsplit(*line, ' ');
 	if (!ft_isnumstr(arr[1]) || !ft_isnumstr(arr[2]))
 		error_handling(3, arr, graph);
+	// if (pos != 2)
 	add_node(graph, arr, pos);
 	ft_arrdel(arr);
 	return (1);
@@ -145,7 +153,7 @@ void	parsing(int fd, t_vert **graph)
 	print_graph(*graph);
 	dprintf(g_fd, "\nstart = %d\n", g_start);
 	print_matrix(links);
-	new_algo(graph, links);
+	new_algo(links);
 	clear_graph(graph);
 	clear_matrix(links);
 }
@@ -161,13 +169,12 @@ int main(int argc, char **argv)
 	graph = NULL;
 	fd = open(argv[1], O_RDONLY);
 	g_fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
-	// g_amount = 0;
-	// dprintf(g_fd, "%d\n", g_fd);
+	if (fd < 0)
+		exit(0);
 	get_next_line(fd, &line);
 	if (!ft_isnumstr(line))
 		error_handling(7, NULL, &graph);
 	g_ants = ft_atoi(line);
-
 	free(line);
 	parsing(fd, &graph);
 	system("leaks lem-in");

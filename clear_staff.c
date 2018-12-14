@@ -54,17 +54,20 @@ void		clear_path(t_path **path)
 	t_path *clear;
 
 	clear = NULL;
-	if ((*path)->next)
+	if (*path)
 	{
-		while ((*path)->next)
+		if ((*path)->next)
 		{
-			clear = (*path);
-			free((*path)->path);
-			free((*path));
-			(*path) = clear->next;
+			while ((*path)->next)
+			{
+				clear = (*path);
+				free((*path)->path);
+				free((*path));
+				(*path) = clear->next;
+			}
 		}
+		free((*path)->path);
+		free(*path);
+		*path = NULL;
 	}
-	free((*path)->path);
-	free(*path);
-	*path = NULL;
 }

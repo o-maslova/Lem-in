@@ -41,11 +41,13 @@ t_vert		*vertex_create(char **arr, int pos)
 		vrt->y = ft_atoi(arr[2]);
 		vrt->is_start = pos == 1 ? 1 : 0;
 		vrt->is_end = pos == 2 ? 1 : 0;
-		vrt->pos = i;
+		if (vrt->is_start)
+			vrt->pos = 0;
+		else
+			vrt->pos = ++i;
 		g_amount = vrt->pos;
 		vrt->next = NULL;
 	}
-	i++;
 	return (vrt);
 }
 
@@ -77,11 +79,9 @@ t_vert		*vertex_create(char **arr, int pos)
 
 void		add_vertex(t_vert **graph, t_vert *new) //start is first
 {
-	t_vert *tmp;
-	t_vert *tmp2;
+	t_vert		*tmp;
 
 	tmp = NULL;
-	tmp2 = NULL;
 	if (!(*graph) && new)
 		*graph = new;
 	else if (new->is_start)
