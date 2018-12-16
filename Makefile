@@ -1,7 +1,17 @@
 NAME = lem-in
 LIB = ./libft/libft.a
 FLAGS = -Wall -Wextra -Werror -g
-SRC = ./main.c ./list_staff.c ./clear_staff.c ./errors.c ./check.c ./algorithm.c ./search.c
+SRC = ./main.c \
+		./vertex_staff.c \
+		./clear_staff.c \
+		./errors.c \
+		./check.c \
+		./algorithm.c \
+		./search.c \
+		./link_staff.c \
+		./path_staff.c \
+		./print_staff.c
+
 BINS = $(SRC:.c=.o)
 HEADER = ./lem_in.h
 

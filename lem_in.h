@@ -1,13 +1,21 @@
-#ifndef LEM_IN
-# define LEM_IN
-# define START (*graph)->pos
-# define END (*graph)
-# define VRTX_NUM vrt->pos
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lem_in.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/12/16 18:08:38 by omaslova          #+#    #+#             */
+/*   Updated: 2018/12/16 18:08:39 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef LEM_IN_H
+# define LEM_IN_H
 # include "./libft/ft_printf/ft_printf.h"
 
 int					g_fd;
 int					g_ants;
-int					g_start;
 int					g_end;
 int					g_amount;
 
@@ -38,7 +46,6 @@ typedef struct		s_path
 }					t_path;
 
 t_vert				*vertex_create(char **arr, int pos);
-// t_link				*create_link(int pos);
 void				add_link(t_link **path, int pos);
 void				add_vertex(t_vert **graph, t_vert *nw);
 void				add_path(t_path **variants, t_path *path);
@@ -53,10 +60,13 @@ void				check_s_e(int fd, char **line, t_vert **graph, int n);
 int					check_err(char *line, t_vert **graph, int n, int pos);
 int					check_link(char *line);
 int					search_by_name(t_vert *graph, char *name);
+int					count_link_elem(t_link *list);
+int					**memory_allocate(int *check);
 t_vert				*search_by_pos(t_vert *graph, int pos);
-void				new_algo(int **links);
-void				print_graph(t_vert *graph);
+void				algorithm(int **links);
 
-void		print_matrix(int **links);
+void				print_graph(t_vert *graph);
+void				print_matrix(int **links);
+void				print_path(t_link *path);
 
 #endif

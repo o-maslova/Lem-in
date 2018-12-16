@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   errors.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/12/16 18:06:37 by omaslova          #+#    #+#             */
+/*   Updated: 2018/12/16 18:06:42 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 void	error_handling(int num, char **arr, t_vert **graph)
 {
-	dprintf(g_fd, "here\n");
 	if (num == 1)
 		perror("Error! Undefined start position!\n");
 	if (num == 2)

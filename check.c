@@ -1,9 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/12/16 18:08:03 by omaslova          #+#    #+#             */
+/*   Updated: 2018/12/16 18:08:16 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 int			check_err(char *line, t_vert **graph, int n, int pos)
 {
-	// if (n > 2 && *line == '#')
-	// 	return (0);
 	if (n > 2 && *line != '#')
 		return (-1);
 	else if (ft_emptyline(line))

@@ -1,57 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/12/16 18:07:17 by omaslova          #+#    #+#             */
+/*   Updated: 2018/12/16 18:07:18 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
-void		print_matrix(int **links)
-{
-	int i;
-	int j;
-
-	i = 0;
-	dprintf(g_fd, " ");
-	while (i < g_amount)
-	{
-		dprintf(g_fd, "%5d", i++);
-	}
-	dprintf(g_fd, "\n");
-	i = 0;
-	while (i < g_amount)
-	{
-		j = 0;
-		while (j < g_amount)
-		{
-			if (j == 0)
-				dprintf(g_fd, "%d", i);
-			dprintf(g_fd, "%5d", links[i][j]);
-			j++;
-		}
-		dprintf(g_fd, "\n");
-		i++;
-	}
-}
-
-void		print_graph(t_vert *graph)
-{
-	t_vert		*tmp;
-
-	tmp = graph;
-	while (tmp)
-	{
-		ft_printf("\nname = %s, pos = %d, (%d, %d)\n", tmp->name, tmp->pos, tmp->x, tmp->y);
-		if (tmp->is_start == 1)
-			ft_printf("IS START\n");
-		if (tmp->is_end == 1)
-			ft_printf("IS END\n");
-		tmp = tmp->next;
-	}
-}
-
-int			making_links(char *line, t_vert **graph, int **links)
+int		making_links(char *line, t_vert **graph, int **links)
 {
 	t_vert	*tmp;
 	char	**arr;
 	int		vertex[2];
 
 	tmp = *graph;
-	// add_node()
 	if (check_link(line) < 0)
 		return (-1);
 	arr = ft_strsplit(line, '-');
@@ -68,26 +35,20 @@ int			making_links(char *line, t_vert **graph, int **links)
 
 void	add_node(t_vert **graph, char **arr, int pos)
 {
-	// static t_vert	*end;
-	t_vert			*tmp;
-	 
+	t_vert *tmp;
+
 	tmp = vertex_create(arr, pos);
 	if (tmp->name[0] == 'L' || tmp->name[0] == '#')
 		error_handling(4, arr, graph);
-	if (pos == 1)
-		g_start = tmp->pos;
-	else if(pos == 2)
-	{
-		// end = tmp;
+	if (pos == 2)
 		g_end = tmp->pos;
-	}
 	add_vertex(graph, tmp);
 }
 
 int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 {
-	char			**arr;
-	int				w_amount;
+	char	**arr;
+	int		w_amount;
 
 	if (pos == 1 || pos == 2)
 		check_s_e(fd, line, graph, pos);
@@ -99,27 +60,9 @@ int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 	arr = ft_strsplit(*line, ' ');
 	if (!ft_isnumstr(arr[1]) || !ft_isnumstr(arr[2]))
 		error_handling(3, arr, graph);
-	// if (pos != 2)
 	add_node(graph, arr, pos);
 	ft_arrdel(arr);
 	return (1);
-}
-
-int		**memory_allocate(int *check)
-{
-	int i;
-	int **tmp;
-
-	i = 0;
-	*check += 1;
-	g_amount += 1;
-	tmp = (int **)ft_memalloc(sizeof(int *) * g_amount);
-	while (i < g_amount)
-	{
-		tmp[i] = (int *)ft_memalloc(sizeof(int) * g_amount);
-		i++;
-	}
-	return (tmp);
 }
 
 void	parsing(int fd, t_vert **graph)
@@ -128,7 +71,7 @@ void	parsing(int fd, t_vert **graph)
 	int			**links;
 	static int	check;
 	char		*line;
-	
+
 	i = 0;
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -148,17 +91,14 @@ void	parsing(int fd, t_vert **graph)
 		if (i < 0)
 			break ;
 	}
-	// g_amount = (g_amount + 1) / 2;
-	// dprintf(g_fd, "amount = %d\n", g_amount);
 	print_graph(*graph);
-	dprintf(g_fd, "\nstart = %d\n", g_start);
 	// print_matrix(links);
-	new_algo(links);
+	algorithm(links);
 	clear_graph(graph);
 	clear_matrix(links);
 }
 
-int main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	int			fd;
 	char		*line;
