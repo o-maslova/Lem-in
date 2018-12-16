@@ -120,18 +120,28 @@ void		match_visited(int **links, int i, int order)
 	}
 }
 
-void		remove_last(t_link **path)
+void		remove_part(t_link **path, int pos)
 {
-	t_link *tmp;
 	t_link *fr;
+	t_link *tmp;
+	t_link *tmp_2;
 
 	tmp = *path;
-	while (tmp->next)
+	while (tmp && tmp->pos != pos)
+	{
 		tmp = tmp->next;
-	fr = tmp;
-	free(tmp);
-	tmp = NULL;
-	// fr = NULL;
+		tmp_2 = tmp;
+	}
+	tmp = tmp->next;
+	while (tmp)
+	{
+		fr = tmp->next;
+		free(tmp);
+		tmp = fr;
+	}
+	// tmp = NULL;
+	if (tmp_2)
+		tmp_2->next = NULL;
 }
 
 int			count_match(int *links)
@@ -152,13 +162,12 @@ int			count_match(int *links)
 
 int			going_deeper(int **links, t_link **path, int i)
 {
-	int	check;
+	static int	pos;
+	int			check;
 	int			k;
 
 	k = 0;
 	check = 0;
-	// if ((check = count_match(links[i])) == 0)
-	// 	return (-1);
 	// dprintf(g_fd,"i = %d, check = %d\n", i, check);
 	while (++k < g_amount)
 	{
@@ -166,26 +175,27 @@ int			going_deeper(int **links, t_link **path, int i)
 		{
 			add_link(path, g_end);
 			match_visited(links, i, 2);
-			// check = 1;
 			break ;
 		}
 		if (links[i][k] == 1)
 		{
 			add_link(path, k);
 			match_visited(links, k, 1);
-			if ((check = count_match(links[k])) == 0)
-				return (i);
+			check = count_match(links[k]);
+			if (check > 1)
+				pos = k;
+			if (check == 0)
+			{
+				remove_part(path, pos);
+				return (pos);
+			}
 			i = k;
 			k = 0;
-			// return (k);
 		}
-		// continue ;
 	}
 	dprintf(g_fd,"\n");
-	print_matrix(links);
-	print_path(*path);
+	// print_matrix(links);
 	return (0);
-	// if (check == 0)
 }
 
 void		new_algo(int **links)
@@ -203,7 +213,7 @@ void		new_algo(int **links)
 	while (i < g_amount)
 	{
 		j = 0;
-		while ((i = count_match(links[0])))
+		while ((i = count_match(links[j])))
 		{
 			// if (links[i][j] == 1)
 			// {
@@ -213,8 +223,10 @@ void		new_algo(int **links)
 				if (k == 0)
 				{
 					variant = create_path(path);
+					// print_path(path);
 					add_path(&list, variant);
 					clear_link(&path);
+					j = 0;
 				}
 				else
 				{

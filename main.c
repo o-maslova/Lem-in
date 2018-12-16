@@ -152,7 +152,7 @@ void	parsing(int fd, t_vert **graph)
 	// dprintf(g_fd, "amount = %d\n", g_amount);
 	print_graph(*graph);
 	dprintf(g_fd, "\nstart = %d\n", g_start);
-	print_matrix(links);
+	// print_matrix(links);
 	new_algo(links);
 	clear_graph(graph);
 	clear_matrix(links);
