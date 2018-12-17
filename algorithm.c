@@ -166,4 +166,5 @@ void		algorithm(int **links)
 	}
 	// print_variants(list);
 	clear_path(&list);
+	clear_matrix(links);
 }

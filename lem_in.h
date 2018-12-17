@@ -21,11 +21,9 @@ int					g_amount;
 
 typedef struct		s_vert
 {
-	int				path_val;
 	int				pos;
 	int				is_start;
 	int				is_end;
-	int				if_visit;
 	char			*name;
 	int				x;
 	int				y;
@@ -49,6 +47,7 @@ t_vert				*vertex_create(char **arr, int pos);
 void				add_link(t_link **path, int pos);
 void				add_vertex(t_vert **graph, t_vert *nw);
 void				add_path(t_path **variants, t_path *path);
+void				add_node(t_vert **graph, char **arr, int pos);
 t_path				*create_path(t_link *link);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
@@ -56,17 +55,21 @@ void				clear_link(t_link **link);
 void				clear_path(t_path **path);
 void				clear_matrix(int **links);
 void				error_handling(int num, char **arr, t_vert **graph);
-void				check_s_e(int fd, char **line, t_vert **graph, int n);
+void				check_s_e(t_vert **graph, int n);
 int					check_err(char *line, t_vert **graph, int n, int pos);
 int					check_link(char *line);
 int					search_by_name(t_vert *graph, char *name);
+// int					list_fulling(int fd, t_vert **graph, char **line, int pos);
+// int					making_links(char *line, t_vert **graph, int **links);
 int					count_link_elem(t_link *list);
 int					**memory_allocate(int *check);
-t_vert				*search_by_pos(t_vert *graph, int pos);
+t_vert				search_by_pos(t_vert *graph, int pos);
+int					**parsing(int fd, t_vert **graph, int **links);
 void				algorithm(int **links);
 
 void				print_graph(t_vert *graph);
-void				print_matrix(int **links);
+void				print_matrix(int fd, int **links);
 void				print_path(t_link *path);
+void				print_variants(int fd, t_path *path);
 
 #endif

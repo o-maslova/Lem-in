@@ -10,7 +10,8 @@ SRC = ./main.c \
 		./search.c \
 		./link_staff.c \
 		./path_staff.c \
-		./print_staff.c
+		./print_staff.c \
+		./parsing.c
 
 BINS = $(SRC:.c=.o)
 HEADER = ./lem_in.h

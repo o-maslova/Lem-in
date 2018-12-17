@@ -41,7 +41,7 @@ static size_t	count_letters(char const *s, char c)
 
 	i = 0;
 	let_num = 0;
-	while (s[i] != c && s[i] != '\0')
+	while (s[i] != '\0' && s[i] != c)
 	{
 		i++;
 		let_num++;
@@ -73,14 +73,14 @@ char			**ft_strsplit(char const *s, char c)
 	if (!s)
 		return (NULL);
 	num_w = count_words(s, c);
-	if (!(words = (char **)malloc(sizeof(char *) * (num_w + 1))))
+	if (!(words = (char **)ft_memalloc(sizeof(char *) * (num_w + 1))))
 		return (NULL);
 	while (i < num_w)
 	{
 		while (*s == c)
 			s++;
 		num_l = count_letters(s, c);
-		if (!(words[i] = (char *)malloc(sizeof(char) * (num_l + 1))))
+		if (!(words[i] = (char *)ft_memalloc(sizeof(char) * (num_l + 1))))
 			return (NULL);
 		arr_fulling(s, words[i], num_l);
 		s += num_l;

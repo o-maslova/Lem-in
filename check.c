@@ -38,7 +38,7 @@ int			check_link(char *line)
 	return (0);
 }
 
-void		check_s_e(int fd, char **line, t_vert **graph, int n)
+void		check_s_e(t_vert **graph, int n)
 {
 	static int start;
 	static int end;
@@ -53,6 +53,4 @@ void		check_s_e(int fd, char **line, t_vert **graph, int n)
 	{
 		error_handling(2, NULL, graph);
 	}
-	free(*line);
-	get_next_line(fd, line);
 }

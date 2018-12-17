@@ -37,7 +37,7 @@ t_vert		*vertex_create(char **arr, int pos)
 	vrt = NULL;
 	if (arr)
 	{
-		vrt = (t_vert *)ft_memalloc(sizeof(t_vert));
+		vrt = (t_vert *)malloc(sizeof(t_vert));
 		vrt->name = ft_strdup(arr[0]);
 		vrt->x = ft_atoi(arr[1]);
 		vrt->y = ft_atoi(arr[2]);
