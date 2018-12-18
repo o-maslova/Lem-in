@@ -1,5 +1,34 @@
 #include "view.h"
 
+void	BresenhamCircle(t_win *win, int x0, int y0, int radius)
+{
+	int x = radius;
+	int y = 0;
+	int radiusError = 1 - x;
+	
+	while (x >= y)
+	{
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x + x0, y + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, y + x0, x + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, -x + x0, y + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, -y + x0, x + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, -x + x0, -y + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, -y + x0, -x + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x + x0, -y + y0, COLOR);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, y + x0, -x + y0, COLOR);
+		y++;
+		if (radiusError < 0)
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * (y - x + 1);
+		}
+	}
+}
+
 void	draw_vert_line(t_win *win, int dot_x, int dot_y)
 {
 	int	x;
@@ -11,7 +40,7 @@ void	draw_vert_line(t_win *win, int dot_x, int dot_y)
 	win->var->length += 1;
 	while (win->var->length--)
 	{
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, 0xFFFFFF);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, COLOR);
 		y += win->var->d_y;
 		win->var->err += 2 * win->var->len_x;
 		if (win->var->err > 0)
@@ -33,7 +62,7 @@ void	draw_horiz_line(t_win *win, int dot_x, int dot_y)
 	win->var->length += 1;
 	while (win->var->length--)
 	{
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, 0xFFFFFF);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, COLOR);
 		x += win->var->d_x;
 		win->var->err += 2 * win->var->len_y;
 		if (win->var->err > 0)
@@ -44,7 +73,7 @@ void	draw_horiz_line(t_win *win, int dot_x, int dot_y)
 	}
 }
 
-void	brznh_algo(t_win *win, t_vert start, t_vert end)
+void	brznh_algo(t_win *win, t_dot start, t_dot end)
 {
 	int		x;
 	int		y;
@@ -57,7 +86,7 @@ void	brznh_algo(t_win *win, t_vert start, t_vert end)
 	win->var->d_x = POS(end.x - start.x);
 	win->var->d_y = POS(end.y - start.y);
 	if (win->var->length == 0)
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, 0xFFFFFF);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, COLOR);
 	if (win->var->len_y <= win->var->len_x)
 		draw_horiz_line(win, start.x, start.y);
 	else

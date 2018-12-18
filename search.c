@@ -27,21 +27,3 @@ int			search_by_name(t_vert *graph, char *name)
 	}
 	return (-1);
 }
-
-t_vert		search_by_pos(t_vert *graph, int pos)
-{
-	t_vert	*tmp;
-
-	tmp = NULL;
-	if (graph)
-	{
-		tmp = graph;
-		while (tmp)
-		{
-			if (tmp->pos == pos)
-				return (*tmp);
-			tmp = tmp->next;
-		}
-	}
-	return (*tmp);
-}

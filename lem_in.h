@@ -63,7 +63,6 @@ int					search_by_name(t_vert *graph, char *name);
 // int					making_links(char *line, t_vert **graph, int **links);
 int					count_link_elem(t_link *list);
 int					**memory_allocate(int *check);
-t_vert				search_by_pos(t_vert *graph, int pos);
 int					**parsing(int fd, t_vert **graph, int **links);
 void				algorithm(int **links);
 

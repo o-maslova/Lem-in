@@ -2,8 +2,11 @@ NAME = lemin.visualisation
 LIB = libft.a
 GRAPHICS = -lmlx -framework OpenGL -framework AppKit
 FLAGS = -Wall -Wextra -Werror
-SRC = ./draw.c \
+SRC = ./main.c \
+		./draw.c \
 		./brezenhaim.c \
+		./wuline.c \
+		./initial.c \
 		../vertex_staff.c \
 		../parsing.c \
 		../check.c \
