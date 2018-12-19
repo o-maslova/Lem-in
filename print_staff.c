@@ -7,6 +7,7 @@ void		print_path(t_link *path)
 	
 	i = 0;
 	tmp = path;
+	// dprintf(g_fd, "value of path: %d\n", tmp->path_val);
 	while (tmp)
 	{
 		dprintf(g_fd, "%d\n", tmp->pos);
@@ -24,6 +25,7 @@ void		print_variants(int fd, t_path *path)
 	{
 		i = -1;
 		dprintf(fd, "NEW PATH\n");
+		dprintf(fd, "value of path: %d\n", tmp->path_val);
 		while (++i < tmp->path_val)
 			dprintf(fd, "%d\n", tmp->path[i]);
 		dprintf(fd, "\n");
@@ -31,27 +33,27 @@ void		print_variants(int fd, t_path *path)
 	}
 }
 
-void		print_matrix(int fd, int **links)
+void		print_matrix(int fd, t_graph *graph)
 {
 	int i;
 	int j;
 
 	i = 0;
 	dprintf(fd, " ");
-	while (i < g_amount)
+	while (i < graph->rooms)
 	{
 		dprintf(fd, "%5d", i++);
 	}
 	dprintf(fd, "\n");
 	i = 0;
-	while (i < g_amount)
+	while (i < graph->rooms)
 	{
 		j = 0;
-		while (j < g_amount)
+		while (j < graph->rooms)
 		{
 			if (j == 0)
 				dprintf(fd, "%d", i);
-			dprintf(fd, "%5d", links[i][j]);
+			dprintf(fd, "%5d", graph->links[i][j]);
 			j++;
 		}
 		dprintf(fd, "\n");

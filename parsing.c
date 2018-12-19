@@ -21,19 +21,19 @@ int		making_links(char *line, t_vert **graph, int **links)
 	return (1);
 }
 
-void	add_node(t_vert **graph, char **arr, int pos)
+void	add_node(t_graph **graph, char **arr, int pos)
 {
 	t_vert *tmp;
 
-	tmp = vertex_create(arr, pos);
+	tmp = vertex_create(*graph, arr, pos);
 	if (tmp->name[0] == 'L' || tmp->name[0] == '#')
 		error_handling(4, arr, graph);
 	if (pos == 2)
-		g_end = tmp->pos;
-	add_vertex(graph, tmp);
+		(*graph)->end_room = tmp->pos;
+	add_vertex(&((*graph)->graph), tmp);
 }
 
-int		list_fulling(int fd, t_vert **graph, char **line, int pos)
+int		list_fulling(int fd, t_graph **graph, char **line, int pos)
 {
 	char	**arr;
 	int		w_amount;
@@ -45,7 +45,6 @@ int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 		free(*line);
 		get_next_line(fd, line);
 	}
-	// printf("line = %s\n", *line);
 	w_amount = ft_countchar(*line, ' ');
 	if (w_amount != 2 && *(line[0]) == '#')
 		return (0);
@@ -53,13 +52,13 @@ int		list_fulling(int fd, t_vert **graph, char **line, int pos)
 		return (-1);
 	arr = ft_strsplit(*line, ' ');
 	if (!ft_isnumstr(arr[1]) || !ft_isnumstr(arr[2]))
-		error_handling(3, arr, graph);
+		error_handling(3, arr,graph);
 	add_node(graph, arr, pos);
 	ft_arrdel(arr);
 	return (1);
 }
 
-int		**parsing(int fd, t_vert **graph, int **links)
+void	parsing(int fd, t_graph **graph)
 {
 	int			i;
 	char		*line;
@@ -75,8 +74,8 @@ int		**parsing(int fd, t_vert **graph, int **links)
 		else if (!ft_strchr(line, '#') && ft_strchr(line, '-'))
 		{
 			if (check == 0)
-				links = memory_allocate(&check);
-			i = making_links(line, graph, links);
+				memory_allocate(graph, &check);
+			i = making_links(line, &((*graph)->graph), (*graph)->links);
 		}
 		else
 			i = list_fulling(fd, graph, &line, 0);
@@ -84,5 +83,5 @@ int		**parsing(int fd, t_vert **graph, int **links)
 		if (i < 0)
 			break ;
 	}
-	return (links);
+	// return (links);
 }

@@ -30,8 +30,18 @@ typedef struct		s_vert
 	struct s_vert	*next;
 }					t_vert;
 
+typedef struct		s_graph
+{
+	int				ant_amount;
+	int				end_room;
+	int				rooms;
+	int				**links;
+	t_vert			*graph;
+}					t_graph;
+
 typedef struct		s_link
 {
+	int				end;
 	int				pos;
 	struct s_link	*next;
 }					t_link;
@@ -43,31 +53,31 @@ typedef struct		s_path
 	struct s_path	*next;
 }					t_path;
 
-t_vert				*vertex_create(char **arr, int pos);
+t_vert				*vertex_create(t_graph *graph, char **arr, int pos);
 void				add_link(t_link **path, int pos);
 void				add_vertex(t_vert **graph, t_vert *nw);
 void				add_path(t_path **variants, t_path *path);
-void				add_node(t_vert **graph, char **arr, int pos);
+void				add_node(t_graph **graph, char **arr, int pos);
 t_path				*create_path(t_link *link);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
 void				clear_link(t_link **link);
 void				clear_path(t_path **path);
-void				clear_matrix(int **links);
-void				error_handling(int num, char **arr, t_vert **graph);
-void				check_s_e(t_vert **graph, int n);
-int					check_err(char *line, t_vert **graph, int n, int pos);
+void				clear_matrix(int **links, int amount);
+void				error_handling(int num, char **arr, t_graph **graph);
+void				check_s_e(t_graph **graph, int n);
+int					check_err(char *line, t_graph **graph, int n, int pos);
 int					check_link(char *line);
 int					search_by_name(t_vert *graph, char *name);
 // int					list_fulling(int fd, t_vert **graph, char **line, int pos);
 // int					making_links(char *line, t_vert **graph, int **links);
 int					count_link_elem(t_link *list);
-int					**memory_allocate(int *check);
-int					**parsing(int fd, t_vert **graph, int **links);
-void				algorithm(int **links);
+void				memory_allocate(t_graph **graph, int *check);
+void				parsing(int fd, t_graph **graph);
+void				algorithm(t_graph *graph);
 
 void				print_graph(t_vert *graph);
-void				print_matrix(int fd, int **links);
+void				print_matrix(int fd, t_graph *graph);
 void				print_path(t_link *path);
 void				print_variants(int fd, t_path *path);
 

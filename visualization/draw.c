@@ -1,48 +1,126 @@
 #include "view.h"
 
+void		change_value(t_win *win, t_dot *first, t_dot *second)
+{
+	first->x = (first->x * CELL_SIZE) + (CELL_SIZE / 2);
+	second->x = (second->x * CELL_SIZE) + (CELL_SIZE / 2);
+	first->y = (first->y * CELL_SIZE) + (CELL_SIZE / 2);
+	second->y = (second->y * CELL_SIZE) + (CELL_SIZE / 2);
+	first->x += MOVE_SIDE;
+	second->x += MOVE_SIDE;
+	first->y += MOVE_UP;
+	second->y += MOVE_UP;
+}
+
+void		find_min(t_win *win, t_dot dot)
+{
+	if (win->min_down < dot.y)
+	{
+		win->min_down = dot.y;
+		// win->min_down = (win->min_down * CELL_SIZE) + (CELL_SIZE / 2) + MOVE_UP;
+	}
+	if (win->min_up > dot.y)
+	{
+		win->min_up = dot.y;
+		// win->min_up = (win->min_up * CELL_SIZE) + (CELL_SIZE / 2) + MOVE_UP;
+	}
+	if (win->min_left > dot.x)
+	{
+		win->min_left = dot.x;
+		// win->min_left = (win->min_left * CELL_SIZE) + (CELL_SIZE / 2) + MOVE_SIDE;
+	}
+	if (win->min_right < dot.x)
+	{
+		win->min_right = dot.x;
+		// win->min_right = (win->min_right * CELL_SIZE) + (CELL_SIZE / 2) + MOVE_SIDE;
+	}
+}
+
 void		smaller_x(t_win *win, t_dot first, t_dot second)
 {
 	t_dot *tmp;
+	t_dot *tmp_2;
 
+	dprintf(my_fd, "SMALLER_X\n");
+	change_value(win, &first, &second);
+	if (first.y == second.y)
+	{
+		brznh_algo(win, first, second);
+		// free(tmp);
+		// free(tmp_2);
+		return ;
+	}
 	tmp = (t_dot *)ft_memalloc(sizeof(t_dot));
+	tmp_2 = (t_dot *)ft_memalloc(sizeof(t_dot));
+	// find_min(win, first);
+	tmp->x = first.x;
 	if (first.y < second.y)
 	{
-		tmp->x = second.x;
-		tmp->y = first.y;
-		brznh_algo(win, *tmp, first);
-		brznh_algo(win, *tmp, second);
+		dprintf(my_fd, "SMALLER_X SMALLER_Y\n");
+		// tmp->x = first.x;
+		tmp->y = second.y + CELL_SIZE;
+		// brznh_algo(win, first, second);
+		// brznh_algo(win, *tmp, first);
+		// tmp_2->x = second.x;
+		// tmp_2->y = tmp->y;
+		// brznh_algo(win, *tmp, *tmp_2);
+		// brznh_algo(win, *tmp_2, second);
 	}
-	else if (first.y == second.y)
-		brznh_algo(win, first, second);
 	else
 	{
-		tmp->x = first.x;
-		tmp->y = second.y;
-		brznh_algo(win, *tmp, first);
-		brznh_algo(win, *tmp, second);
+		dprintf(my_fd, "SMALLER_X BIGGER_Y\n");
+		// tmp->x = first.x;
+		tmp->y = first.y + CELL_SIZE;
 	}
+	brznh_algo(win, *tmp, first);
+	// brznh_algo(win, *tmp, second);
+	brznh_algo(win, *tmp, first);
+	tmp_2->x = second.x;
+	tmp_2->y = tmp->y;
+	brznh_algo(win, *tmp, *tmp_2);
+	brznh_algo(win, *tmp_2, second);
 	free(tmp);
 }
 
 void		bigger_x(t_win *win, t_dot first, t_dot second)
 {
 	t_dot *tmp;
+	t_dot *tmp_2;
 
+
+	dprintf(my_fd, "BIGGER_X\n");
+	change_value(win, &first, &second);
+	if (first.y == second.y)
+	{
+		brznh_algo(win, first, second);
+		return ;
+	}
 	tmp = (t_dot *)ft_memalloc(sizeof(t_dot));
+	tmp_2 = (t_dot *)ft_memalloc(sizeof(t_dot));
+	// find_min(win, first);
 	if (first.y < second.y)
 	{
+		dprintf(my_fd, "BIGGER_X SMALLER_Y\n");
 		tmp->x = first.x;
 		tmp->y = second.y;
 		brznh_algo(win, *tmp, first);
 		brznh_algo(win, *tmp, second);
+		// brznh_algo(win, first, second);
 	}
-	else if (first.y == second.y)
-		brznh_algo(win, first, second);
 	else
 	{
-		tmp->x = second.x;
+		first.x += (CELL_SIZE - 1) / 2;
+		first.y += (CELL_SIZE - 1) / 2;
+		dprintf(my_fd, "BIGGER_X BIGGER_Y\n");
+		tmp->x = first.x + CELL_SIZE;
 		tmp->y = first.y;
 		brznh_algo(win, *tmp, first);
+		tmp_2->x = tmp->x;
+		tmp_2->y = second.y - CELL_SIZE;
+		brznh_algo(win, *tmp, *tmp_2);
+		tmp->x = second.x;
+		tmp->y = tmp_2->y;
+		brznh_algo(win, *tmp_2, *tmp);
 		brznh_algo(win, *tmp, second);
 	}
 	free(tmp);
@@ -68,20 +146,16 @@ void		draw_links(t_win *win, t_vert *graph, int **links)
 				second = search_by_pos(graph, j);
 				links[i][j] = -1;
 				links[j][i] = -1;
-				first.x = (first.x * CELL_SIZE) + (CELL_SIZE / 2);
-				second.x = (second.x * CELL_SIZE) + (CELL_SIZE / 2);
-				first.y = (first.y * CELL_SIZE) + (CELL_SIZE / 2);
-				second.y = (second.y * CELL_SIZE) + (CELL_SIZE / 2);
-				first.x += MOVE_SIDE;
-				second.x += MOVE_SIDE;
-				first.y += MOVE_UP;
-				second.y += MOVE_UP;
+				// find_min(win, first);
 				dprintf(my_fd, "first_x = %d, first_y = %d\n", first.x, first.y);
 				dprintf(my_fd, "second_x = %d, second_y = %d\n", second.x, second.y);
 				if (first.x > second.x)
 					bigger_x(win, first, second);
-				// else if (first.x == second.x)
-				// 	brznh_algo(win, first, second);
+				else if (first.x == second.x)
+				{
+					change_value(win, &first, &second);
+					brznh_algo(win, first, second);
+				}
 				else
 					smaller_x(win, first, second);
 			}
@@ -89,6 +163,10 @@ void		draw_links(t_win *win, t_vert *graph, int **links)
 		}
 		i++;
 	}
+	dprintf(my_fd, "\nmin_up = %d\n", win->min_up);
+	dprintf(my_fd, "min_down = %d\n", win->min_down);
+	dprintf(my_fd, "min_left = %d\n", win->min_left);
+	dprintf(my_fd, "min_right = %d\n\n", win->min_right);
 }
 
 void		draw_room(t_win *win, int x, int y)
@@ -134,7 +212,7 @@ void		draw_anthill(t_win *win, t_vert *graph, int **links)
 			max[1] = y;
 		}
 		draw_room(win, x, y);
-		// pixel_put_img(win, tmp->x, tmp->y, COLOR);
+		// mlx_pixel_put(win->mlx_ptr, win->win_ptr, tmp->x, tmp->y, COLOR);
 		tmp = tmp->next;
 	}
 	// links = NULL;

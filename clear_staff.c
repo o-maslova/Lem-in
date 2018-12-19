@@ -35,12 +35,12 @@ void		clear_graph(t_vert **graph)
 	free(*graph);
 }
 
-void		clear_matrix(int **links)
+void		clear_matrix(int **links, int amount)
 {
 	int i;
 
 	i = 0;
-	while (i < g_amount)
+	while (i < amount)
 	{
 		free(links[i]);
 		i++;

@@ -15,14 +15,14 @@
 int		main(int argc, char **argv)
 {
 	int			fd;
-	int			**links;
 	char		*line;
-	t_vert		*graph;
+	t_graph		*graph;
 
 	if (argc != 2)
 		exit(0);
-	graph = NULL;
-	links = NULL;
+	graph = (t_graph *)ft_memalloc(sizeof(t_graph));
+	graph->graph = NULL;
+	graph->links = NULL;
 	fd = open(argv[1], O_RDONLY);
 	g_fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
 	if (fd < 0)
@@ -30,13 +30,15 @@ int		main(int argc, char **argv)
 	get_next_line(fd, &line);
 	if (!ft_isnumstr(line))
 		error_handling(7, NULL, &graph);
-	g_ants = ft_atoi(line);
+	graph->ant_amount = ft_atoi(line);
 	free(line);
-	links = parsing(fd, &graph, links);
-	print_matrix(g_fd, links);
-	algorithm(links);
-	print_graph(graph);
-	clear_graph(&graph);
+	parsing(fd, &graph);
+	print_matrix(g_fd, graph);
+	algorithm(graph);
+	// print_graph(graph);
+	clear_matrix(graph->links, graph->rooms);
+	clear_graph(&(graph->graph));
+	free(graph);
 	system("leaks lem-in");
 	return (0);
 }

@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-void	error_handling(int num, char **arr, t_vert **graph)
+void	error_handling(int num, char **arr, t_graph **graph)
 {
 	if (num == 1)
 		perror("Error! Undefined start position!\n");
@@ -29,6 +29,7 @@ void	error_handling(int num, char **arr, t_vert **graph)
 	if (num == 7)
 		perror("Error! Wrong number of ants!\n");
 	ft_arrdel(arr);
-	clear_graph(graph);
+	clear_graph(&((*graph)->graph));
+	free(*graph);
 	exit(0);
 }

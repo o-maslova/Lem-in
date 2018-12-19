@@ -18,8 +18,8 @@
 # include <math.h>
 # include "../lem_in.h"
 
-# define WIDTH 500
-# define HEIGTH 500
+# define WIDTH 2000
+# define HEIGTH 1400
 # define MOVE_SIDE win->move_side
 # define MOVE_UP win->move_up
 # define CELL_SIZE win->cell
@@ -58,16 +58,19 @@ typedef struct		s_win
 	int				min_right;
 	t_vert			*graph;
 	t_brzhm			*var;
-	int				mtrx_size;
 	int				cell;
 	int				move_side;
 	int				move_up;
-	int				value;
 	void			*win_ptr;
 	void			*mlx_ptr;
+	void			*img_ptr;
+	int				size_line;
+	int				endian;
+	int				bpp;
+	char			*img;
 }					t_win;
 
-void				init(t_win **win);
+void				init(int fd, t_win **win);
 void				matrix_to_default(int **links);
 void				pixel_put_img(t_win *win, int x, int y, int colour);
 void				brznh_algo(t_win *win, t_dot start, t_dot end);

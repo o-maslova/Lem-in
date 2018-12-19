@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-int			check_path(t_link *path)
+int			check_path(t_link *path, int amount)
 {
 	int		check;
 	t_link	*tmp;
@@ -21,21 +21,21 @@ int			check_path(t_link *path)
 	tmp = path;
 	while (tmp)
 	{
-		if (tmp->pos == g_amount)
+		if (tmp->pos == amount)
 			check = 1;
 		tmp = tmp->next;
 	}
 	return (check);
 }
 
-void		match_visited(int **links, int i, int order)
+void		match_visited(int **links, int i, int order, int amount)
 {
 	int k;
 
 	k = 0;
 	if (order == 1)
 	{
-		while (k < g_amount)
+		while (k < amount)
 		{
 			if (links[k][i] == 1)
 				links[k][i] = -1;
@@ -44,7 +44,7 @@ void		match_visited(int **links, int i, int order)
 	}
 	else if (order == 2)
 	{
-		while (k < g_amount)
+		while (k < amount)
 		{
 			if (links[i][k] == 1)
 				links[i][k] = -1;
@@ -79,14 +79,14 @@ void		remove_part(t_link **path, int pos)
 		tmp_2->next = NULL;
 }
 
-int			count_match(int *links)
+int			count_match(int *links, int amount)
 {
 	int i;
 	int count;
 
 	i = 0;
 	count = 0;
-	while (i < g_amount)
+	while (i < amount)
 	{
 		if (links[i] == 1)
 			count++;
@@ -95,40 +95,38 @@ int			count_match(int *links)
 	return (count);
 }
 
-void		going_deeper(t_path	**list, int **links, t_link **path, int i)
+void		deeper(t_path **list, t_graph *graph, t_link **path, int i)
 {
-	t_path		*variant;
-	static int	pos;
-	int			check;
-	int			k;
+	static int		pos;
+	t_path			*variant;
+	int				check;
+	int				k;
 
 	k = 0;
 	check = 0;
-	while (++k < g_amount)
+	while (++k < graph->rooms)
 	{
-		if (links[i][g_end] == 1)
+		if (graph->links[i][graph->end_room] == 1)
 		{
-			add_link(path, g_end);
+			add_link(path, graph->end_room);
 			// match_visited(links, i, 1);
-			match_visited(links, i, 2);
+			match_visited(graph->links, i, 2, graph->rooms);
 			variant = create_path(*path);
-			dprintf(g_fd,"NEW_PATH\n");
-			print_path(*path);
+			// dprintf(g_fd,"NEW_PATH\n");
+			// print_path(*path);
 			add_path(list, variant);
 			remove_part(path, pos);
 			break ;
 		}
-		if (links[i][k] == 1)
+		if (graph->links[i][k] == 1)
 		{
 			add_link(path, k);
-			match_visited(links, k, 1);
-			// match_visited(links, i, 2);
-			check = count_match(links[k]);
+			match_visited(graph->links, k, 1, graph->rooms);
+			check = count_match(graph->links[k], graph->rooms);
 			if (check > 1)
 			{
-				// add_link(path, -1);
 				pos = k;
-				going_deeper(list, links, path, k);
+				deeper(list, graph, path, k);
 			}
 			if (check == 0)
 			{
@@ -139,32 +137,36 @@ void		going_deeper(t_path	**list, int **links, t_link **path, int i)
 			k = 0;
 		}
 	}
-	dprintf(g_fd,"\n");
-	// print_matrix(links);
+	// dprintf(g_fd,"\n");
+	print_matrix(g_fd, graph);
 }
 
-void		algorithm(int **links)
+void		algorithm(t_graph *graph)
 {
 	t_path	*list;
 	t_link	*path;
 	int		i;
 	int		j;
 
-	path = NULL;
 	list = NULL;
+	path = NULL;
 	j = 0;
-	i = count_match(links[j]);
+	i = count_match(graph->links[j], graph->rooms);
+	dprintf(g_fd, "ant_amount = %d\n", graph->ant_amount);
+	dprintf(g_fd, "end = %d\n", graph->end_room);
+	dprintf(g_fd, "rooms = %d\n", graph->rooms);
 	while (i > 0)
 	{
-		while (links[0][j] != 1)
+		j = 0;
+		while (graph->links[0][j] != 1 && j < graph->rooms)
 			j++;
 		add_link(&path, j);
-		match_visited(links, j, 1);
-		going_deeper(&list, links, &path, j);
+		match_visited(graph->links, j, 1, graph->rooms);
+		deeper(&list, graph, &path, j);
 		clear_link(&path);
 		i--;
 	}
-	// print_variants(list);
+	print_variants(g_fd, list);
 	clear_path(&list);
-	clear_matrix(links);
+	// clear_matrix(graph->links, graph->rooms);
 }

@@ -12,24 +12,25 @@
 
 #include "lem_in.h"
 
-int			**memory_allocate(int *check)
+void		memory_allocate(t_graph **graph, int *check)
 {
 	int i;
-	int **tmp;
+	int tmp;
 
 	i = 0;
 	*check += 1;
-	g_amount += 1;
-	tmp = (int **)ft_memalloc(sizeof(int *) * g_amount);
-	while (i < g_amount)
+	(*graph)->rooms += 1;
+	tmp = (*graph)->rooms;
+	(*graph)->links = (int **)ft_memalloc(sizeof(int *) * tmp);
+	while (i < tmp)
 	{
-		tmp[i] = (int *)ft_memalloc(sizeof(int) * g_amount);
+		(*graph)->links[i] = (int *)ft_memalloc(sizeof(int) * tmp);
 		i++;
 	}
-	return (tmp);
+	// return (graph->links);
 }
 
-t_vert		*vertex_create(char **arr, int pos)
+t_vert		*vertex_create(t_graph *graph, char **arr, int pos)
 {
 	static int	i;
 	t_vert		*vrt;
@@ -47,7 +48,7 @@ t_vert		*vertex_create(char **arr, int pos)
 			vrt->pos = 0;
 		else
 			vrt->pos = ++i;
-		g_amount = vrt->pos;
+		graph->rooms = vrt->pos;
 		vrt->next = NULL;
 	}
 	return (vrt);

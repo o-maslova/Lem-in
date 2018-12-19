@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-int			check_err(char *line, t_vert **graph, int n, int pos)
+int			check_err(char *line, t_graph **graph, int n, int pos)
 {
 	if (n > 2 && *line != '#')
 		return (-1);
@@ -38,7 +38,7 @@ int			check_link(char *line)
 	return (0);
 }
 
-void		check_s_e(t_vert **graph, int n)
+void		check_s_e(t_graph **graph, int n)
 {
 	static int start;
 	static int end;

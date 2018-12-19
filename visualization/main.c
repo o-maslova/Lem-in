@@ -162,13 +162,16 @@ int			main(int argc, char **argv)
 	if (argc < 2 || argc > 2 || fd < 0)
 		exit (-1);
 	line = NULL;
-	init(&win);
 	get_next_line(fd, &line);
 	if (!ft_isnumstr(line))
 		exit(-1);
 	g_ants = ft_atoi(line);
 	free(line);
-	win->links = parsing(fd, &(win->graph), win->links);
+	init(fd, &win);
+	win->img_ptr = mlx_new_image(win->mlx_ptr, HEIGTH, WIDTH);
+	win->img =
+	mlx_get_data_addr(win->img_ptr, &win->bpp, &win->size_line, &win->endian);
+	// win->links = parsing(fd, &(win->graph), win->links);
 	// win->links = parsing(fd, &(win->graph), win->links);
 	print_matrix(my_fd, win->links);
 	print_graph(win->graph);
