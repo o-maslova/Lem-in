@@ -36,12 +36,13 @@ typedef struct		s_graph
 	int				end_room;
 	int				rooms;
 	int				**links;
+	int				**arr;
 	t_vert			*graph;
 }					t_graph;
 
 typedef struct		s_link
 {
-	int				end;
+	// int				end;
 	int				pos;
 	struct s_link	*next;
 }					t_link;
@@ -74,11 +75,12 @@ int					search_by_name(t_vert *graph, char *name);
 int					count_link_elem(t_link *list);
 void				memory_allocate(t_graph **graph, int *check);
 void				parsing(int fd, t_graph **graph);
-void				algorithm(t_graph *graph);
+void				algorithm(t_graph graph);
 
-void				print_graph(t_vert *graph);
-void				print_matrix(int fd, t_graph *graph);
+void				print_graph(t_graph *graph);
+void				print_matrix(int fd, t_graph graph);
 void				print_path(t_link *path);
 void				print_variants(int fd, t_path *path);
+void				printf_this(int **arr, int amount);
 
 #endif

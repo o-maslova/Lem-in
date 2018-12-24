@@ -42,8 +42,11 @@ int		list_fulling(int fd, t_graph **graph, char **line, int pos)
 	if (pos == 1 || pos == 2)
 	{
 		check_s_e(graph, pos);
-		free(*line);
-		get_next_line(fd, line);
+		while (*line[0] == '#')
+		{
+			free(*line);
+			get_next_line(fd, line);
+		}
 	}
 	w_amount = ft_countchar(*line, ' ');
 	if (w_amount != 2 && *(line[0]) == '#')

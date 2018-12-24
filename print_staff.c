@@ -1,5 +1,24 @@
 #include "lem_in.h"
 
+void		printf_this(int **arr, int amount)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < amount)
+	{
+		j = 0;
+		while (arr[i][j] != -1)
+		{
+			dprintf(g_fd, "%3d", arr[i][j]);
+			j++;
+		}
+		dprintf(g_fd, "\n");
+		i++;
+	}
+}
+
 void		print_path(t_link *path)
 {
 	int i;
@@ -33,27 +52,27 @@ void		print_variants(int fd, t_path *path)
 	}
 }
 
-void		print_matrix(int fd, t_graph *graph)
+void		print_matrix(int fd, t_graph graph)
 {
 	int i;
 	int j;
 
 	i = 0;
 	dprintf(fd, " ");
-	while (i < graph->rooms)
+	while (i < graph.rooms)
 	{
 		dprintf(fd, "%5d", i++);
 	}
 	dprintf(fd, "\n");
 	i = 0;
-	while (i < graph->rooms)
+	while (i < graph.rooms)
 	{
 		j = 0;
-		while (j < graph->rooms)
+		while (j < graph.rooms)
 		{
 			if (j == 0)
 				dprintf(fd, "%d", i);
-			dprintf(fd, "%5d", graph->links[i][j]);
+			dprintf(fd, "%5d", graph.links[i][j]);
 			j++;
 		}
 		dprintf(fd, "\n");
@@ -61,18 +80,18 @@ void		print_matrix(int fd, t_graph *graph)
 	}
 }
 
-void		print_graph(t_vert *graph)
+void		print_graph(t_graph *graph)
 {
 	t_vert		*tmp;
 
-	tmp = graph;
+	tmp = graph->graph;
 	while (tmp)
 	{
-		ft_printf("\npos = %d, (%d, %d)\n", tmp->pos, tmp->x, tmp->y);
+		printf("\nname = %s, pos = %d, (%d, %d)\n", tmp->name, tmp->pos, tmp->x, tmp->y);
 		if (tmp->is_start == 1)
-			ft_printf("IS START\n");
+			printf("IS START\n");
 		if (tmp->is_end == 1)
-			ft_printf("IS END\n");
+			printf("IS END\n");
 		tmp = tmp->next;
 	}
 }
