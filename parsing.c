@@ -2,11 +2,9 @@
 
 int		making_links(char *line, t_vert **graph, int **links)
 {
-	t_vert	*tmp;
 	char	**arr;
 	int		vertex[2];
 
-	tmp = *graph;
 	if (check_link(line) < 0)
 		return (-1);
 	arr = ft_strsplit(line, '-');

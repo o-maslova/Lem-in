@@ -40,23 +40,47 @@ void		match(int **links, int k, int amount)
 	}
 }
 
-void		unmatch(int **links, int limit, int amount)
+void		unmatch(t_graph graph, int limit)
 {
+	int		k;
 	int		i;
 	int		j;
 
 	i = 0;
-	while (i < amount)
+	while (i < graph.rooms)
 	{
 		j = 0;
-		while (j < amount)
+		k = 0;
+		while (j < graph.rooms)
 		{
-			if (links[i][j] == -1 && j != limit)
-				links[i][j] = 1;
+			if (graph.links[i][j] == -1)
+			{
+				if (j == graph.starts[k] && k <= limit)
+				{
+					k++;
+				}
+				else
+					graph.links[i][j] = 1;
+			}
 			j++;
 		}
 		i++;
 	}
+}
+
+void		remove_last(t_link **path)
+{
+	t_link *tmp;
+
+	if (!(*path))
+		return ;
+	tmp = *path;
+	while (tmp->next->next)
+	{
+		tmp = tmp->next;
+	}
+	free(tmp->next->next);
+	tmp->next = NULL;
 }
 
 void		remove_part(t_link **path, int pos)
@@ -109,12 +133,12 @@ void		remove_part(t_link **path, int pos)
 	}
 	while (tmp && tmp->pos != pos)
 	{
-		tmp = tmp->next;
 		tmp_2 = tmp;
+		tmp = tmp->next;
 	}
 	if (tmp)
 	{
-		tmp = tmp->next;
+		// tmp = tmp->next;
 		while (tmp)
 		{
 			fr = tmp->next;
@@ -122,8 +146,8 @@ void		remove_part(t_link **path, int pos)
 			tmp = fr;
 		}
 	}
-	if (tmp_2 && tmp_2->next != NULL)
-		tmp_2->next = NULL;
+	// if (tmp_2 && tmp_2->next != NULL)
+	tmp_2->next = NULL;
 }
 
 int			count_match(int *links, int amount)
@@ -142,136 +166,94 @@ int			count_match(int *links, int amount)
 	return (count);
 }
 
-void		deeper(t_path **list, t_graph graph, t_link **path, int i)
+int		deeper(t_path **list, t_graph graph, t_link **path, int i)
 {
-	static int		pos;
-	t_path			*variant;
-	int				check;
-	int				k;
+	t_path	*variant;
+	int		k;
 
 	k = 0;
-	check = 0;
 	while (++k < graph.rooms)
 	{
 		if (graph.links[i][graph.end_room] == 1)
 		{
 			add_link(path, graph.end_room);
 			variant = create_path(*path);
-			dprintf(g_fd,"NEW_PATH\n");
-			print_path(*path);
 			add_path(list, variant);
-			// clear_link(path);
-			print_matrix(g_fd, graph);
-			dprintf(g_fd, "\n");
-			remove_part(path, (*path)->pos);
-			break ;
+			return (1);
 		}
 		if (graph.links[i][k] == 1)
 		{
 			add_link(path, k);
 			graph.links[i][k] = -1;
 			graph.links[k][i] = -1;
-			check = count_match(graph.links[k], graph.rooms);
-			if (check >= 1)
+			if ((deeper(list, graph, path, k)) == 1)
 			{
-				pos = i;
-				deeper(list, graph, path, k);
+				// dprintf(g_fd, "remove part\n");
+				remove_part(path, k);
 			}
-			if (check == 0)
+			else
 			{
-				remove_part(path, pos);
-				// continue ;
+				// dprintf(g_fd, "remove last\n");
+				remove_last(path);
 			}
-			// i = k;
-			// k = 0;
 		}
 	}
-	// if (k == graph->rooms)
-	// {
-	// 	remove_part(path, &pos);
-	// 	deeper(list, graph, path, pos);
-	// }
-	// }
-	// k = pos;
+	return (0);
 }
 
-void		create_dup_matrix(t_graph *graph)
+int		create_start_matrix(t_graph *graph)
 {
 	int i;
 	int j;
-	int k;
 
+	i = count_match(graph->links[0], graph->rooms);
+	graph->starts = (int *)ft_memalloc(sizeof(int) * (i + 1));
 	i = 0;
-	graph->arr = (int **)ft_memalloc(sizeof(int *) * graph->rooms);
-	while (i < graph->rooms)
-	{
-		k = count_match(graph->links[i], graph->rooms);
-		graph->arr[i] = (int *)ft_memalloc(sizeof(int) * (k + 1));
-		k = 0;
-		j = 0;
-		while (j < graph->rooms)
-		{
-			if (graph->links[i][j] == 1)
-			{
-				if (j != graph->rooms - 1)
-					graph->links[j][i] = -1;
-				graph->arr[i][k++] = j;
-			}
-			j++;
-		}
-		graph->arr[i][k++] = -1;
-		i++;
-	}
-	printf_this(graph->arr, graph->rooms);
-}
-
-void		algo(t_graph *graph, t_link **path, int i)
-{
-	int j;
-
 	j = 0;
-	while (graph->arr[i][j] != -1)
+	while (j < graph->rooms)
 	{
-		if (graph->arr[i][j] == i)
-			break ;
-		add_link(path, graph->arr[i][j]);
-		graph->arr[i][j] = -1;
-		algo(graph, path, graph->arr[i][j++]);
-
-		// graph->links[graph->arr[i][j]][graph->arr[i][j]]
+		if (graph->links[0][j] == 1)
+		{
+			// if (j != graph->rooms - 1)
+			// 	graph->links[j][i] = -1;
+			graph->starts[i++] = j;
+		}
+		j++;
 	}
-	// if (graph->arr[i][j] == -1)
-	
+	graph->starts[i] = -1;
+	printf_this(graph->starts);
+	return (i);
 }
 
 void		algorithm(t_graph graph)
 {
-	t_path	*list;
+	t_path	**list;
 	t_link	*path;
 	int		i;
 	int		j;
+	int		k;
 
 	list = NULL;
 	path = NULL;
-	j = 0;
-	i = count_match(graph.links[j], graph.rooms);
 	dprintf(g_fd, "ant_amount = %d\n", graph.ant_amount);
 	dprintf(g_fd, "end = %d\n", graph.end_room);
 	dprintf(g_fd, "rooms = %d\n", graph.rooms);
-	// create_dup_matrix(graph.
-	while (i > 0)
+	k = 0;
+	i = create_start_matrix(&graph);
+	list = (t_path **)ft_memalloc(sizeof(t_path *) * i);
+	while (k < i)
 	{
-		j = 0;
-		while (graph.links[0][j] != 1 && j < graph.rooms)
-			j++;
-		add_link(&path, j);
-		match(graph.links, j, graph.rooms);
-		deeper(&list, graph, &path, j);
-		unmatch(graph.links, j, graph.rooms);
+		add_link(&path, graph.starts[k]);
+		match(graph.links, graph.starts[k], graph.rooms);
+		j = deeper(&(list[k]), graph, &path, graph.starts[k]);
 		clear_link(&path);
-		i--;
+		list[k] = sort_path(list[k]);
+		dprintf(g_fd, "\n *** j = %d ***\n", j);;
+		print_variants(g_fd, list[k], k + 1);
+		unmatch(graph, k);
+		// print_matrix(g_fd, graph);
+		k++;
 	}
-	// print_variants(g_fd, list);
-	clear_path(&list);
+	// clear_path(&list);
 	// clear_matrix(graph.links, graph.rooms);
 }

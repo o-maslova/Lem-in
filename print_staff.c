@@ -1,30 +1,21 @@
 #include "lem_in.h"
 
-void		printf_this(int **arr, int amount)
+void		printf_this(int *arr)
 {
 	int i;
-	int j;
 
 	i = 0;
-	while (i < amount)
+	while (arr[i] != -1)
 	{
-		j = 0;
-		while (arr[i][j] != -1)
-		{
-			dprintf(g_fd, "%3d", arr[i][j]);
-			j++;
-		}
-		dprintf(g_fd, "\n");
+		dprintf(g_fd, "%d  ", arr[i]);
 		i++;
 	}
 }
 
 void		print_path(t_link *path)
 {
-	int i;
 	t_link *tmp;
 	
-	i = 0;
 	tmp = path;
 	// dprintf(g_fd, "value of path: %d\n", tmp->path_val);
 	while (tmp)
@@ -34,12 +25,13 @@ void		print_path(t_link *path)
 	}
 }
 
-void		print_variants(int fd, t_path *path)
+void		print_variants(int fd, t_path *path, int k)
 {
 	int i;
 	t_path *tmp;
 
 	tmp = path;
+	dprintf(fd, "PATH # %d\n", k);
 	while (tmp)
 	{
 		i = -1;

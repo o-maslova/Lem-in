@@ -12,22 +12,33 @@
 
 #include "lem_in.h"
 
-void		copy_path(t_path **dst, t_link *src)
+t_path		*sort_path(t_path *list)
 {
-	t_link	*l_tmp;
-	int		i;
+	t_path	*tmp1;
+	t_path	*tmp2;
+	t_path	*swap;
 
-	i = 0;
-	l_tmp = src;
-	if (l_tmp)
+	tmp1 = list;
+	swap = (t_path *)ft_memalloc(sizeof(t_path));
+	while (tmp1->next)
 	{
-		while (l_tmp)
+		tmp2 = list;
+		while (tmp2->next)
 		{
-			(*dst)->path[i] = l_tmp->pos;
-			l_tmp = l_tmp->next;
-			i++;
+			if (tmp2->path_val > tmp2->next->path_val)
+			{
+				swap->path = tmp2->path;
+				swap->path_val = tmp2->path_val;
+				tmp2->path = tmp2->next->path;
+				tmp2->path_val = tmp2->next->path_val;
+				tmp2->next->path = swap->path;
+				tmp2->next->path_val = swap->path_val;
+			}
+			tmp2 = tmp2->next;
 		}
+		tmp1 = tmp1->next;
 	}
+	return (list);
 }
 
 t_path		*create_path(t_link *link)

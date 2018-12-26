@@ -33,7 +33,7 @@ int		main(int argc, char **argv)
 	graph->ant_amount = ft_atoi(line);
 	free(line);
 	parsing(fd, &graph);
-	print_matrix(g_fd, *graph);
+	// print_matrix(g_fd, *graph);
 	print_graph(graph);
 	algorithm(*graph);
 	clear_matrix(graph->links, graph->rooms);

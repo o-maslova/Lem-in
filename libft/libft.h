@@ -15,6 +15,7 @@
 # define BUFF_SIZE 4
 
 # include <string.h>
+# include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>

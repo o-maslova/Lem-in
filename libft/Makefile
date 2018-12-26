@@ -100,7 +100,7 @@ PRINTF_SRC = ./ft_printf/cast.c \
 
 PRINTF_HEADER = ./ft_printf/ft_printf.h
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra
 
 OBJ = $(SRC:.c=.o)
 

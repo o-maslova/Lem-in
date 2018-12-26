@@ -14,9 +14,6 @@
 
 void		clear_vertex(t_vert *vertex)
 {
-	t_link		*tmp;
-
-	tmp = NULL;
 	ft_strdel(&(vertex->name));
 	free(vertex);
 }

@@ -36,7 +36,7 @@ typedef struct		s_graph
 	int				end_room;
 	int				rooms;
 	int				**links;
-	int				**arr;
+	int				*starts;
 	t_vert			*graph;
 }					t_graph;
 
@@ -59,6 +59,7 @@ void				add_link(t_link **path, int pos);
 void				add_vertex(t_vert **graph, t_vert *nw);
 void				add_path(t_path **variants, t_path *path);
 void				add_node(t_graph **graph, char **arr, int pos);
+t_path				*sort_path(t_path *list);
 t_path				*create_path(t_link *link);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
@@ -80,7 +81,7 @@ void				algorithm(t_graph graph);
 void				print_graph(t_graph *graph);
 void				print_matrix(int fd, t_graph graph);
 void				print_path(t_link *path);
-void				print_variants(int fd, t_path *path);
-void				printf_this(int **arr, int amount);
+void				print_variants(int fd, t_path *path, int k);
+void				printf_this(int *arr);
 
 #endif
