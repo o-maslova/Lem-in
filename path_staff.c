@@ -12,7 +12,17 @@
 
 #include "lem_in.h"
 
-t_path		*sort_path(t_path *list)
+void		swap_values(t_path *tmp, t_path *first, t_path *second)
+{
+	tmp->path = first->path;
+	tmp->path_val = first->path_val;
+	first->path = second->path;
+	first->path_val = second->path_val;
+	second->path = tmp->path;
+	second->path_val = tmp->path_val;
+}
+
+void		sort_path(t_path *list)
 {
 	t_path	*tmp1;
 	t_path	*tmp2;
@@ -27,18 +37,30 @@ t_path		*sort_path(t_path *list)
 		{
 			if (tmp2->path_val > tmp2->next->path_val)
 			{
-				swap->path = tmp2->path;
-				swap->path_val = tmp2->path_val;
-				tmp2->path = tmp2->next->path;
-				tmp2->path_val = tmp2->next->path_val;
-				tmp2->next->path = swap->path;
-				tmp2->next->path_val = swap->path_val;
+				swap_values(swap, tmp2, tmp2->next);
 			}
 			tmp2 = tmp2->next;
 		}
 		tmp1 = tmp1->next;
 	}
-	return (list);
+	free(swap);
+	// return (list);
+}
+
+int			check_path(t_link *path, int amount)
+{
+	int		check;
+	t_link	*tmp;
+
+	check = 0;
+	tmp = path;
+	while (tmp)
+	{
+		if (tmp->pos == amount)
+			check = 1;
+		tmp = tmp->next;
+	}
+	return (check);
 }
 
 t_path		*create_path(t_link *link)
@@ -62,7 +84,6 @@ t_path		*create_path(t_link *link)
 			l_tmp = l_tmp->next;
 			i++;
 		}
-		// copy_path(&tmp, link);
 		tmp->next = NULL;
 	}
 	return (tmp);

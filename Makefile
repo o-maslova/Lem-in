@@ -11,7 +11,9 @@ SRC = ./main.c \
 		./link_staff.c \
 		./path_staff.c \
 		./print_staff.c \
-		./parsing.c
+		./parsing.c \
+		./matrix_operations.c \
+		./remove.c
 
 BINS = $(SRC:.c=.o)
 HEADER = ./lem_in.h

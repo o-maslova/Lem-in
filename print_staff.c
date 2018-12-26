@@ -25,13 +25,12 @@ void		print_path(t_link *path)
 	}
 }
 
-void		print_variants(int fd, t_path *path, int k)
+void		print_variants(int fd, t_path *path)
 {
 	int i;
 	t_path *tmp;
 
 	tmp = path;
-	dprintf(fd, "PATH # %d\n", k);
 	while (tmp)
 	{
 		i = -1;

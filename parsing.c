@@ -10,10 +10,12 @@ int		making_links(char *line, t_vert **graph, int **links)
 	arr = ft_strsplit(line, '-');
 	vertex[0] = search_by_name(*graph, arr[0]);
 	vertex[1] = search_by_name(*graph, arr[1]);
-	if (vertex[0] >= 0 && vertex[1] >= 0)
+	if (vertex[0] >= 0 && vertex[1] >= 0 && vertex[0] != vertex[1])
 	{
-		links[vertex[0]][vertex[1]] = 1;
-		links[vertex[1]][vertex[0]] = 1;
+		// if (vertex[0] < vertex[1])
+			links[vertex[0]][vertex[1]] = 1;
+		// else
+			links[vertex[1]][vertex[0]] = 1;
 	}
 	ft_arrdel(arr);
 	return (1);
