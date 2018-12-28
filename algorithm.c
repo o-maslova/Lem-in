@@ -136,6 +136,7 @@ void	output(t_path *path, int ant, int i, int amount)
 		path = path->next;
 		ant += 1;
 	}
+	
 	while (path->path[i] != -1)
 	{
 		if (ant < amount)
