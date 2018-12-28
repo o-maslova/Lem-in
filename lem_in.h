@@ -74,6 +74,7 @@ int					check_err(char *line, t_graph **graph, int n, int pos);
 int					check_link(char *line);
 int					check_path(t_link *path, int amount);
 int					search_by_name(t_vert *graph, char *name);
+char				*search_by_pos(t_graph *graph, int pos);
 // int					list_fulling(int fd, t_vert **graph, char **line, int pos);
 // int					making_links(char *line, t_vert **graph, int **links);
 int					count_link_elem(t_link *list);

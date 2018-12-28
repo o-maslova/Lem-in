@@ -35,10 +35,10 @@ int		main(int argc, char **argv)
 	parsing(fd, &graph);
 	// print_matrix(g_fd, *graph);
 	print_graph(graph);
-	clear_graph(&(graph->graph));
 	algorithm(graph);
 	clear_matrix(graph->links, graph->rooms);
 	clear_path(&(graph->pathes));
+	clear_graph(&(graph->graph));
 	free(graph->starts);
 	free(graph);
 	system("leaks lem-in");

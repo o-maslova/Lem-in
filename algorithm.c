@@ -112,27 +112,67 @@ int		create_start_matrix(t_graph *graph)
 	return (i);
 }
 
-// void	go_ant_go(t_graph *graph);
-// {
-// 	int		i;
-// 	int		j;
-// 	t_path	*tmp;
+void	arr_memalloc(int **arr, int amount, t_path *pathes)
+{
+	int		i;
+	t_path	*tmp;
 
-// 	i = 0;
-// 	tmp = graph->pathes;
-// 	while (i < graph->ant_amount && i < graph->pathes_num)
-// 	{
-// 		dprintf(g_fd, "L%d-%d", i, tmp->path[0]);
-// 		i++;
-// 		tmp = tmp->next;
-// 	}
-// 	if ()
-// 	j = 0;
-// 		while (tmp)
-// 		{
-// 		}
-// 	}
-// }
+	i = 0;
+	tmp = pathes;
+	arr = (int **)ft_memalloc(sizeof(int *) * amount);
+	while (i < amount)
+	{
+		arr[i] = (int *)ft_memalloc(sizeof(int) * tmp->path_val);
+		tmp = tmp->next;
+		i++;
+	}
+}
+
+void	output(t_path *path, int ant, int i, int amount)
+{
+	dprintf(g_fd, "L%d-%d\n", ant, path->path[i]);
+	if (amount > 1)
+	{
+		path = path->next;
+		ant += 1;
+	}
+	while (path->path[i] != -1)
+	{
+		if (ant < amount)
+		{
+			output(path, ant, i + 1, amount);
+		}
+	}
+	// ant = 0;
+	// i++;
+}
+
+void	go_ant_go(t_graph *graph)
+{
+	int		ant;
+	int		path_i;
+	int		**arr;
+	// int		index[graph->ant_amount];
+	t_path	*tmp;
+
+	ant = 0;
+	path_i = 0;
+	tmp = graph->pathes;
+	arr = NULL;
+	// arr_memalloc(arr, graph->pathes_num, graph->pathes);
+	output(tmp, ant, path_i, graph->ant_amount);
+	// while (ant < graph->ant_amount)
+	// {
+	// 	while (tmp->path[path_i] != -1)
+	// 	{
+	// 		// dprintf(g_fd, "L%d-%d\n", ant + 1, tmp->path[path_i]);
+	// 		dprintf(g_fd, "L%d-%s\n", ant + 1, search_by_pos(graph, tmp->path[path_i]));
+	// 		path_i++;
+	// 	}
+	// 	ant++;
+	// 	tmp = tmp->next;
+	// }
+}
 
 void	algorithm(t_graph *graph)
 {
@@ -156,7 +196,7 @@ void	algorithm(t_graph *graph)
 		match_column(graph->links, graph->starts[k], graph->rooms);
 		deeper(variant, graph, &path, graph->starts[k]);
 		clear_link(&path);
-		// dprintf(g_fd, "\n *** j = %d ***\n", j);;
+		// dprintf(g_fd, "\n *** j = %d ***\n", j);
 		unmatch(graph, k);
 		k++;
 	}
@@ -164,6 +204,6 @@ void	algorithm(t_graph *graph)
 	define_right_variants(graph, arr);
 	print_variants(g_fd, graph->pathes);
 	dprintf(g_fd, "num = %d\n", graph->pathes_num);
-	// go_ant_go(graph);
+	go_ant_go(graph);
 	free(arr);
 }
