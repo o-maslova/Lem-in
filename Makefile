@@ -13,6 +13,7 @@ SRC = ./main.c \
 		./print_staff.c \
 		./parsing.c \
 		./matrix_operations.c \
+		./define_pathes.c \
 		./remove.c
 
 BINS = $(SRC:.c=.o)

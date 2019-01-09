@@ -37,6 +37,7 @@ int		main(int argc, char **argv)
 	print_graph(graph);
 	algorithm(graph);
 	clear_matrix(graph->links, graph->rooms);
+	clear_arr(graph->arr);
 	clear_path(&(graph->pathes));
 	clear_graph(&(graph->graph));
 	free(graph->starts);

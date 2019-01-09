@@ -80,3 +80,17 @@ void		clear_path(t_path **path)
 		*path = NULL;
 	}
 }
+
+void	clear_arr(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i] != 0)
+	{
+		ft_strdel(&(arr[i]));
+		i++;
+	}
+	free(arr[i]);
+	free(arr);
+}
