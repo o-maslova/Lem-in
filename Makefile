@@ -13,6 +13,7 @@ SRC = ./main.c \
 		./print_staff.c \
 		./parsing.c \
 		./matrix_operations.c \
+		./matrix_creation.c \
 		./define_pathes.c \
 		./remove.c
 

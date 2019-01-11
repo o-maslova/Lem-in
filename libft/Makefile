@@ -109,10 +109,10 @@ OBJ_PRINTF = $(PRINTF_SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(OBJ_PRINTF)
-	ar rc $(NAME) $(OBJ) $(OBJ_PRINTF)
+	@ar rc $(NAME) $(OBJ) $(OBJ_PRINTF)
 
 %.o: %.c $(HEADER) $(PRINTF_HEADER)
-	$(CC) $(FLAGS) -o $@ -c $< -I./
+	@$(CC) $(FLAGS) -o $@ -c $< -I./
 
 clean:
 	/bin/rm -f $(OBJ) $(OBJ_PRINTF)

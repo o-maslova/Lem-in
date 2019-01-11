@@ -24,21 +24,22 @@ void		swap_values(t_path *tmp, t_path *first, t_path *second)
 
 void		sort_path(t_path *list)
 {
-	t_path	*tmp[2];
+	t_path	*tmp_1;
+	t_path	*tmp_2;
 	t_path	*swap;
 
-	tmp[0] = list;
+	tmp_1 = list;
 	swap = (t_path *)ft_memalloc(sizeof(t_path));
-	while (tmp[0]->next)
+	while (tmp_1->next)
 	{
-		tmp[1] = list;
-		while (tmp[1]->next)
+		tmp_2 = list;
+		while (tmp_2->next)
 		{
-			if (tmp[1]->path_val > tmp[1]->next->path_val)
-				swap_values(swap, tmp[1], tmp[1]->next);
-			tmp[1] = tmp[1]->next;
+			if (tmp_2->path_val > tmp_2->next->path_val)
+				swap_values(swap, tmp_2, tmp_2->next);
+			tmp_2 = tmp_2->next;
 		}
-		tmp[0] = tmp[0]->next;
+		tmp_1 = tmp_1->next;
 	}
 	free(swap);
 }

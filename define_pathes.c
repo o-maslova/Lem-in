@@ -31,7 +31,7 @@ void	define_right_variants(t_graph *graph, int *arr)
 		{
 			match(arr, tmp->path, tmp->path_val);
 			prev = tmp;
-			graph->pathes_num += 1;
+			graph->p_num += 1;
 			tmp = tmp->next;
 		}
 		else

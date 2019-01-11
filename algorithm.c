@@ -41,86 +41,81 @@ int		deeper(t_path *variant, t_graph *graph, t_link **path, int i)
 	return (0);
 }
 
-void		output(t_path *path, t_graph *graph, int ant, int i)
+void		output(t_graph *graph, int *ant, int i, int path_i)
 {
-	// // int		i;
+	// int		ant_i[graph->ant_amount];
 	// t_path	*tmp;
 
 	// // i = 0;
 	// tmp = path;
 	// dprintf(g_fd, "L%d-%s ", ant + 1, graph->arr[tmp->path[i]]);
-	// if (graph->ant_amount != 1 && ant < graph->pathes_num)
+	// if (graph->ant_amount != 1 && ant < graph->p_num)
 	// 	output(path->next, graph, ant + 1, i);
-
-	if (path)
+	while (*ant < graph->ant_amount)
 	{
-		if (path->path[i] == -1)
-		{
-			ant += 1;
-			path = path->next;
-		}
-		if (path && ant <= graph->ant_amount)
-		{
-			dprintf(g_fd, "L%d-%s ", ant + 1, graph->arr[path->path[i]]);
-			output(path->next, graph, ant + 1, i);
-		}
-		// else if (ant <= graph->ant_amount)
-	}
-	else if (ant == graph->pathes_num && ant < graph->ant_amount)
-	{
-		dprintf(g_fd, "\n");
-		ant -= graph->pathes_num;
-		output(graph->pathes, graph, ant, i + 1);
-	}
-	else if (ant < graph->ant_amount && ant > graph->pathes_num)
-	{
-		output(graph->pathes, graph, ant + 1, i);
+		graph->output[path_i][i] = 1;
+		*ant += 1;
+		dprintf(g_fd, "L%d-%s ", *ant, graph->arr[graph->p_arr[path_i][i]]);
+		path_i++;
 	}
 }
 
-// int		**create_index_mtrx(t_path *path, int pathes_num)
-// {
-// 	int		i;
-// 	int		*arr;
-// 	t_path	*tmp;
-
-// 	i = 0;
-// 	arr = (int *)ft_memalloc(sizeof(int) * pathes_num);
-// 	tmp = path;
-// 	while (tmp)
-// 	{
-// 		arr[i++] = tmp->path_val;
-// 		tmp = tmp->next;
-// 	}
-// }
-
 void	go_ant_go(t_graph *graph)
 {
-	int		ant;
-	// int		index[graph->pathes_num];
+	int		ant[2];
 	int		i;
-	int		j;
-	t_path	*tmp;
+	int		path_i[2];
 
 	i = 0;
-	j = 0;
-	ant = 0;
-	// index = create_index_mtrx(graph->pathes, graph->pathes_num);
-	// while (ant < graph->ant_amount)
+	ant[0] = 0;
+	path_i[0] = 0;
+	while (ant[1] < graph->ant_amount)
+	{
+		ant[0] = ant[1];
+		path_i[0] = path_i[1];
+		while (path_i[0] < graph->p_num)
+		{
+			graph->output[path_i[0]][i] = 1;
+			dprintf(g_fd, "L%d-%s ", ant[0] + 1, graph->arr[graph->p_arr[path_i[0]][i]]);
+			if (graph->p_arr[path_i[0]][i + 1] == -1)
+			{
+				path_i[1] = path_i[0] + 1;
+				ant[1] = ant[0] + 1;
+			}
+			path_i[0]++;
+			ant[0]++;
+		}
+		if (ant[0] == graph->p_num && i > 0 && ant[0] < graph->ant_amount)
+		{
+			output(graph, &ant[0], i - 1, path_i[1]);
+		}
+		i++;
+		dprintf(g_fd, "\n");
+	}
+
+	// while (ant <= graph->ant_amount)
 	// {
-		
-		tmp = graph->pathes;
-		output(tmp, graph, ant, i);
-		// // dprintf(g_fd, "\n");
-		// while (ant < graph->pathes_num && graph->ant_amount != 1)
-		// {
-		// 	dprintf(g_fd, "L%d-%s ", ant + 1, graph->arr[tmp->path[i]]);
-		// 	tmp = tmp->next;
-		// 	ant++;
-		// }
-		// graph->pathes_num += graph->pathes_num;
-		// i++;
-		// ant += graph->pathes_num;
+	// 	path_i += 1;
+	// 	// if (graph->p_arr[path_i - 1][i + 1] == -1)
+	// 	// 	break ;
+	// 	if (path_i == graph->p_num || graph->ant_amount == 1)
+	// 	{
+	// 		path_i = 0;
+	// 		while (ant < graph->ant_amount && i > 0)
+	// 		{
+	// 			output(graph, &ant, i - 1, path_i);
+	// 		}
+	// 		dprintf(g_fd, "\n");
+	// 		ant = 1;
+	// 		i += 1;
+	// 	}
+	// 	else
+	// 		ant++;
+	// 	while (graph->p_arr[path_i][i] == graph->end_room)
+	// 	{
+	// 		path_i += 1;
+	// 		ant++;
+	// 	}
 	// }
 }
 
@@ -152,9 +147,9 @@ void	algorithm(t_graph *graph)
 	}
 	sort_path(graph->pathes);
 	define_right_variants(graph, arr);
-	make_arr(graph);
-	// print_variants(g_fd, graph->pathes);
-	dprintf(g_fd, "pathes_num = %d\n", graph->pathes_num);
+	make_arrays(graph);
+	print_variants(g_fd, graph->pathes);
+	dprintf(g_fd, "p_num = %d\n", graph->p_num);
 	go_ant_go(graph);
 	free(arr);
 }
