@@ -1,13 +1,13 @@
 #include "lem_in.h"
 
-void		match(int *arr, int *path, int amount)
+void		match(int *arr, int **path, int amount)
 {
 	int i;
 
 	i = 0;
 	while (i < amount - 1)
 	{
-		arr[path[i]] = -1;
+		arr[path[i][0]] = -1;
 		i++;
 	}
 }

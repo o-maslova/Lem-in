@@ -38,8 +38,9 @@ typedef struct		s_link
 
 typedef struct		s_path
 {
-	int				*path;
-	int				path_val;
+	int				**path;
+	int				p_val;
+	int				ant_in_path;
 	struct s_path	*next;
 }					t_path;
 
@@ -85,13 +86,14 @@ int					search_by_name(t_vert *graph, char *name);
 int					count_link_elem(t_link *list);
 void				memory_allocate(t_graph **graph, int *check);
 void				parsing(int fd, t_graph **graph);
-void				match(int *arr, int *path, int amount);
+void				match(int *arr, int **path, int amount);
 void				match_column(int **links, int k, int amount);
 void				unmatch(t_graph *graph, int limit);
 void				remove_part(t_link **path, int pos);
 void				remove_last(t_link **path);
 void				algorithm(t_graph *graph);
 void				define_right_variants(t_graph *graph, int *arr);
+void				define_ant_step(t_graph *graph);
 
 void				print_graph(t_graph *graph);
 void				print_matrix(int fd, t_graph graph);

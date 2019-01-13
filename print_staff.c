@@ -17,7 +17,7 @@ void		print_path(t_link *path)
 	t_link *tmp;
 	
 	tmp = path;
-	// dprintf(g_fd, "value of path: %d\n", tmp->path_val);
+	// dprintf(g_fd, "value of path: %d\n", tmp->p_val);
 	while (tmp)
 	{
 		dprintf(g_fd, "%d\n", tmp->pos);
@@ -35,9 +35,9 @@ void		print_variants(int fd, t_path *path)
 	{
 		i = -1;
 		dprintf(fd, "NEW PATH\n");
-		dprintf(fd, "value of path: %d\n", tmp->path_val);
-		while (++i < tmp->path_val)
-			dprintf(fd, "%d\n", tmp->path[i]);
+		dprintf(fd, "value of path: %d\n", tmp->p_val);
+		while (++i < tmp->p_val)
+			dprintf(fd, "%d\n", tmp->path[i][0]);
 		dprintf(fd, "\n");
 		tmp = tmp->next;
 	}

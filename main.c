@@ -15,8 +15,8 @@
 void	clearing_fun(t_graph *graph)
 {
 	clear_matrix(graph->links, graph->rooms);
-	clear_matrix(graph->p_arr, graph->p_num);
-	clear_matrix(graph->output, graph->p_num);
+	// clear_matrix(graph->p_arr, graph->p_num);
+	// clear_matrix(graph->output, graph->p_num);
 	clear_arr(graph->arr);
 	clear_path(&(graph->pathes));
 	clear_graph(&(graph->graph));

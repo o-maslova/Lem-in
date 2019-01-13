@@ -15,11 +15,14 @@
 void		swap_values(t_path *tmp, t_path *first, t_path *second)
 {
 	tmp->path = first->path;
-	tmp->path_val = first->path_val;
+	tmp->ant_in_path = first->ant_in_path;
+	tmp->p_val = first->p_val;
 	first->path = second->path;
-	first->path_val = second->path_val;
+	first->p_val = second->p_val;
+	first->ant_in_path = second->ant_in_path;
 	second->path = tmp->path;
-	second->path_val = tmp->path_val;
+	second->p_val = tmp->p_val;
+	second->ant_in_path = tmp->ant_in_path;
 }
 
 void		sort_path(t_path *list)
@@ -35,7 +38,7 @@ void		sort_path(t_path *list)
 		tmp_2 = list;
 		while (tmp_2->next)
 		{
-			if (tmp_2->path_val > tmp_2->next->path_val)
+			if (tmp_2->p_val > tmp_2->next->p_val)
 				swap_values(swap, tmp_2, tmp_2->next);
 			tmp_2 = tmp_2->next;
 		}
@@ -70,17 +73,18 @@ t_path		*create_path(t_link *link)
 	if (link)
 	{
 		tmp = (t_path *)ft_memalloc(sizeof(t_path));
-		tmp->path_val = count_link_elem(link);
-		tmp->path = (int *)ft_memalloc(sizeof(int) * (tmp->path_val + 1));
+		tmp->p_val = count_link_elem(link);
+		tmp->path = (int **)ft_memalloc(sizeof(int *) * tmp->p_val);
 		i = 0;
 		l_tmp = link;
 		while (l_tmp)
 		{
-			tmp->path[i] = l_tmp->pos;
+			tmp->path[i] = (int *)ft_memalloc(sizeof(int) * 2);
+			tmp->path[i][0] = l_tmp->pos;
+			tmp->path[i][1] = 0;
 			l_tmp = l_tmp->next;
 			i++;
 		}
-		tmp->path[i] = -1;
 		tmp->next = NULL;
 	}
 	return (tmp);

@@ -60,23 +60,22 @@ void		clear_link(t_link **link)
 
 void		clear_path(t_path **path)
 {
-	t_path *clear;
+	int		i;
+	t_path	*clear;
 
 	clear = NULL;
 	if (*path)
 	{
-		if ((*path)->next)
+		while ((*path))
 		{
-			while ((*path)->next)
-			{
-				clear = (*path);
-				free((*path)->path);
-				free((*path));
-				(*path) = clear->next;
-			}
+			i = 0;
+			clear = (*path);
+			while (i < (*path)->p_val)
+				free((*path)->path[i++]);
+			free((*path)->path);
+			free((*path));
+			(*path) = clear->next;
 		}
-		free((*path)->path);
-		free(*path);
 		*path = NULL;
 	}
 }
