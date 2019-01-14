@@ -37,7 +37,7 @@ void		print_variants(int fd, t_path *path)
 		dprintf(fd, "NEW PATH\n");
 		dprintf(fd, "value of path: %d\n", tmp->p_val);
 		while (++i < tmp->p_val)
-			dprintf(fd, "%d\n", tmp->path[i][0]);
+			dprintf(fd, "%d\n", tmp->path[i]);
 		dprintf(fd, "\n");
 		tmp = tmp->next;
 	}

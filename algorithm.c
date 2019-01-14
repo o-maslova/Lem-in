@@ -41,75 +41,104 @@ int		deeper(t_path *variant, t_graph *graph, t_link **path, int i)
 	return (0);
 }
 
-void	out_it(t_graph *graph, int lim)
-{
-	int		i;
-	int		flag;
-	t_path	*tmp;
+// void	out_it(t_graph *graph, int lim)
+// {
+// 	int		i;
+// 	int		flag;
+// 	t_path	*tmp;
 
-	i = lim;
-	flag = 0;
-	while (i >= 0)
+// 	i = lim;
+// 	flag = 0;
+// 	while (i >= 0)
+// 	{
+// 		tmp = graph->pathes;
+// 		while (tmp)
+// 		{
+// 			while (tmp && tmp->p_val <= i)
+// 				tmp = tmp->next;
+// 			if (tmp && tmp->path[i][0] < 0)
+// 			{
+// 				tmp->path[i] = -tmp->path[i];
+// 				dprintf(g_fd, "L%d-%s ", tmp->path[i][1], graph->arr[tmp->path[i][0]]);
+// 			}
+// 			if (flag)
+// 				i = lim;
+// 			if (tmp)
+// 				tmp = tmp->next;
+// 		}
+// 		i--;
+// 	}
+// }
+
+void	another_try(t_graph *graph)
+{
+	int		k;
+	int		num;
+	int		ant;
+	// int		index[graph->ant_amount];
+
+	k = 1;
+	num = 0;
+	ant = 0;
+	while (graph->ant_p[graph->ant_amount - 1][k] != graph->end_room)
 	{
-		tmp = graph->pathes;
-		while (tmp)
+		if (ant < graph->p_num)
 		{
-			while (tmp && tmp->p_val <= i)
-				tmp = tmp->next;
-			if (tmp && tmp->path[i][0] < 0)
-			{
-				tmp->path[i][0] = -tmp->path[i][0];
-				dprintf(g_fd, "L%d-%s ", tmp->path[i][1], graph->arr[tmp->path[i][0]]);
-			}
-			if (flag)
-				i = lim;
-			if (tmp)
-				tmp = tmp->next;
+			dprintf(g_fd, "L%d-%s ", graph->ant_p[ant][0], graph->arr[graph->ant_p[ant][k]]);
 		}
-		i--;
+		if (ant > graph->p_num && ant < graph->ant_amount && k > 1)
+		{
+			dprintf(g_fd, "L%d-%s ", graph->ant_p[ant][0], graph->arr[graph->ant_p[ant][k - 1]]);
+		}
+		else
+			dprintf(g_fd, "\n");
+		ant++;
+		k++;
 	}
 }
 
 void	go_ant_go(t_graph *graph)
 {
+	int		k;
 	int		i;
 	int		p_num;
 	int		ants;
 	t_path	*tmp;
 
 	i = 0;
+	k = 0;
 	ants = 0;
-	while (ants < graph->ant_amount)
+	while (ants <= graph->ant_amount)
 	{
 		p_num = graph->p_num;
 		tmp = graph->pathes;
 		while (tmp && ants < graph->ant_amount && p_num > 0)
 		{
-			while (tmp && i >= tmp->p_val)
+			if (tmp && i >= tmp->p_val)
 			{
-				// if (graph->ant_amount == 1)
-				// 	break ;
 				tmp = tmp->next;
+				k++;
 				ants++;
 			}
-			if (!tmp)
-				break ;
-			tmp->path[i][0] = -tmp->path[i][0];
-			tmp->path[i][1] = ants + 1;
-			ants++;
-			tmp = tmp->next;
+			else
+			{
+				tmp->path[i] = -tmp->path[i];
+				// tmp->path[i][1] = ants + 1;
+				ants++;
+				tmp = tmp->next;
+			}
 			p_num--;
 		}
+		if (k == graph->ant_amount)
+			break ;
 		if (ants == graph->ant_amount) // вот тут ломается, когда все выведет и дойдкт до конца списка
 		{
-			ants = 0;
+			ants = k;
 			i++;
 			if (graph->ant_amount > graph->p_num) // из-за этого не работает, когда муравьев больше, чем путей
 				continue ;
 		}
-		else if (ants > graph->ant_amount || ants == 0)
-			break ;
-		out_it(graph, i);
+		// out_it(graph, i);
 		dprintf(g_fd, "\n");
 	}
 	//надо попробовать перенести в массив
@@ -143,10 +172,10 @@ void	algorithm(t_graph *graph)
 	}
 	sort_path(graph->pathes);
 	define_right_variants(graph, arr);
-	define_ant_step(graph);
-	make_arrays(graph);
+	define_ant_and_path(graph);
+	make_array(graph);
 	print_variants(g_fd, graph->pathes);
 	dprintf(g_fd, "p_num = %d\n", graph->p_num);
-	go_ant_go(graph);
+	another_try(graph);
 	free(arr);
 }

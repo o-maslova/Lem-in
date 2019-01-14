@@ -38,7 +38,7 @@ typedef struct		s_link
 
 typedef struct		s_path
 {
-	int				**path;
+	int				*path;
 	int				p_val;
 	int				ant_in_path;
 	struct s_path	*next;
@@ -51,8 +51,8 @@ typedef struct		s_graph
 	int				rooms;
 	int				p_num;
 	int				**links;
-	int				**p_arr;
-	int				**output;
+	// int				**p_arr;
+	int				**ant_p;
 	int				*starts;
 	char			**arr;
 	t_vert			*graph;
@@ -68,7 +68,7 @@ void				add_node(t_graph **graph, char **arr, int pos);
 void				sort_path(t_path *list);
 t_path				*create_path(t_link *link);
 int					create_start_matrix(t_graph *graph);
-void				make_arrays(t_graph *graph);
+void				make_array(t_graph *graph);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
 void				clear_link(t_link **link);
@@ -86,14 +86,14 @@ int					search_by_name(t_vert *graph, char *name);
 int					count_link_elem(t_link *list);
 void				memory_allocate(t_graph **graph, int *check);
 void				parsing(int fd, t_graph **graph);
-void				match(int *arr, int **path, int amount);
+void				match(int *arr, int *path, int amount);
 void				match_column(int **links, int k, int amount);
 void				unmatch(t_graph *graph, int limit);
 void				remove_part(t_link **path, int pos);
 void				remove_last(t_link **path);
 void				algorithm(t_graph *graph);
 void				define_right_variants(t_graph *graph, int *arr);
-void				define_ant_step(t_graph *graph);
+void				define_ant_and_path(t_graph *graph);
 
 void				print_graph(t_graph *graph);
 void				print_matrix(int fd, t_graph graph);

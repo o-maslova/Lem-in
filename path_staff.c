@@ -74,14 +74,14 @@ t_path		*create_path(t_link *link)
 	{
 		tmp = (t_path *)ft_memalloc(sizeof(t_path));
 		tmp->p_val = count_link_elem(link);
-		tmp->path = (int **)ft_memalloc(sizeof(int *) * tmp->p_val);
+		tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
 		i = 0;
 		l_tmp = link;
 		while (l_tmp)
 		{
-			tmp->path[i] = (int *)ft_memalloc(sizeof(int) * 2);
-			tmp->path[i][0] = l_tmp->pos;
-			tmp->path[i][1] = 0;
+			// tmp->path[i] = (int *)ft_memalloc(sizeof(int));
+			tmp->path[i]= l_tmp->pos;
+			// tmp->path[i][1] = 0;
 			l_tmp = l_tmp->next;
 			i++;
 		}

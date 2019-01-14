@@ -9,7 +9,7 @@ int		found_match(t_path *tmp, int *arr, int end)
 	k = 0;
 	while (i < tmp->p_val)
 	{
-		if (arr[tmp->path[i][0]] == 0 && tmp->path[i][0] != end)
+		if (arr[tmp->path[i]] == 0 && tmp->path[i] != end)
 			k++;
 		i++;
 	}
@@ -51,19 +51,56 @@ void	define_right_variants(t_graph *graph, int *arr)
 	}
 }
 
-void		define_ant_step(t_graph *graph)
+void		print_ants(t_graph *graph)
 {
-	int		ants;
-	t_path	*tmp;
+	int i;
+	int k;
+	t_path *tmp;
 
-	ants = graph->ant_amount;
+	i = 0;
 	tmp = graph->pathes;
-	while (ants > 0)
+	dprintf(g_fd, "\n");
+	while (i < graph->ant_amount)
 	{
-		ants--;
-		tmp->ant_in_path++;
+		k = 0;
+		dprintf(g_fd, "ant #%d\n", i + 1);
+		while (k < tmp->p_val + 1)
+		{
+			dprintf(g_fd, "%3d, ", graph->ant_p[i][k]);
+			k++;
+		}
 		tmp = tmp->next;
 		if (tmp == NULL)
 			tmp = graph->pathes;
+		dprintf(g_fd, "\n");
+		i++;
 	}
+}
+
+void		define_ant_and_path(t_graph *graph)
+{
+	int		i;
+	int		ant;
+	t_path	*tmp;
+
+	ant = 0;
+	tmp = graph->pathes;
+	graph->ant_p = (int **)ft_memalloc(sizeof(int *) * graph->ant_amount);
+	while (ant < graph->ant_amount)
+	{
+		while (tmp && tmp->p_val > ant)
+			tmp = tmp->next;
+		tmp = tmp == NULL ? graph->pathes : tmp->next;
+		i = 1;
+		graph->ant_p[ant] = (int *)ft_memalloc(sizeof(int) * (tmp->p_val + 1));
+		graph->ant_p[ant][0] = ant + 1;
+		while (i < tmp->p_val + 1)
+		{
+			graph->ant_p[ant][i] = tmp->path[i - 1];
+			i++;
+		}
+		ant++;
+		tmp->ant_in_path++;
+	}
+	print_ants(graph);
 }
