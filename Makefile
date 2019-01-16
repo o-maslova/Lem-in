@@ -4,6 +4,7 @@ FLAGS = -Wall -Wextra -Werror -g
 SRC = ./main.c \
 		./vertex_staff.c \
 		./clear_staff.c \
+		./more_clear_staff.c \
 		./errors.c \
 		./check.c \
 		./algorithm.c \

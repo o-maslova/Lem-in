@@ -15,14 +15,14 @@
 void		swap_values(t_path *tmp, t_path *first, t_path *second)
 {
 	tmp->path = first->path;
-	tmp->ant_in_path = first->ant_in_path;
+	// // tmp->ant_in_path = first->ant_in_path;
 	tmp->p_val = first->p_val;
 	first->path = second->path;
 	first->p_val = second->p_val;
-	first->ant_in_path = second->ant_in_path;
+	// // first->ant_in_path = second->ant_in_path;
 	second->path = tmp->path;
 	second->p_val = tmp->p_val;
-	second->ant_in_path = tmp->ant_in_path;
+	// // second->ant_in_path = tmp->ant_in_path;
 }
 
 void		sort_path(t_path *list)

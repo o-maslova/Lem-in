@@ -64,18 +64,17 @@ void		print_ants(t_graph *graph)
 	i = 0;
 	tmp = graph->pathes;
 	dprintf(g_fd, "\n");
-	while (i < graph->ant_amount)
+	while (i < graph->p_num)
 	{
-		k = 0;
-		dprintf(g_fd, "ant #%d\n", i + 1);
+		k = 1;
+		dprintf(g_fd, "path #%d\n", i + 1);
+		dprintf(g_fd, "%3s = %d, ", "ant", graph->ant_p[i][0][0]);
 		while (k < tmp->p_val + 1)
 		{
-			dprintf(g_fd, "%3d, ", graph->ant_p[i][k]);
+			dprintf(g_fd, "%d, ", graph->ant_p[i][k][0]);
 			k++;
 		}
 		tmp = tmp->next;
-		if (tmp == NULL)
-			tmp = graph->pathes;
 		dprintf(g_fd, "\n");
 		i++;
 	}
@@ -83,31 +82,33 @@ void		print_ants(t_graph *graph)
 
 void		define_ant_and_path(t_graph *graph)
 {
-	int		i;
-	int		val;
+	int		i_p;
+	// int		j;
+	// int		val;
 	int		ant;
 	t_path	*tmp;
 
 	ant = 0;
 	tmp = graph->pathes;
-	graph->ant_p = (int **)ft_memalloc(sizeof(int *) * graph->ant_amount);
 	graph->p_num = graph->ant_amount == 1 ? 1 : graph->p_num;
 	while (ant < graph->ant_amount)
 	{
-		i = 1;
-		graph->ant_p[ant] = (int *)ft_memalloc(sizeof(int) * (tmp->p_val + 1));
-		graph->ant_p[ant][0] = ant + 1;
-		while (i < tmp->p_val + 1)
+		i_p = 0;
+		tmp = graph->pathes;
+		while (ant < graph->ant_amount && i_p < graph->p_num)
 		{
-			graph->ant_p[ant][i] = tmp->path[i - 1];
-			i++;
-		}
-		tmp->ant_in_path++;
-		ant++;
-		val = tmp->next ? tmp->next->p_val - tmp->p_val : -1;
-		if (ant >= val)
+			if (ant >= graph->p_num && ant > tmp->p_val)
+			{
+				i_p++;
+			}
+			else
+			{
+				graph->ant_p[i_p][0][0] += 1;
+				ant++;
+				i_p++;
+			}
 			tmp = tmp->next;
-		tmp = tmp == NULL ? graph->pathes : tmp;
+		}
 	}
 	print_ants(graph);
 }

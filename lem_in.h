@@ -40,7 +40,6 @@ typedef struct		s_path
 {
 	int				*path;
 	int				p_val;
-	int				ant_in_path;
 	struct s_path	*next;
 }					t_path;
 
@@ -52,7 +51,7 @@ typedef struct		s_graph
 	int				p_num;
 	int				**links;
 	// int				**p_arr;
-	int				**ant_p;
+	int				***ant_p;
 	int				*starts;
 	char			**arr;
 	t_vert			*graph;
@@ -68,12 +67,14 @@ void				add_node(t_graph **graph, char **arr, int pos);
 void				sort_path(t_path *list);
 t_path				*create_path(t_link *link);
 int					create_start_matrix(t_graph *graph);
-void				make_array(t_graph *graph);
+void				make_name_arr(t_graph *graph);
+void				make_path_arr(t_graph *graph);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
 void				clear_link(t_link **link);
 void				clear_path(t_path **path);
 void				clear_matrix(int **links, int amount);
+void				clear_3d_matrix(t_graph *graph);
 void				clear_arr(char **arr);
 void				error_handling(int num, char **arr, t_graph **graph);
 void				check_s_e(t_graph **graph, int n);
