@@ -39,9 +39,9 @@ void		clear_link(t_link **link)
 	tmp = NULL;
 	while (*link)
 	{
-		tmp = *link;
+		tmp = (*link)->next;
 		free(*link);
-		*link = tmp->next;
+		*link = tmp;
 	}
 }
 
@@ -54,10 +54,10 @@ void		clear_path(t_path **path)
 	{
 		while ((*path))
 		{
-			clear = *path;
+			clear = (*path)->next;
 			free((*path)->path);
 			free((*path));
-			*path = clear->next;
+			*path = clear;
 		}
 		*path = NULL;
 	}

@@ -80,11 +80,12 @@ t_path		*create_path(t_link *link)
 		while (l_tmp)
 		{
 			// tmp->path[i] = (int *)ft_memalloc(sizeof(int));
-			tmp->path[i]= l_tmp->pos;
+			tmp->path[i] = l_tmp->pos;
 			// tmp->path[i][1] = 0;
 			l_tmp = l_tmp->next;
 			i++;
 		}
+		// tmp->path[i] = -1;
 		tmp->next = NULL;
 	}
 	return (tmp);

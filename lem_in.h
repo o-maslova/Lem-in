@@ -40,6 +40,7 @@ typedef struct		s_path
 {
 	int				*path;
 	int				p_val;
+	int				ant;
 	struct s_path	*next;
 }					t_path;
 
@@ -50,8 +51,6 @@ typedef struct		s_graph
 	int				rooms;
 	int				p_num;
 	int				**links;
-	// int				**p_arr;
-	int				***ant_p;
 	int				*starts;
 	char			**arr;
 	t_vert			*graph;

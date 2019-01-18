@@ -25,6 +25,8 @@ void	define_right_variants(t_graph *graph, int *arr)
 	t_path	*fr;
 
 	tmp = graph->pathes;
+	if (graph->ant_amount == 1)
+		clear_path(&(tmp->next));
 	if (graph->pathes->next)
 		val = graph->pathes->next->p_val - graph->pathes->p_val;
 	else
@@ -43,72 +45,34 @@ void	define_right_variants(t_graph *graph, int *arr)
 		}
 		else
 		{
-			k = 0;
-			fr = tmp->next;
-			// while (k < tmp->p_val)
-			// 	free(tmp->path[k++]);
-			free(tmp);
-			tmp = NULL;
-			prev->next = fr;
+			fr = tmp;
+			prev->next = tmp->next;
 			tmp = prev->next;
+			free(fr);
 		}
-	}
-}
-
-void		print_ants(t_graph *graph)
-{
-	int i;
-	int k;
-	t_path *tmp;
-
-	i = 0;
-	tmp = graph->pathes;
-	dprintf(g_fd, "\n");
-	while (i < graph->p_num)
-	{
-		k = 1;
-		dprintf(g_fd, "path #%d\n", i + 1);
-		dprintf(g_fd, "%3s = %d, ", "ant", graph->ant_p[i][0][0]);
-		while (k < tmp->p_val + 1)
-		{
-			dprintf(g_fd, "%d, ", graph->ant_p[i][k][0]);
-			k++;
-		}
-		tmp = tmp->next;
-		dprintf(g_fd, "\n");
-		i++;
 	}
 }
 
 void		define_ant_and_path(t_graph *graph)
 {
-	int		i_p;
-	// int		j;
-	// int		val;
+	int		i;
 	int		ant;
+	int		var;
 	t_path	*tmp;
 
-	ant = 0;
+	i = 1;
+	ant = graph->ant_amount;
 	tmp = graph->pathes;
-	graph->p_num = graph->ant_amount == 1 ? 1 : graph->p_num;
-	while (ant < graph->ant_amount)
+	tmp->ant = ant;
+	while (i <= graph->p_num)
 	{
-		i_p = 0;
-		tmp = graph->pathes;
-		while (ant < graph->ant_amount && i_p < graph->p_num)
+		if (tmp->next)
 		{
-			if (ant >= graph->p_num && ant > tmp->p_val)
-			{
-				i_p++;
-			}
-			else
-			{
-				graph->ant_p[i_p][0][0] += 1;
-				ant++;
-				i_p++;
-			}
-			tmp = tmp->next;
+			var = (tmp->next->p_val - tmp->p_val) * i;
+			tmp->next->ant = ant - var;
+			ant -= var;
 		}
+		tmp = tmp->next;
+		i++;
 	}
-	print_ants(graph);
 }
