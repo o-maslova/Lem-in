@@ -56,59 +56,37 @@ int		define_step(int p_num, int ants)
 	return (step);
 }
 
-// void	out_it(t_graph *graph, int *ant, int k, int step, int *flag)
-// {
-// 	int i;
-// 	int j;
-// 	int add;
-
-// 	i = step;
-// 	j = 0;
-// 	add = 1;
-// 	while (i > 0)
-// 	{
-// 		if (k - step >= 0)
-// 			dprintf(g_fd, "L%d-%s ", graph->ant_p[*ant][0], graph->arr[graph->ant_p[*ant][k - step]]);
-// 		if (graph->ant_p[*ant][k - step] == graph->end_room)
-// 		{
-// 			graph->ant_p[*ant][k - step] = -graph->ant_p[*ant][k - step];
-// 			*flag = *ant;
-// 		}
-// 		*ant += 1;
-// 		j++;
-// 		i--;
-// 	}
-// }
-
-int		out_it_2(t_graph *graph, int k, int ant, int lim)
+int		out_it_2(t_graph *graph, int ant, int lim)
 {
-	int		j;
+	// int		j;
 	int		done_with;
 	int		that_ant;
 	t_path	*tmp;
 	
-	j = k;
 	done_with = 0;
 	// lim = lim > graph->p_num ? lim - graph->p_num : 0;
 	that_ant = lim + 1;
 	while (that_ant <= ant)
 	{
 		tmp = graph->pathes;
-		while (tmp && lim-- > 0)
-			tmp = tmp->next;
+		// while (tmp && lim-- > 0)
+		// 	tmp = tmp->next;
 		while (tmp && that_ant <= ant)
 		{
-			if (tmp->path[j] < 0)
+			// j = tmp->j;
+			// if (that_ant > tmp->ant)
+			// 	tmp = tmp->next;
+			if (tmp && tmp->path[tmp->j] < 0)
 			{
-				tmp->path[j] = -tmp->path[j];
-				if (tmp->path[j] == graph->end_room)
+				tmp->path[tmp->j] = -tmp->path[tmp->j];
+				if (tmp->path[tmp->j] == graph->end_room)
 					done_with++;
-				dprintf(g_fd, "L%d-%s ", that_ant, graph->arr[tmp->path[j]]);
+				dprintf(g_fd, "L%d-%s ", that_ant, graph->arr[tmp->path[tmp->j]]);
+				that_ant++;
 			}
+			tmp->j -= 1;
 			tmp = tmp->next;
-			that_ant++;
 		}
-		j--;
 	}
 	dprintf(g_fd, "\n");
 	return (done_with);
@@ -120,12 +98,11 @@ void	match_rooms(t_path *path, int step, int i, int ant)
 	t_path	*tmp;
 
 	tmp = path;
-	if (i < step)
+	step = 0;
+	if (ant <= path->ant)
 		j = 0;
-	else if (path->ant < ant)
-		j = ant - path->ant;
 	else
-		j = i - step;
+		j = (path->k)++;
 	while (j < path->p_val && j < i)
 	{
 		path->path[j] = -path->path[j];
@@ -135,14 +112,12 @@ void	match_rooms(t_path *path, int step, int i, int ant)
 
 void	another_try_2(t_graph *graph)
 {
-	int		i;
 	int		ant;
 	int		step;
 	int		done_with;
 	t_path	*tmp;
 
 	ant = 0;
-	i = 0;
 	done_with = 0;
 	step = define_step(graph->p_num, graph->ant_amount);
 	while (done_with < graph->ant_amount)
@@ -150,16 +125,20 @@ void	another_try_2(t_graph *graph)
 		tmp = graph->pathes;
 		while (tmp)
 		{
-			if (i > 0 && graph->ant_amount > graph->p_num)
-				match_rooms(tmp, step, i, ant);
-			if (i < tmp->p_val)
-				tmp->path[i] = -tmp->path[i];
-			if (tmp->path[0] < 0)
+			if (tmp->i > 0 && graph->ant_amount > graph->p_num)
+				match_rooms(tmp, step, tmp->i, ant);
+			if (tmp->i < tmp->p_val)
+				tmp->path[tmp->i] = -tmp->path[tmp->i];
+			if (ant < graph->ant_amount)
 				ant++;
+			// if (tmp->path[0] < 0)
+			// 	ant++;
+			tmp->j = tmp->i;
+			if (tmp->i < tmp->p_val - 1)
+				tmp->i += 1;
 			tmp = tmp->next;
 		}
-		done_with += out_it_2(graph, i, ant, done_with);
-		i++;
+		done_with += out_it_2(graph, ant, done_with);
 	}
 }
 
@@ -190,13 +169,9 @@ void	algorithm(t_graph *graph)
 		k++;
 	}
 	sort_path(graph->pathes);
-	// print_variants(g_fd, graph->pathes);
-	// if (graph->ant_amount == 1)
-	// 	clear_path(&(graph->pathes->next));
-	// else
-		define_right_variants(graph, arr);
+	define_right_variants(graph, arr);
 	make_name_arr(graph);
-	// make_path_arr(graph);
+	graph->pathes->ant = graph->ant_amount;
 	define_ant_and_path(graph);
 	print_variants(g_fd, graph->pathes);
 	dprintf(g_fd, "p_num = %d\n", graph->p_num);
