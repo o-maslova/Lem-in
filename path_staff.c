@@ -63,7 +63,25 @@ int			check_path(t_link *path, int amount)
 	return (check);
 }
 
-t_path		*create_path(t_link *link)
+void	revers(int *path, int num)
+{
+	int i;
+	int j;
+	int tmp;
+
+	i = 0;
+	j = num - 1;
+	while (i < j)
+	{
+		tmp = path[i];
+		path[i] = path[j];
+		path[j] = tmp;
+		i++;
+		j--;
+	}
+}
+
+t_path		*create_path(t_link *link, int start, int end)
 {
 	int			i;
 	t_path		*tmp;
@@ -74,10 +92,11 @@ t_path		*create_path(t_link *link)
 	{
 		tmp = (t_path *)ft_memalloc(sizeof(t_path));
 		// tmp->p_val = val;
-		tmp->p_val = count_link_elem(link);
+		tmp->p_val = count_link_elem(link) + 2;
 		tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
 		i = 0;
 		l_tmp = link;
+		tmp->path[i++] = end;
 		while (l_tmp)
 		{
 			// tmp->path[i] = (int *)ft_memalloc(sizeof(int));
@@ -86,15 +105,16 @@ t_path		*create_path(t_link *link)
 			l_tmp = l_tmp->next;
 			i++;
 		}
-		// tmp->path[i] = -1;
+		tmp->path[i] = start;
+		revers(tmp->path, tmp->p_val);
 		tmp->next = NULL;
 	}
 	return (tmp);
 }
 
-void		add_path(t_path **variants, t_path *path)
+int		add_path(t_path **variants, t_path *path)
 {
-	t_path *tmp;
+	t_path		*tmp;
 
 	tmp = NULL;
 	if (!(*variants))
@@ -108,4 +128,5 @@ void		add_path(t_path **variants, t_path *path)
 			tmp = tmp->next;
 		tmp->next = path;
 	}
+	return (1);
 }

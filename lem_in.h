@@ -66,10 +66,10 @@ typedef struct		s_graph
 t_vert				*vertex_create(t_graph *graph, char **arr, int pos);
 void				add_link(t_link **path, int pos);
 void				add_vertex(t_vert **graph, t_vert *nw);
-void				add_path(t_path **variants, t_path *path);
+int					add_path(t_path **variants, t_path *path);
 void				add_node(t_graph **graph, char **arr, int pos);
 void				sort_path(t_path *list);
-t_path				*create_path(t_link *link);
+t_path				*create_path(t_link *link, int start, int end);
 int					create_start_matrix(t_graph *graph);
 void				make_name_arr(t_graph *graph);
 void				make_path_arr(t_graph *graph);

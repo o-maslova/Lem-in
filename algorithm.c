@@ -14,43 +14,59 @@ void	print_arr(t_graph *graph)
 
 int		deeper(t_path *variant, t_graph *graph, t_link **path, int i)
 {
-	int		k;
+	static int	flag;
+	int			k;
 
 	k = 0;
-	while (++k < graph->rooms)
+	flag = 0;
+	while (++k < graph->rooms && flag == 0)
 	{
 		if (graph->links[i][graph->end_room] == 1)
 		{
-			add_link(path, graph->end_room);
-			variant = create_path(*path);
-			add_path(&(graph->pathes), variant);
+			// add_link(path, graph->end_room);
+			// variant = create_path(*path);
+			// add_path(&(graph->pathes), variant);
 			return (1);
 		}
 		if (graph->links[i][k] == 1 && graph->v_arr[k] > 0)
 		{
-			add_link(path, k);
-			graph->v_arr[k] = -graph->v_arr[k];
+			// val++;
+			// add_link(path, k);
+			// graph->v_arr[k] = -graph->v_arr[k];
 			// graph->links[i][k] = -1;
 			// graph->links[k][i] = -1;
-			if ((deeper(variant, graph, path, k)) == 1)
+			graph->v_arr[k] = -graph->v_arr[k];
+			if ((deeper(variant, graph, path, k)) > 0)
 			{
-				remove_part(path, k);
-				dprintf(g_fd, "if ne null\n");
-				print_arr(graph);
+				add_link(path, k);
+				// graph->v_arr[k] = -graph->v_arr[k];
+				flag = 1;
+				// remove_part(path, k);
+				// unmatch(graph, k);
+				// dprintf(g_fd, "if ne null\n");
+				// print_arr(graph);
 			}
-			else
-			{
-				graph->v_arr[k] = -graph->v_arr[k];
+			// else
+			// {
+				// graph->links[i][k] = -1;
+				// graph->links[k][i] = -1;
+				// unmatch(graph, k);
+				// graph->v_arr[k] = -graph->v_arr[k];
 				// graph->links[i][k] = 1;
 				// graph->links[k][i] = 1;
-				remove_last(path);
-				dprintf(g_fd, "if null\n");
-				print_arr(graph);
-			}
+				// remove_last(path);
+				// dprintf(g_fd, "if null\n");
+				// print_arr(graph);
+			// }
 		}
 	}
-	free(variant);
+	if (flag == 1)
+		return (1);
 	return (0);
+	// add_link(&path, graph->starts[k]);
+	// }
+	// free(variant);
+	// return (0);
 }
 
 int		define_step(int p_num, int ants)
@@ -171,7 +187,6 @@ int		*create_arr(t_graph *graph)
 	return (v_arr);
 }
 
-
 void	algorithm(t_graph *graph)
 {
 	t_path	*variant;
@@ -179,6 +194,8 @@ void	algorithm(t_graph *graph)
 	int		*arr;
 	int		i;
 	int		k;
+	// int		val;
+	// int		tmp;
 
 	path = NULL;
 	variant = NULL;
@@ -186,23 +203,26 @@ void	algorithm(t_graph *graph)
 	dprintf(g_fd, "end = %d\n", graph->end_room);
 	dprintf(g_fd, "rooms = %d\n", graph->rooms);
 	k = 0;
+	// val = 1;
 	i = create_start_matrix(graph);
 	arr = (int *)ft_memalloc(sizeof(int) * graph->rooms);
 	graph->v_arr = create_arr(graph);
 	while (k < i)
 	{
-		add_link(&path, graph->starts[k]);
-		graph->links[0][k] = -1;
-		graph->v_arr[k] = -graph->v_arr[k];
+		// add_link(&path, graph->starts[k]);
+		// graph->links[0][k] = -1;
 		// match_column(graph->links, graph->starts[k], graph->rooms);
+		graph->v_arr[graph->starts[k]] = -graph->v_arr[graph->starts[k]];
 		deeper(variant, graph, &path, graph->starts[k]);
+		variant = create_path(path, graph->starts[k], graph->end_room);
+		graph->p_num += add_path(&(graph->pathes), variant);
 		clear_link(&path);
 		// dprintf(g_fd, "\n *** j = %d ***\n", j);
-		unmatch(graph, k);
+		// unmatch(graph, k);
 		k++;
 	}
 	sort_path(graph->pathes);
-	define_right_variants(graph, arr);
+	// define_right_variants(graph, arr);
 	make_name_arr(graph);
 	graph->pathes->ant = graph->ant_amount;
 	define_ant_and_path(graph);
