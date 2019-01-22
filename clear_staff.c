@@ -43,6 +43,7 @@ void		clear_link(t_link **link)
 		free(*link);
 		*link = tmp;
 	}
+	*link = NULL;
 }
 
 void		clear_path(t_path **path)

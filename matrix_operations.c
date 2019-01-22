@@ -40,9 +40,7 @@ void		unmatch(t_graph *graph, int limit)
 			if (graph->links[i][j] == -1)
 			{
 				if (j == graph->starts[k] && k <= limit)
-				{
 					k++;
-				}
 				else
 					graph->links[i][j] = 1;
 			}

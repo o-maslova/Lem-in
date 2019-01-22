@@ -54,6 +54,7 @@ typedef struct		s_graph
 	int				rooms;
 	int				p_num;
 	int				max_i;
+	int				*v_arr;
 	int				**links;
 	int				*starts;
 	char			**arr;

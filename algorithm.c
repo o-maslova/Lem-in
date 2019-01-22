@@ -1,16 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   algorithm.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/16 18:04:49 by omaslova          #+#    #+#             */
-/*   Updated: 2018/12/16 18:05:48 by omaslova         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "lem_in.h"
+
+void	print_arr(t_graph *graph)
+{
+	int i;
+
+	i = 0;
+	while (i < graph->rooms)
+	{
+		dprintf(g_fd, "%d ", graph->v_arr[i++]); 
+	}
+	dprintf(g_fd, "\n");
+}
 
 int		deeper(t_path *variant, t_graph *graph, t_link **path, int i)
 {
@@ -26,15 +26,27 @@ int		deeper(t_path *variant, t_graph *graph, t_link **path, int i)
 			add_path(&(graph->pathes), variant);
 			return (1);
 		}
-		if (graph->links[i][k] == 1)
+		if (graph->links[i][k] == 1 && graph->v_arr[k] > 0)
 		{
 			add_link(path, k);
-			graph->links[i][k] = -1;
-			graph->links[k][i] = -1;
+			graph->v_arr[k] = -graph->v_arr[k];
+			// graph->links[i][k] = -1;
+			// graph->links[k][i] = -1;
 			if ((deeper(variant, graph, path, k)) == 1)
+			{
 				remove_part(path, k);
+				dprintf(g_fd, "if ne null\n");
+				print_arr(graph);
+			}
 			else
+			{
+				graph->v_arr[k] = -graph->v_arr[k];
+				// graph->links[i][k] = 1;
+				// graph->links[k][i] = 1;
 				remove_last(path);
+				dprintf(g_fd, "if null\n");
+				print_arr(graph);
+			}
 		}
 	}
 	free(variant);
@@ -142,6 +154,24 @@ void	another_try_2(t_graph *graph)
 	}
 }
 
+int		*create_arr(t_graph *graph)
+{
+	int		i;
+	int		*v_arr;
+	t_vert	*tmp;
+
+	i = 0;
+	tmp = graph->graph;
+	v_arr = (int *)ft_memalloc(sizeof(int) * graph->rooms);
+	while (i < graph->rooms)
+	{
+		v_arr[i++] = tmp->pos;
+		tmp = tmp->next;
+	}
+	return (v_arr);
+}
+
+
 void	algorithm(t_graph *graph)
 {
 	t_path	*variant;
@@ -158,10 +188,13 @@ void	algorithm(t_graph *graph)
 	k = 0;
 	i = create_start_matrix(graph);
 	arr = (int *)ft_memalloc(sizeof(int) * graph->rooms);
+	graph->v_arr = create_arr(graph);
 	while (k < i)
 	{
 		add_link(&path, graph->starts[k]);
-		match_column(graph->links, graph->starts[k], graph->rooms);
+		graph->links[0][k] = -1;
+		graph->v_arr[k] = -graph->v_arr[k];
+		// match_column(graph->links, graph->starts[k], graph->rooms);
 		deeper(variant, graph, &path, graph->starts[k]);
 		clear_link(&path);
 		// dprintf(g_fd, "\n *** j = %d ***\n", j);
@@ -175,6 +208,6 @@ void	algorithm(t_graph *graph)
 	define_ant_and_path(graph);
 	print_variants(g_fd, graph->pathes);
 	dprintf(g_fd, "p_num = %d\n", graph->p_num);
-	another_try_2(graph);
+	// another_try_2(graph);
 	free(arr);
 }

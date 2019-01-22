@@ -73,6 +73,7 @@ t_path		*create_path(t_link *link)
 	if (link)
 	{
 		tmp = (t_path *)ft_memalloc(sizeof(t_path));
+		// tmp->p_val = val;
 		tmp->p_val = count_link_elem(link);
 		tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
 		i = 0;
