@@ -81,36 +81,66 @@ void	revers(int *path, int num)
 	}
 }
 
-t_path		*create_path(t_link *link, int start, int end)
+int			count_elems(int *arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i] != 0)
+	{
+		i++;
+	}
+	return (i);
+}
+
+t_path		*create_path(t_graph *graph, t_algo *algo_stuff, int val)
 {
 	int			i;
+	int			j;
 	t_path		*tmp;
-	t_link		*l_tmp;
-
-	tmp = NULL;
-	if (link)
+	
+	i = 0;
+	tmp = (t_path *)ft_memalloc(sizeof(t_path));
+	tmp->p_val = val + 1;
+	tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
+	j = tmp->p_val - 1;
+	while (i < tmp->p_val - 1)
 	{
-		tmp = (t_path *)ft_memalloc(sizeof(t_path));
-		// tmp->p_val = val;
-		tmp->p_val = count_link_elem(link) + 2;
-		tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
-		i = 0;
-		l_tmp = link;
-		tmp->path[i++] = end;
-		while (l_tmp)
-		{
-			// tmp->path[i] = (int *)ft_memalloc(sizeof(int));
-			tmp->path[i] = l_tmp->pos;
-			// tmp->path[i][1] = 0;
-			l_tmp = l_tmp->next;
-			i++;
-		}
-		tmp->path[i] = start;
-		revers(tmp->path, tmp->p_val);
-		tmp->next = NULL;
+		tmp->path[i] = algo_stuff->prev[i];
+		i++;
 	}
+	tmp->path[i] = END;
+	tmp->next = NULL;
 	return (tmp);
 }
+
+// t_path		*create_path(t_link *link)
+// {
+// 	int			i;
+// 	t_path		*tmp;
+// 	t_link		*l_tmp;
+// 	tmp = NULL;
+// 	if (link)
+// 	{
+// 		tmp = (t_path *)ft_memalloc(sizeof(t_path));
+// 		tmp->p_val = count_link_elem(link);
+// 		tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
+// 		i = 0;
+// 		l_tmp = link;
+// 			while (l_tmp)
+// 			{
+// 				// tmp->path[i] = (int *)ft_memalloc(sizeof(int));
+// 				tmp->path[i]= l_tmp->pos;
+// 				tmp->path[i] = l_tmp->pos;
+// 				// tmp->path[i][1] = 0;
+// 				l_tmp = l_tmp->next;
+// 				i++;
+// 			}
+// 			// tmp->path[i] = -1;
+// 			tmp->next = NULL;
+// 		}
+// 		return (tmp);
+// }
 
 int		add_path(t_path **variants, t_path *path)
 {

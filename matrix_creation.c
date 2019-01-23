@@ -16,7 +16,7 @@ int		create_start_matrix(t_graph *graph)
 	}
 	graph->starts = (int *)ft_memalloc(sizeof(int) * (count + 1));
 	i = 0;
-	j = 0;
+	j = 1;
 	while (j < graph->rooms)
 	{
 		if (graph->links[0][j] == 1)

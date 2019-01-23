@@ -7,7 +7,7 @@ SRC = ./main.c \
 		./more_clear_staff.c \
 		./errors.c \
 		./check.c \
-		./algorithm.c \
+		./algorithm_.c \
 		./search.c \
 		./link_staff.c \
 		./path_staff.c \
@@ -16,7 +16,8 @@ SRC = ./main.c \
 		./matrix_operations.c \
 		./matrix_creation.c \
 		./define_pathes.c \
-		./remove.c
+		./remove.c \
+		./queue_stuff.c
 
 BINS = $(SRC:.c=.o)
 HEADER = ./lem_in.h

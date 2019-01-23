@@ -13,11 +13,25 @@
 #ifndef LEM_IN_H
 # define LEM_IN_H
 # include "./libft/ft_printf/ft_printf.h"
+# define ROOMS graph->rooms
+# define END graph->end_room
 
 int					g_fd;
 int					g_ants;
 int					g_end;
 int					g_amount;
+
+typedef struct		s_link
+{
+	int				pos;
+	struct s_link	*next;
+}					t_link;
+
+typedef struct		s_queue
+{
+	t_link			*start;
+	t_link			*end;
+}					t_queue;
 
 typedef struct		s_vert
 {
@@ -30,11 +44,6 @@ typedef struct		s_vert
 	struct s_vert	*next;
 }					t_vert;
 
-typedef struct		s_link
-{
-	int				pos;
-	struct s_link	*next;
-}					t_link;
 
 typedef struct		s_path
 {
@@ -62,6 +71,14 @@ typedef struct		s_graph
 	t_path			*pathes;
 }					t_graph;
 
+typedef struct		s_algo
+{
+	int				*distances;
+	int				*prev;
+	int				*used;
+	int				*visited;
+	t_queue			*queue;
+}					t_algo;
 
 t_vert				*vertex_create(t_graph *graph, char **arr, int pos);
 void				add_link(t_link **path, int pos);
@@ -69,7 +86,8 @@ void				add_vertex(t_vert **graph, t_vert *nw);
 int					add_path(t_path **variants, t_path *path);
 void				add_node(t_graph **graph, char **arr, int pos);
 void				sort_path(t_path *list);
-t_path				*create_path(t_link *link, int start, int end);
+// t_path				*create_path(t_link *link);
+t_path				*create_path(t_graph *graph, t_algo *algo_stuff, int val);
 int					create_start_matrix(t_graph *graph);
 void				make_name_arr(t_graph *graph);
 void				make_path_arr(t_graph *graph);
@@ -99,6 +117,9 @@ void				remove_last(t_link **path);
 void				algorithm(t_graph *graph);
 void				define_right_variants(t_graph *graph, int *arr);
 void				define_ant_and_path(t_graph *graph);
+
+int					pop_from_queue(t_queue *queue);
+void				put_to_queue(t_queue *queue, int pos);
 
 void				print_graph(t_graph *graph);
 void				print_matrix(int fd, t_graph graph);

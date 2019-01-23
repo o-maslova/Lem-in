@@ -20,9 +20,12 @@ void	remove_node(t_path *path)
 {
 	t_path *tmp;
 
-	tmp = path->next->next;
-	free(path->next);
-	path->next = tmp;
+	if (path->next->next)
+	{
+		tmp = path->next->next;
+		free(path->next);
+		path->next = tmp;
+	}
 	// return (path);
 }
 
