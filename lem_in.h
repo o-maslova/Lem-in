@@ -27,12 +27,6 @@ typedef struct		s_link
 	struct s_link	*next;
 }					t_link;
 
-typedef struct		s_queue
-{
-	t_link			*start;
-	t_link			*end;
-}					t_queue;
-
 typedef struct		s_vert
 {
 	int				pos;
@@ -54,6 +48,7 @@ typedef struct		s_path
 	int				j;
 	int				k;
 	struct s_path	*next;
+
 }					t_path;
 
 typedef struct		s_graph
@@ -62,10 +57,7 @@ typedef struct		s_graph
 	int				end_room;
 	int				rooms;
 	int				p_num;
-	int				max_i;
-	int				*v_arr;
 	int				**links;
-	int				*starts;
 	char			**arr;
 	t_vert			*graph;
 	t_path			*pathes;
@@ -75,51 +67,40 @@ typedef struct		s_algo
 {
 	int				*distances;
 	int				*prev;
-	int				*used;
 	int				*visited;
-	t_queue			*queue;
+	int				*queue;
+	int				index;
 }					t_algo;
 
 t_vert				*vertex_create(t_graph *graph, char **arr, int pos);
-void				add_link(t_link **path, int pos);
 void				add_vertex(t_vert **graph, t_vert *nw);
 int					add_path(t_path **variants, t_path *path);
 void				add_node(t_graph **graph, char **arr, int pos);
 void				sort_path(t_path *list);
-// t_path				*create_path(t_link *link);
-t_path				*create_path(t_graph *graph, t_algo *algo_stuff, int val);
-int					create_start_matrix(t_graph *graph);
+t_path				*create_path(t_graph *graph, t_algo *algo_stuff, int *used);
+t_path				*deeper(t_algo *algo, t_graph *graph, int *used);
+void				initial(t_algo **algo, int num);
+
 void				make_name_arr(t_graph *graph);
 void				make_path_arr(t_graph *graph);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
-void				clear_link(t_link **link);
 void				clear_path(t_path **path);
 void				clear_matrix(int **links, int amount);
-void				clear_3d_matrix(t_graph *graph);
 void				clear_arr(char **arr);
 void				error_handling(int num, char **arr, t_graph **graph);
 void				check_s_e(t_graph **graph, int n);
 int					check_err(char *line, t_graph **graph, int n, int pos);
 int					check_link(char *line);
-int					check_path(t_link *path, int amount);
-int					search_by_name(t_vert *graph, char *name);
 // int					list_fulling(int fd, t_vert **graph, char **line, int pos);
 // int					making_links(char *line, t_vert **graph, int **links);
-int					count_link_elem(t_link *list);
 void				memory_allocate(t_graph **graph, int *check);
 void				parsing(int fd, t_graph **graph);
-void				match(int *arr, int *path, int amount);
-void				match_column(int **links, int k, int amount);
-void				unmatch(t_graph *graph, int limit);
-void				remove_part(t_link **path, int pos);
-void				remove_last(t_link **path);
+// void				match(int *arr, int *path, int amount);
+// void				match_column(int **links, int k, int amount);
+// void				unmatch(t_graph *graph, int limit);
 void				algorithm(t_graph *graph);
-void				define_right_variants(t_graph *graph, int *arr);
-void				define_ant_and_path(t_graph *graph);
-
-int					pop_from_queue(t_queue *queue);
-void				put_to_queue(t_queue *queue, int pos);
+void				ant_output(t_graph *graph);
 
 void				print_graph(t_graph *graph);
 void				print_matrix(int fd, t_graph graph);

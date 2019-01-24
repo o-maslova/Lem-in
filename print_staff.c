@@ -10,6 +10,7 @@ void		printf_this(int *arr)
 		dprintf(g_fd, "%d  ", arr[i]);
 		i++;
 	}
+	dprintf(g_fd, "\n");
 }
 
 void		print_path(t_link *path)

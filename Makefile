@@ -4,20 +4,14 @@ FLAGS = -Wall -Wextra -Werror -g
 SRC = ./main.c \
 		./vertex_staff.c \
 		./clear_staff.c \
-		./more_clear_staff.c \
 		./errors.c \
 		./check.c \
 		./algorithm_.c \
-		./search.c \
-		./link_staff.c \
 		./path_staff.c \
 		./print_staff.c \
 		./parsing.c \
-		./matrix_operations.c \
-		./matrix_creation.c \
-		./define_pathes.c \
-		./remove.c \
-		./queue_stuff.c
+		./find_pathes.c \
+		./ant_output.c
 
 BINS = $(SRC:.c=.o)
 HEADER = ./lem_in.h

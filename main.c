@@ -15,11 +15,9 @@
 void	clearing_fun(t_graph *graph)
 {
 	clear_matrix(graph->links, graph->rooms);
-	// clear_3d_matrix(graph);
 	clear_arr(graph->arr);
 	clear_path(&(graph->pathes));
 	clear_graph(&(graph->graph));
-	free(graph->starts);
 }
 
 int		main(int argc, char **argv)

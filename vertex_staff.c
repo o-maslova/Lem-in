@@ -27,7 +27,6 @@ void		memory_allocate(t_graph **graph, int *check)
 		(*graph)->links[i] = (int *)ft_memalloc(sizeof(int) * tmp);
 		i++;
 	}
-	// return (graph->links);
 }
 
 t_vert		*vertex_create(t_graph *graph, char **arr, int pos)

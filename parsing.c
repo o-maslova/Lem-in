@@ -1,5 +1,21 @@
 #include "lem_in.h"
 
+int			search_by_name(t_vert *graph, char *name)
+{
+	int		res;
+	t_vert	*tmp;
+
+	tmp = graph;
+	while (tmp)
+	{
+		res = ft_strcmp(tmp->name, name);
+		if (res == 0)
+			return (tmp->pos);
+		tmp = tmp->next;
+	}
+	return (-1);
+}
+
 int		making_links(char *line, t_vert **graph, int **links)
 {
 	char	**arr;
@@ -12,10 +28,8 @@ int		making_links(char *line, t_vert **graph, int **links)
 	vertex[1] = search_by_name(*graph, arr[1]);
 	if (vertex[0] >= 0 && vertex[1] >= 0 && vertex[0] != vertex[1])
 	{
-		// if (vertex[0] < vertex[1])
-			links[vertex[0]][vertex[1]] = 1;
-		// else
-			links[vertex[1]][vertex[0]] = 1;
+		links[vertex[0]][vertex[1]] = 1;
+		links[vertex[1]][vertex[0]] = 1;
 	}
 	ft_arrdel(arr);
 	return (1);
@@ -86,5 +100,4 @@ void	parsing(int fd, t_graph **graph)
 		if (i < 0)
 			break ;
 	}
-	// return (links);
 }
