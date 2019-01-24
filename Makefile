@@ -6,7 +6,7 @@ SRC = ./main.c \
 		./clear_staff.c \
 		./errors.c \
 		./check.c \
-		./algorithm_.c \
+		./algorithm.c \
 		./path_staff.c \
 		./print_staff.c \
 		./parsing.c \

@@ -86,10 +86,10 @@ void	algorithm(t_graph *graph)
 	}
 	sort_path(graph->pathes);
 	dprintf(g_fd, "p_num = %d\n", graph->p_num);
-	print_variants(g_fd, graph->pathes);
 	make_name_arr(graph);
 	graph->pathes->ant = graph->ant_amount;
 	define_ant_and_path(graph);
+	print_variants(g_fd, graph->pathes);
 	ant_output(graph);
 	clear_algo(&algo);
 	free(used);

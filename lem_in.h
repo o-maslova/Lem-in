@@ -92,13 +92,8 @@ void				error_handling(int num, char **arr, t_graph **graph);
 void				check_s_e(t_graph **graph, int n);
 int					check_err(char *line, t_graph **graph, int n, int pos);
 int					check_link(char *line);
-// int					list_fulling(int fd, t_vert **graph, char **line, int pos);
-// int					making_links(char *line, t_vert **graph, int **links);
 void				memory_allocate(t_graph **graph, int *check);
 void				parsing(int fd, t_graph **graph);
-// void				match(int *arr, int *path, int amount);
-// void				match_column(int **links, int k, int amount);
-// void				unmatch(t_graph *graph, int limit);
 void				algorithm(t_graph *graph);
 void				ant_output(t_graph *graph);
 

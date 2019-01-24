@@ -2,19 +2,20 @@
 
 int		out_it(t_graph *graph, int ant, int lim)
 {
-	// int		j;
+	int		counter;;
 	int		done_with;
 	int		that_ant;
 	t_path	*tmp;
 	
+	counter = 0;
 	done_with = 0;
 	// lim = lim > graph->p_num ? lim - graph->p_num : 0;
 	that_ant = lim + 1;
 	while (that_ant <= ant)
 	{
 		tmp = graph->pathes;
-		// while (tmp && lim-- > 0)
-		// 	tmp = tmp->next;
+		while (tmp && lim-- > 0)
+			tmp = tmp->next;
 		while (tmp && that_ant <= ant)
 		{
 			// j = tmp->j;
@@ -27,8 +28,10 @@ int		out_it(t_graph *graph, int ant, int lim)
 					done_with++;
 				dprintf(g_fd, "L%d-%s ", that_ant, graph->arr[tmp->path[tmp->j]]);
 				that_ant++;
+				if (tmp->j == tmp->k)
+					counter++;
 			}
-			tmp->j -= 1;
+			tmp->j = tmp->j > 0 ? tmp->j - 1 : tmp->j;
 			tmp = tmp->next;
 		}
 	}
