@@ -14,22 +14,29 @@
 
 void	error_handling(int num, char **arr, t_graph **graph)
 {
+	if (num == -1)
+		perror("ERROR!\n");
+	if (num == 0)
+		perror("ERROR! Wrong number of ants!\n");
 	if (num == 1)
-		perror("Error! Undefined start position!\n");
+		perror("ERROR! Undefined start position!\n");
 	if (num == 2)
-		perror("Error! Undefined end position!\n");
+		perror("ERROR! Undefined end position!\n");
 	if (num == 3)
-		perror("Error! Wrong coordinates format!\n");
+		perror("ERROR! Wrong coordinates format!\n");
 	if (num == 4)
-		perror("Error! Wrong data!\n");
+		perror("ERROR! Wrong data!\n");
 	if (num == 5)
-		perror("Error! Wrong link!\n");
+		perror("ERROR! Wrong link!\n");
 	if (num == 6)
-		perror("Error! Meet an empty line!\n");
+		perror("ERROR! Not enough data!\n");
 	if (num == 7)
-		perror("Error! Wrong number of ants!\n");
+		ft_printf("usage: ./lem-in ant_farm_map.txt\n");
 	ft_arrdel(arr);
-	clear_graph(&((*graph)->graph));
-	free(*graph);
+	if (graph)
+	{
+		clear_graph(&((*graph)->graph));
+		free(*graph);
+	}
 	exit(0);
 }

@@ -19,15 +19,18 @@ int			ft_atoi(const char *str)
 
 	nb = 0;
 	sign = 0;
-	while (*str == 32 || *str == '\t' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-' || *str == '+')
+	if (str)
 	{
-		if (*str == '-')
-			sign = 1;
-		str++;
+		while (*str == 32 || *str == '\t' || (*str >= 9 && *str <= 13))
+			str++;
+		if (*str == '-' || *str == '+')
+		{
+			if (*str == '-')
+				sign = 1;
+			str++;
+		}
+		while (*str >= '0' && *str <= '9')
+			nb = nb * 10 + *str++ - 48;
 	}
-	while (*str >= '0' && *str <= '9')
-		nb = nb * 10 + *str++ - 48;
 	return (sign ? -nb : nb);
 }

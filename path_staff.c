@@ -28,20 +28,23 @@ void		sort_path(t_path *list)
 	t_path	*tmp_2;
 	t_path	*swap;
 
-	tmp_1 = list;
-	swap = (t_path *)ft_memalloc(sizeof(t_path));
-	while (tmp_1->next)
+	if (list)
 	{
-		tmp_2 = list;
-		while (tmp_2->next)
+		tmp_1 = list;
+		swap = (t_path *)ft_memalloc(sizeof(t_path));
+		while (tmp_1->next)
 		{
-			if (tmp_2->p_val > tmp_2->next->p_val)
-				swap_values(swap, tmp_2, tmp_2->next);
-			tmp_2 = tmp_2->next;
+			tmp_2 = list;
+			while (tmp_2->next)
+			{
+				if (tmp_2->p_val > tmp_2->next->p_val)
+					swap_values(swap, tmp_2, tmp_2->next);
+				tmp_2 = tmp_2->next;
+			}
+			tmp_1 = tmp_1->next;
 		}
-		tmp_1 = tmp_1->next;
+		free(swap);
 	}
-	free(swap);
 }
 
 t_path		*create_path(t_graph *graph, t_algo *algo, int *used)
@@ -49,7 +52,7 @@ t_path		*create_path(t_graph *graph, t_algo *algo, int *used)
 	int			i;
 	int			j;
 	t_path		*tmp;
-	
+
 	tmp = (t_path *)ft_memalloc(sizeof(t_path));
 	tmp->p_val = algo->distances[END];
 	tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
@@ -66,7 +69,7 @@ t_path		*create_path(t_graph *graph, t_algo *algo, int *used)
 	return (tmp);
 }
 
-int		add_path(t_path **variants, t_path *path)
+int			add_path(t_path **variants, t_path *path)
 {
 	t_path		*tmp;
 

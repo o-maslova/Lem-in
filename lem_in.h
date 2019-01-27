@@ -16,11 +16,6 @@
 # define ROOMS graph->rooms
 # define END graph->end_room
 
-int					g_fd;
-int					g_ants;
-int					g_end;
-int					g_amount;
-
 typedef struct		s_link
 {
 	int				pos;
@@ -54,6 +49,7 @@ typedef struct		s_path
 typedef struct		s_graph
 {
 	int				ant_amount;
+	int				ant_in_string;
 	int				end_room;
 	int				rooms;
 	int				p_num;
@@ -80,27 +76,20 @@ void				sort_path(t_path *list);
 t_path				*create_path(t_graph *graph, t_algo *algo_stuff, int *used);
 t_path				*deeper(t_algo *algo, t_graph *graph, int *used);
 void				initial(t_algo **algo, int num);
-
 void				make_name_arr(t_graph *graph);
-void				make_path_arr(t_graph *graph);
 void				clear_graph(t_vert **graph);
 void				clear_vertex(t_vert *vrt);
 void				clear_path(t_path **path);
 void				clear_matrix(int **links, int amount);
 void				clear_arr(char **arr);
 void				error_handling(int num, char **arr, t_graph **graph);
-void				check_s_e(t_graph **graph, int n);
+void				check_start_end(t_graph **graph, int n, int fd, char **line);
 int					check_err(char *line, t_graph **graph, int n, int pos);
 int					check_link(char *line);
+void				check_graph(t_graph *graph);
 void				memory_allocate(t_graph **graph, int *check);
-void				parsing(int fd, t_graph **graph);
+int					parsing(int fd, t_graph **graph, char **line);
 void				algorithm(t_graph *graph);
 void				ant_output(t_graph *graph);
-
-void				print_graph(t_graph *graph);
-void				print_matrix(int fd, t_graph graph);
-void				print_path(t_link *path);
-void				print_variants(int fd, t_path *path);
-void				printf_this(int *arr);
 
 #endif

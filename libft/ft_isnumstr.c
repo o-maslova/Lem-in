@@ -12,22 +12,39 @@
 
 #include "libft.h"
 
+int		is_overflow(char *str, int num)
+{
+	char *num_2;
+
+	num_2 = ft_itoa(num);
+	if (ft_strcmp(str, num_2) != 0)
+		return (0);
+	return (1);
+}
+
 int		ft_isnumstr(char *str)
 {
 	int i;
 	int num;
 
 	i = 0;
-	num = ft_atoi(str);
-	if (num < 0 || num > 2147483647)
-		return (0);
-	if (num == 0 && str[i] == '\0')
-		return (0);
-	while (str[i] != '\0')
+	if (str)
 	{
-		if (!ft_isdigit(str[i]))
+		num = ft_atoi(str);
+		if (ft_strlen(str) >= 10)
+			if (!is_overflow(str, num))
+				return (0);
+		if (num <= 0 || num > 2147483647)
 			return (0);
-		i++;
+		if (num == 0 && str[i] == '\0')
+			return (0);
+		while (str[i] != '\0')
+		{
+			if (!ft_isdigit(str[i]))
+				return (0);
+			i++;
+		}
+		return (1);
 	}
-	return (1);
+	return (-1);
 }

@@ -12,13 +12,13 @@
 
 #include "lem_in.h"
 
-void		clear_vertex(t_vert *vertex)
+void	clear_vertex(t_vert *vertex)
 {
 	ft_strdel(&(vertex->name));
 	free(vertex);
 }
 
-void		clear_graph(t_vert **graph)
+void	clear_graph(t_vert **graph)
 {
 	t_vert	*v_tmp;
 
@@ -32,7 +32,7 @@ void		clear_graph(t_vert **graph)
 	free(*graph);
 }
 
-void		clear_path(t_path **path)
+void	clear_path(t_path **path)
 {
 	t_path	*clear;
 

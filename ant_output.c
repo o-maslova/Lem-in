@@ -1,45 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ant_output.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/01/24 17:58:08 by omaslova          #+#    #+#             */
+/*   Updated: 2019/01/24 17:58:12 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
+
+void	if_out(t_graph *graph, t_path *tmp, int *done_with, int ant)
+{
+	tmp->path[tmp->j] = -tmp->path[tmp->j];
+	if (tmp->path[tmp->j] == graph->end_room)
+		*done_with += 1;
+	ft_printf("L%d-%s ", ant, graph->arr[tmp->path[tmp->j]]);
+}
 
 int		out_it(t_graph *graph, int ant, int lim)
 {
-	int		counter;;
 	int		done_with;
 	int		that_ant;
 	t_path	*tmp;
-	
-	counter = 0;
+
 	done_with = 0;
-	// lim = lim > graph->p_num ? lim - graph->p_num : 0;
 	that_ant = lim + 1;
-	while (that_ant <= ant)
+	ft_printf("\n");
+	while (that_ant <= ant && graph->ant_in_string > 0)
 	{
 		tmp = graph->pathes;
 		while (tmp && lim-- > 0)
 			tmp = tmp->next;
 		while (tmp && that_ant <= ant)
 		{
-			// j = tmp->j;
-			// if (that_ant > tmp->ant)
-			// 	tmp = tmp->next;
 			if (tmp && tmp->path[tmp->j] < 0)
 			{
-				tmp->path[tmp->j] = -tmp->path[tmp->j];
-				if (tmp->path[tmp->j] == graph->end_room)
-					done_with++;
-				dprintf(g_fd, "L%d-%s ", that_ant, graph->arr[tmp->path[tmp->j]]);
-				that_ant++;
-				if (tmp->j == tmp->k)
-					counter++;
+				if_out(graph, tmp, &done_with, that_ant++);
+				graph->ant_in_string--;
 			}
 			tmp->j = tmp->j > 0 ? tmp->j - 1 : tmp->j;
 			tmp = tmp->next;
 		}
 	}
-	dprintf(g_fd, "\n");
 	return (done_with);
 }
 
-void	match_rooms(t_path *path, int i, int ant)
+void	match_rooms(t_path *path, int i, int ant, int *ant_in_string)
 {
 	int		j;
 	t_path	*tmp;
@@ -52,6 +61,7 @@ void	match_rooms(t_path *path, int i, int ant)
 	while (j < path->p_val && j < i)
 	{
 		path->path[j] = -path->path[j];
+		*ant_in_string += 1;
 		j++;
 	}
 }
@@ -70,16 +80,15 @@ void	ant_output(t_graph *graph)
 		while (tmp)
 		{
 			if (tmp->i > 0 && graph->ant_amount > graph->p_num)
-				match_rooms(tmp, tmp->i, ant);
+				match_rooms(tmp, tmp->i, ant, &graph->ant_in_string);
 			if (tmp->i < tmp->p_val)
+			{
 				tmp->path[tmp->i] = -tmp->path[tmp->i];
-			if (ant < graph->ant_amount)
-				ant++;
-			// if (tmp->path[0] < 0)
-			// 	ant++;
+				graph->ant_in_string++;
+			}
+			ant = ant < graph->ant_amount ? ant + 1 : ant;
 			tmp->j = tmp->i;
-			if (tmp->i < tmp->p_val - 1)
-				tmp->i += 1;
+			tmp->i = tmp->i < tmp->p_val - 1 ? tmp->i + 1 : tmp->i;
 			tmp = tmp->next;
 		}
 		done_with += out_it(graph, ant, done_with);

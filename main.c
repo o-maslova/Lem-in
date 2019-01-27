@@ -12,40 +12,55 @@
 
 #include "lem_in.h"
 
-void	clearing_fun(t_graph *graph)
+void	clearing_function(t_graph *graph)
 {
 	clear_matrix(graph->links, graph->rooms);
-	clear_arr(graph->arr);
 	clear_path(&(graph->pathes));
 	clear_graph(&(graph->graph));
+	free(graph);
+}
+
+void	pars_data(int fd, t_graph **graph)
+{
+	int			i;
+	char		*line;
+
+	i = 0;
+	get_next_line(fd, &line);
+	while (*line == '#')
+	{
+		free(line);
+		get_next_line(fd, &line);
+	}
+	if ((i = ft_isnumstr(line)) <= 0)
+		error_handling(i, NULL, graph);
+	(*graph)->ant_amount = ft_atoi(line);
+	ft_printf("%d\n", (*graph)->ant_amount);
+	free(line);
+	while (get_next_line(fd, &line) > 0)
+	{
+		if ((i = parsing(fd, graph, &line)) > 0)
+			ft_printf("%s\n", line);
+		free(line);
+		if (i < 0)
+			break ;
+	}
 }
 
 int		main(int argc, char **argv)
 {
 	int			fd;
-	char		*line;
 	t_graph		*graph;
 
-	if (argc != 2)
-		exit(0);
 	graph = (t_graph *)ft_memalloc(sizeof(t_graph));
 	graph->graph = NULL;
 	graph->links = NULL;
 	fd = open(argv[1], O_RDONLY);
-	g_fd = open("log", O_RDWR | O_CREAT | O_TRUNC);
-	if (fd < 0)
-		exit(0);
-	get_next_line(fd, &line);
-	if (!ft_isnumstr(line))
+	if (argc != 2 || fd < 0)
 		error_handling(7, NULL, &graph);
-	graph->ant_amount = ft_atoi(line);
-	free(line);
-	parsing(fd, &graph);
-	// print_matrix(g_fd, *graph);
-	print_graph(graph);
+	pars_data(fd, &graph);
 	algorithm(graph);
-	clearing_fun(graph);
-	free(graph);
+	clearing_function(graph);
 	system("leaks lem-in");
 	return (0);
 }

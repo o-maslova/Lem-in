@@ -1,16 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   algorithm.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/01/24 17:58:18 by omaslova          #+#    #+#             */
+/*   Updated: 2019/01/24 17:58:21 by omaslova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
-
-void	print_arr(int *arr, int num)
-{
-	int i;
-
-	i = 0;
-	while (i < num)
-	{
-		dprintf(g_fd, "%d ", arr[i++]); 
-	}
-	dprintf(g_fd, "\n");
-}
 
 void	clear_algo(t_algo **algo)
 {
@@ -44,6 +44,7 @@ void	define_ant_and_path(t_graph *graph)
 
 	i = 1;
 	ant = graph->ant_amount;
+	graph->pathes->ant = ant;
 	tmp = graph->pathes;
 	while (ant > 1 && tmp)
 	{
@@ -73,24 +74,21 @@ void	algorithm(t_graph *graph)
 	algo = NULL;
 	path = NULL;
 	variant = NULL;
+	check_graph(graph);
 	used = (int *)ft_memalloc(sizeof(int) * ROOMS);
 	initial(&algo, ROOMS);
-	
-	dprintf(g_fd, "ant_amount = %d\n", graph->ant_amount);
-	dprintf(g_fd, "end = %d\n", graph->end_room);
-	dprintf(g_fd, "rooms = %d\n", graph->rooms);
-	
 	while ((variant = deeper(algo, graph, used)) != NULL)
-	{
 		graph->p_num += add_path(&(graph->pathes), variant);
+	if (graph->pathes != NULL)
+	{
+		sort_path(graph->pathes);
+		make_name_arr(graph);
+		define_ant_and_path(graph);
+		ant_output(graph);
+		clear_arr(graph->arr);
 	}
-	sort_path(graph->pathes);
-	dprintf(g_fd, "p_num = %d\n", graph->p_num);
-	make_name_arr(graph);
-	graph->pathes->ant = graph->ant_amount;
-	define_ant_and_path(graph);
-	print_variants(g_fd, graph->pathes);
-	ant_output(graph);
+	else
+		perror("ERROR! Not enough data!\n");
 	clear_algo(&algo);
 	free(used);
 }
