@@ -5,7 +5,6 @@ FLAGS = -Wall -Wextra -Werror
 SRC = ./main.c \
 		./draw.c \
 		./brezenhaim.c \
-		./wuline.c \
 		./initial.c \
 		../vertex_staff.c \
 		../parsing.c \
@@ -14,9 +13,9 @@ SRC = ./main.c \
 		../algorithm.c \
 		../clear_staff.c \
 		../path_staff.c \
-		../link_staff.c \
-		../print_staff.c \
-		../search.c
+		../find_pathes.c \
+		../ant_output.c
+
 BINS = $(SRC:.c=.o)
 HEADER = ./view.h ../lem_in.h
 LIB_DIR = ../libft/

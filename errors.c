@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-void	error_handling(int num, char **arr, t_graph **graph)
+void	error(int num)
 {
 	if (num == -1)
 		perror("ERROR!\n");
@@ -26,17 +26,32 @@ void	error_handling(int num, char **arr, t_graph **graph)
 		perror("ERROR! Wrong coordinates format!\n");
 	if (num == 4)
 		perror("ERROR! Wrong data!\n");
+}
+
+void	error_handling(int num, char **arr, t_graph **graph)
+{
+	if (num == -1 || num == 0 || num == 1 || num == 2 || num == 3 || num == 4)
+		error(num);
 	if (num == 5)
 		perror("ERROR! Wrong link!\n");
 	if (num == 6)
 		perror("ERROR! Not enough data!\n");
 	if (num == 7)
 		ft_printf("usage: ./lem-in ant_farm_map.txt\n");
+	if (num == 8)
+		ft_printf("ERROR! Duplicate room name.\n");
+	if (num == 9)
+		ft_printf("ERROR! Duplicate room coordinates.\n");
+	if (num == 10)
+		ft_printf("ERROR! Link with not existing room.\n");
+	if (num == 11)
+		ft_printf("ERROR! Wrong room name!\n");
 	ft_arrdel(arr);
 	if (graph)
 	{
 		clear_graph(&((*graph)->graph));
 		free(*graph);
 	}
+	system("leaks lem-in");
 	exit(0);
 }

@@ -53,23 +53,59 @@ t_vert		*vertex_create(t_graph *graph, char **arr, int pos)
 	return (vrt);
 }
 
-void		add_vertex(t_vert **graph, t_vert *new)
+int			check_vertex(t_vert *tmp, t_vert *new)
 {
-	t_vert		*tmp;
+	int res;
+
+	res = 0;
+	if (ft_strcmp(tmp->name, new->name) == 0)
+		res = 8;
+	else if (tmp->x == new->x && tmp->y == new->y)
+		res = 9;
+	return (res);
+}
+
+void		add_vertex(t_graph **graph, t_vert **rooms, t_vert *new)
+{
+	int		res;
+	t_vert	*tmp;
 
 	tmp = NULL;
-	if (!(*graph) && new)
-		*graph = new;
+	if (!(*rooms) && new)
+		*rooms = new;
 	else if (new->is_start)
 	{
-		new->next = *graph;
-		*graph = new;
+		new->next = *rooms;
+		*rooms = new;
 	}
 	else
 	{
-		tmp = *graph;
+		tmp = *rooms;
 		while (tmp->next)
+		{
+			if ((res = check_vertex(tmp, new)))
+				error_handling(res, NULL, graph);
+			(*graph)->is_neg = tmp->name[0] == '-' ? 1 : (*graph)->is_neg;
 			tmp = tmp->next;
+		}
+		if ((res = check_vertex(tmp, new)))
+			error_handling(res, NULL, graph);
 		tmp->next = new;
 	}
+}
+
+void		add_node(t_graph **graph, char **arr, int pos)
+{
+	t_vert *tmp;
+
+	tmp = vertex_create(*graph, arr, pos);
+	if (tmp->name[0] == 'L' || tmp->name[0] == '#')
+	{
+		free(tmp->name);
+		free(tmp);
+		error_handling(11, arr, graph);
+	}
+	if (pos == 2)
+		(*graph)->end_room = tmp->pos;
+	add_vertex(graph, &((*graph)->graph), tmp);
 }

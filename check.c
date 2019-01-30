@@ -25,7 +25,7 @@ void	check_graph(t_graph *graph)
 			check++;
 		tmp = tmp->next;
 	}
-	if (check < 2)
+	if (check < 2 || graph->links == NULL)
 	{
 		error_handling(6, NULL, &graph);
 	}
@@ -42,19 +42,6 @@ int		check_err(char *line, t_graph **graph, int n, int pos)
 	else if ((pos == 1 || pos == 2) && n == 0)
 		error_handling(pos, NULL, graph);
 	return (1);
-}
-
-int		check_link(char *line)
-{
-	int w_amount;
-
-	w_amount = 0;
-	w_amount = ft_countchar(line, '-');
-	if (w_amount != 1)
-		return (-1);
-	if (ft_strchr(line, ' '))
-		return (-1);
-	return (0);
 }
 
 void	check_start_end(t_graph **graph, int n, int fd, char **line)

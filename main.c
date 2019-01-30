@@ -20,33 +20,6 @@ void	clearing_function(t_graph *graph)
 	free(graph);
 }
 
-void	pars_data(int fd, t_graph **graph)
-{
-	int			i;
-	char		*line;
-
-	i = 0;
-	get_next_line(fd, &line);
-	while (*line == '#')
-	{
-		free(line);
-		get_next_line(fd, &line);
-	}
-	if ((i = ft_isnumstr(line)) <= 0)
-		error_handling(i, NULL, graph);
-	(*graph)->ant_amount = ft_atoi(line);
-	ft_printf("%d\n", (*graph)->ant_amount);
-	free(line);
-	while (get_next_line(fd, &line) > 0)
-	{
-		if ((i = parsing(fd, graph, &line)) > 0)
-			ft_printf("%s\n", line);
-		free(line);
-		if (i < 0)
-			break ;
-	}
-}
-
 int		main(int argc, char **argv)
 {
 	int			fd;
@@ -61,6 +34,7 @@ int		main(int argc, char **argv)
 	pars_data(fd, &graph);
 	algorithm(graph);
 	clearing_function(graph);
-	system("leaks lem-in");
+	// ft_printf("\n");
+	// system("leaks lem-in");
 	return (0);
 }

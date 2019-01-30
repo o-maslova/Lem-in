@@ -64,6 +64,21 @@ void	define_ant_and_path(t_graph *graph)
 	graph->p_num = i;
 }
 
+void	start_to_end(t_graph *graph, t_algo *algo, int *used)
+{
+	t_path	*variant;
+
+	graph->links[0][END] = 0;
+	algo->index = 1;
+	algo->distances[END] = 1;
+	algo->prev[END] = 0;
+	algo->visited[END] = 1;
+	variant = create_path(graph, algo, used);
+	graph->p_num += add_path(&(graph->pathes), variant);
+	algo->visited[END] = 0;
+	algo->distances[END] = 0;
+}
+
 void	algorithm(t_graph *graph)
 {
 	t_path	*variant;
@@ -77,6 +92,8 @@ void	algorithm(t_graph *graph)
 	check_graph(graph);
 	used = (int *)ft_memalloc(sizeof(int) * ROOMS);
 	initial(&algo, ROOMS);
+	if (graph->links[0][END] == 1)
+		start_to_end(graph, algo, used);
 	while ((variant = deeper(algo, graph, used)) != NULL)
 		graph->p_num += add_path(&(graph->pathes), variant);
 	if (graph->pathes != NULL)

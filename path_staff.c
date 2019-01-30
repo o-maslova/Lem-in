@@ -58,7 +58,7 @@ t_path		*create_path(t_graph *graph, t_algo *algo, int *used)
 	tmp->path = (int *)ft_memalloc(sizeof(int) * tmp->p_val);
 	i = tmp->p_val - 1;
 	j = END;
-	while (algo->prev[j])
+	while (i > 0)
 	{
 		tmp->path[--i] = algo->prev[j];
 		used[tmp->path[i]] = 1;

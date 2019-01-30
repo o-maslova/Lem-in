@@ -46,13 +46,16 @@ int		find_end(t_algo *algo, t_graph *graph, int i, int *used)
 	k = 1;
 	while (k < ROOMS)
 	{
-		if (graph->links[i][k] == 1 && algo->visited[k] != 1 && used[k] != 1)
+		if (graph->links[i][k] == 1 && algo->visited[k] != 1)
 		{
-			algo->queue[algo->index] = k;
-			algo->index++;
-			algo->distances[k] = algo->distances[i] + 1;
-			algo->prev[k] = i;
-			algo->visited[k] = 1;
+			if (used[k] != 1)
+			{
+				algo->queue[algo->index] = k;
+				algo->index++;
+				algo->distances[k] = algo->distances[i] + 1;
+				algo->prev[k] = i;
+				algo->visited[k] = 1;
+			}
 			if (k == END)
 				return (1);
 		}

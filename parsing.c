@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-int		search_by_name(t_vert *graph, char *name)
+int		search_by_name(t_vert *graph, char *name, int amount)
 {
 	int		res;
 	t_vert	*tmp;
@@ -20,7 +20,10 @@ int		search_by_name(t_vert *graph, char *name)
 	tmp = graph;
 	while (tmp)
 	{
-		res = ft_strcmp(tmp->name, name);
+		if (amount > 0)
+			res = ft_strncmp(tmp->name, name, amount);
+		else
+			res = ft_strcmp(tmp->name, name);
 		if (res == 0)
 			return (tmp->pos);
 		tmp = tmp->next;
@@ -28,38 +31,26 @@ int		search_by_name(t_vert *graph, char *name)
 	return (-1);
 }
 
-int		making_links(char *line, t_vert **graph, int **links)
+int		making_links(char *line, t_graph **graph, int **links)
 {
-	char	**arr;
+	char	*ptr;
 	int		vertex[2];
+	int		res;
+	int		i;
 
-	if (check_link(line) < 0)
-		return (-1);
-	arr = ft_strsplit(line, '-');
-	vertex[0] = search_by_name(*graph, arr[0]);
-	vertex[1] = search_by_name(*graph, arr[1]);
+	res = 1;
+	ptr = ft_strchr(line, '-');
+	i = ft_strlen(line) - ft_strlen(ptr);
+	vertex[0] = search_by_name((*graph)->graph, line, i);
+	vertex[1] = search_by_name((*graph)->graph, ptr + 1, 0);
 	if (vertex[0] >= 0 && vertex[1] >= 0 && vertex[0] != vertex[1])
 	{
 		links[vertex[0]][vertex[1]] = 1;
 		links[vertex[1]][vertex[0]] = 1;
 	}
-	ft_arrdel(arr);
-	return (1);
-}
-
-void	add_node(t_graph **graph, char **arr, int pos)
-{
-	t_vert *tmp;
-
-	tmp = vertex_create(*graph, arr, pos);
-	if (tmp->name[0] == 'L' || tmp->name[0] == '#')
-	{
-		free(tmp);
-		return ;
-	}
-	if (pos == 2)
-		(*graph)->end_room = tmp->pos;
-	add_vertex(&((*graph)->graph), tmp);
+	else
+		res = -1;
+	return (res);
 }
 
 int		list_fulling(int fd, t_graph **graph, char **line, int pos)
@@ -73,8 +64,10 @@ int		list_fulling(int fd, t_graph **graph, char **line, int pos)
 		check_start_end(graph, pos, fd, line);
 	}
 	w_amount = ft_countchar(*line, ' ');
-	if (w_amount != 2 || *(line[0]) == '#')
+	if (w_amount != 2 && *(line[0]) == '#')
 		return (0);
+	else if (w_amount != 2 && *(line[0]) != '#')
+		return (-1);
 	if ((check_err(*line, graph, w_amount, pos)) == -1)
 		return (-1);
 	arr = ft_strsplit(*line, ' ');
@@ -88,20 +81,53 @@ int		list_fulling(int fd, t_graph **graph, char **line, int pos)
 int		parsing(int fd, t_graph **graph, char **line)
 {
 	int			i;
+	int			w_amount;
 	static int	check;
 
 	i = 0;
+	w_amount = ft_countchar(*line, ' ');
 	if ((ft_strcmp(*line, "##start")) == 0)
 		i = list_fulling(fd, graph, line, 1);
 	else if ((ft_strcmp(*line, "##end")) == 0)
 		i = list_fulling(fd, graph, line, 2);
-	else if (!ft_strchr(*line, '#') && ft_strchr(*line, '-'))
+	else if (!ft_strchr(*line, '#') && ft_strchr(*line, '-') && w_amount == 0)
 	{
 		if (check == 0)
 			memory_allocate(graph, &check);
-		i = making_links(*line, &((*graph)->graph), (*graph)->links);
+		i = making_links(*line, graph, (*graph)->links);
 	}
-	else
+	else if (check == 0)
 		i = list_fulling(fd, graph, line, 0);
+	else if (*line[0] != '#')
+		i = -1;
 	return (i);
+}
+
+void	pars_data(int fd, t_graph **graph)
+{
+	int			i;
+	char		*line;
+
+	i = 0;
+	get_next_line(fd, &line);
+	if (!line)
+		return ;
+	while (*line == '#')
+	{
+		free(line);
+		get_next_line(fd, &line);
+	}
+	if ((i = ft_isnumstr(line)) <= 0)
+		error_handling(i, NULL, graph);
+	(*graph)->ant_amount = ft_atoi(line);
+	ft_printf("%d\n", (*graph)->ant_amount);
+	free(line);
+	while (get_next_line(fd, &line) > 0)
+	{
+		i = parsing(fd, graph, &line);
+		ft_printf("%s\n", line);
+		free(line);
+		if (i < 0)
+			break ;
+	}
 }
