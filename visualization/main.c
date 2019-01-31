@@ -12,108 +12,6 @@
 
 #include "view.h"
 
-// void		drawSquareLineLeft(t_win *win, t_dot first, t_dot second)
-// {
-// 	t_dot	*tmp;
-// 	t_dot	*tmp_2;
-
-	
-// 	tmp = (t_dot *)ft_memalloc(sizeof(t_dot));
-// 	tmp_2 = (t_dot *)ft_memalloc(sizeof(t_dot));
-// 	dprintf(my_fd, "1 Y = %d, 2 Y = %d\n", first.y, second.y);
-// 	if (first.x < second.x)
-// 	{
-// 		brznh_algo(win, second, first);
-// 		// dprintf(my_fd, "\nFIRST CASE");
-// 		// tmp->x = first.x;
-// 		// tmp->y = second.y;
-// 		// dprintf(my_fd, "\ntmp: (%d, %d)\n", tmp->x, tmp->y);
-// 		// brznh_algo(win, *tmp, first);
-// 		// // drawWuLine(win, *tmp, first);
-// 		// tmp_2->x = second.x;
-// 		// tmp_2->y = tmp->y;
-// 		// dprintf(my_fd, "tmp_2: (%d, %d)\n", tmp_2->x, tmp_2->y);
-// 		// brznh_algo(win, *tmp, *tmp_2);
-
-// 		// tmp->y = second.y;
-// 		// tmp->x = second.x;
-// 		// dprintf(my_fd, "tmp_3: (%d, %d)\n\n", tmp->x, tmp->y);
-// 		// brznh_algo(win, *tmp_2, *tmp);
-// 	}
-// 	else if (first.x == second.x)
-// 		brznh_algo(win, first, second);
-// 	else
-// 	{
-// 		// dprintf(my_fd, "\nSECOND CASE");
-// 		// tmp->x = second.x + (CELL_SIZE * 2);
-// 		// tmp->y = first.y;
-// 		// dprintf(my_fd, "\ntmp: (%d, %d)\n", tmp->x, tmp->y);
-// 		// brznh_algo(win, *tmp, first);
-// 		// // drawWuLine(win, *tmp, first);
-// 		// tmp_2->x = tmp->x;
-// 		// tmp_2->y = second.y;
-// 		// dprintf(my_fd, "tmp_2: (%d, %d)\n", tmp_2->x, tmp_2->y);
-// 		// brznh_algo(win, *tmp, *tmp_2);
-		
-// 		brznh_algo(win, first, second);
-
-// 		// tmp->y = second.y;
-// 		// tmp->x = second.x;
-// 		// dprintf(my_fd, "tmp_3: (%d, %d)\n\n", tmp->x, tmp->y);
-// 		// brznh_algo(win, *tmp_2, *tmp);
-// 	}
-// }
-
-// void		drawSquareLineRight(t_win *win, t_dot first, t_dot second)
-// {
-// 	t_dot	*tmp;
-// 	t_dot	*tmp_2;
-
-	
-// 	tmp = (t_dot *)ft_memalloc(sizeof(t_dot));
-// 	tmp_2 = (t_dot *)ft_memalloc(sizeof(t_dot));
-// 	dprintf(my_fd, "1 Y = %d, 2 Y = %d\n", first.y, second.y);
-// 	if (first.x == second.x)
-// 		brznh_algo(win, first, second);
-// 	else if (first.x < second.x)
-// 	{
-// 		// brznh_algo(win, second, first);
-// 		dprintf(my_fd, "\nFIRST CASE");
-// 		tmp->x = first.x + win->right->x;
-// 		tmp->y = first.y;
-// 		dprintf(my_fd, "\ntmp: (%d, %d)\n", tmp->x, tmp->y);
-// 		brznh_algo(win, *tmp, first);
-// 		// drawWuLine(win, *tmp, first);
-// 		tmp_2->x = tmp->x;
-// 		tmp_2->y = second.y;
-// 		dprintf(my_fd, "tmp_2: (%d, %d)\n", tmp_2->x, tmp_2->y);
-// 		brznh_algo(win, *tmp, *tmp_2);
-// 		tmp->y = second.y;
-// 		tmp->x = second.x;
-// 		dprintf(my_fd, "tmp_3: (%d, %d)\n\n", tmp->x, tmp->y);
-// 		brznh_algo(win, *tmp_2, *tmp);
-// 	}
-// 	else
-// 	{
-// 		// brznh_algo(win, second, first);
-// 		dprintf(my_fd, "\nSECOND CASE");
-// 		tmp->y = first.y;
-// 		tmp->x = win->right->x + (CELL_SIZE * 2);
-// 		dprintf(my_fd, "\ntmp: (%d, %d)\n", tmp->x, tmp->y);
-// 		brznh_algo(win, first, *tmp);
-// 		// drawWuLine(win, *tmp, first);
-// 		tmp_2->x = tmp->x;
-// 		tmp_2->y = second.y - (CELL_SIZE * 2);
-// 		dprintf(my_fd, "tmp_2: (%d, %d)\n", tmp_2->x, tmp_2->y);
-// 		brznh_algo(win, *tmp, *tmp_2);
-// 		tmp->x = second.x;
-// 		tmp->y = second.y - (CELL_SIZE * 2);
-// 		dprintf(my_fd, "tmp_3: (%d, %d)\n", tmp->x, tmp->y);
-// 		brznh_algo(win, *tmp, *tmp_2);
-// 		brznh_algo(win, *tmp, second);
-// 	}
-// }
-
 int			exit_x(void *par)
 {
 	par = NULL;
@@ -121,87 +19,79 @@ int			exit_x(void *par)
 	return (0);
 }
 
-// t_ant		*search_ant(t_ant *ants, int num)
-// {
-// 	if (ants[num - 1].num != 0)
-// 		return (&ants[num - 1]);
-// 	return (NULL);
-// }
+int		define_color(int ant)
+{
+	int			amount;
+	int			color;
+	static int	tmp;
+	static int	step;
 
-void		define_ant(t_win *win, char *line, int *color, int i)
+	amount = RGB;
+	step = 8;
+	while (ant >= amount)
+	{
+		amount *= RGB;
+		step--;
+	}
+	if (tmp == 0)
+		tmp = 0xFF000000 >> step;
+	color = tmp;
+	tmp = tmp >> step;
+	dprintf(my_fd, "win->color %d, color step = %d\n", tmp, color);
+	return (color);
+}
+
+void		define_ant(t_win *win, char *line)
 {
 	int		pos;
 	int		num;
 	char	*ptr;
 
 	ptr = ft_strchr(line, '-');
-	// dprintf(my_fd, "line + 1 = %s\n", line + 1);
 	num = ft_atoi(line + 1);
 	ptr += 1;
 	pos = search_by_name(win->graph->graph, ptr, 0);
-	// dprintf(my_fd, "ptr = %s, num = %d, pos = %d\n", ptr, num, pos);
-	// dprintf(my_fd, "win->ants[num - 1].num = %d\n", win->ants[num - 1].num);
-	if (win->ants[num - 1].num == 0 && win->ants[num - 1].prev_room == 0)
+	if (win->ants[num - 1].num == 0)
 	{
 		win->ants[num - 1].num = num;
-		// dprintf(my_fd, "win->ants[num - 1].num = %d\n", win->ants[num - 1].num);
-		win->ants[num - 1].color = *color;
+		dprintf(my_fd, "win->ants[num - 1].num = %d\n", win->ants[num - 1].num);
+		win->ants[num - 1].color = define_color(num - 1);
 		win->ants[num - 1].prev_room = 0;
-		*color += win->color_step;
+		win->ants[num - 1].next_room = pos;
 	}
-	// else
-	// {
-	// 	win->ants[num - 1].prev_room = pos;
-	// }
-	win->rooms[i][1] = pos;
-}
-
-void		clear_rooms(t_win *win, int lim)
-{
-	int i;
-
-	i = 0;
-	while (i < lim)
+	else
 	{
-		free(win->rooms[i]);
-		i++;
+		win->ants[num - 1].prev_room = win->ants[num - 1].next_room;
+		win->ants[num - 1].next_room = pos;
 	}
-	free(win->rooms);
 }
 
 int			run(t_win *win)
 {
 	int		i;
-	int		color;
 	char	**arr;
 	char	*line;
 
-	win->ants = (t_ant *)ft_memalloc(sizeof(t_ant) * win->graph->ant_amount);
-	color = 0x000000;
-	dprintf(my_fd, "color_step = %d\n", win->color_step);
 	while (get_next_line(0, &line) > 0)
 	{
 		dprintf(my_fd, "line = %s\n", line);
 		if (ft_strchr(line, 'L'))
 		{
 			i = 0;
-			win->rooms = (int **)ft_memalloc(sizeof(int *) * (ft_countchar(line, ' ') + 1));
+			win->flag = 0;
 			arr = ft_strsplit(line, ' ');
 			while (arr[i] != NULL)
 			{
-				win->rooms[i] = (int *)ft_memalloc(sizeof(int) * 2);
-				define_ant(win, arr[i], &color, i);
-				win->rooms[i][0] = color;
+				define_ant(win, arr[i]);
+				// dprintf(my_fd, "win->ants[0].num %d\n", win->ants[0].num)
 				free(arr[i]);
 				i++;
 			}
-			win->rooms[i] = (int *)ft_memalloc(sizeof(int) * 2);
-			win->rooms[i][0] = -1;
 			free(arr);
-			mlx_clear_window(win->mlx_ptr, win->win_ptr);
+			// mlx_clear_window(win->mlx_ptr, win->win_ptr);
+			ft_bzero(win->img, WIDTH * HEIGTH * 4);
 			matrix_to_default(win);
 			draw_anthill(win);
-			clear_rooms(win, i + 1);
 			usleep(DELAY);
 			break ;
 		}
@@ -236,7 +126,9 @@ static int	key_hook(int keycode, t_win *win)
 	}
 	else
 	{
-		mlx_clear_window(win->mlx_ptr, win->win_ptr);
+		ft_bzero(win->img, WIDTH * HEIGTH * 4);
+		// mlx_destroy_image(win->mlx_ptr, win->img_ptr);
+		// mlx_clear_window(win->mlx_ptr, win->win_ptr);
 		matrix_to_default(win);
 		draw_anthill(win);
 	}

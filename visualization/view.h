@@ -17,6 +17,9 @@
 # include <mlx.h>
 # include <math.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <time.h>
+# include <pthread.h>
 # include "../lem_in.h"
 
 # define WIDTH 2000
@@ -28,20 +31,12 @@
 # define COLOR 0xFFFFFF
 # define COLOR_STEP win->color_step
 # define DELAY win->delay
+# define RGB 3
 // # define SCALE 
 # define POS(x) (x >= 0 ? 1 : -1)
 # define MAX(x, y) ((x) > (y)) ? (x) : (y)
 
 int					my_fd;
-
-typedef struct		s_fu
-{
-	int				x;
-	int				y;
-	int				color;
-	void			*win_ptr;
-	void			*mlx_ptr;
-}					t_fu;
 
 typedef struct		s_dot
 {
@@ -49,11 +44,21 @@ typedef struct		s_dot
 	int				y;
 }					t_dot;
 
+typedef struct		s_col
+{
+	int				r;
+	int				g;
+	int				b;
+	int				color;
+}					t_col;
+
+
 typedef struct		s_ant
 {
 	int				color;
 	int				num;
 	int				prev_room;
+	int				next_room;
 	char			*name;
 }					t_ant;
 
@@ -72,15 +77,18 @@ typedef struct		s_win
 	int				flag;
 	int				width;
 	int				heigth;
-	int				min_up;
-	int				min_down;
-	int				min_left;
-	int				min_right;
-	int				color_step;
+	// int				min_up;
+	// int				min_down;
+	// int				min_left;
+	// int				min_right;
+	int				color;
 	int				delay;
 	t_graph			*graph;
 	t_brzhm			*var;
 	t_ant			*ants;
+	// t_col			*def_col;
+	int				cel_start;
+	int				cel_end;
 	int				**rooms;
 	int				cell;
 	int				move_side;
@@ -98,12 +106,15 @@ void				init(t_win **win);
 void				matrix_to_default(t_win *win);
 void				pixel_put_img(t_win *win, int x, int y, int colour);
 void				brznh_algo(t_win *win, t_dot start, t_dot end, int color);
+void				bigger_x(t_win *win, t_dot first, t_dot second, int color);
+void				smaller_x(t_win *win, t_dot first, t_dot second, int color);
+void				change_value(t_win *win, t_dot *first, t_dot *second);
 
 void				BresenhamCircle(t_win *win, int x0, int y0, int radius);
 
 void				drawWuLine(t_win *win, t_dot start, t_dot end);
 void				draw_anthill(t_win *win);
 void				draw_links(t_win *win);
-t_dot				search_by_pos(t_vert *graph, int pos);
+t_dot				search_by_pos(int **rooms, int pos);
 
 #endif

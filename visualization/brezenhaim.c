@@ -29,33 +29,29 @@ void	BresenhamCircle(t_win *win, int x0, int y0, int radius)
 	}
 }
 
-int		lalala(t_fu *test)
-{
-	mlx_pixel_put(test->mlx_ptr, test->win_ptr, test->x, test->y, test->color);
-	return (1);
-}
-
 void	draw_vert_line(t_win *win, int dot_x, int dot_y, int color)
 {
 	int x;
 	int y;
+	int i;
+	int tmp;
 	int mul;
-	t_fu test;
 
 	x = dot_x;
 	y = dot_y;
-	test.color = color;
-	test.mlx_ptr = win->mlx_ptr;
-	test.win_ptr = win->win_ptr;
-	mul = win->flag == 1 ? 10 : 0;
+	// color = color != COLOR ? 0xFF0000 : COLOR;
+	mul = color != COLOR ? 100 : 0;
+	dprintf(my_fd, "mul = %d\n", mul);
 	win->var->err = win->var->len_y * -1;
-	win->var->length += 1;
-	while (win->var->length--)
+	tmp = win->var->length + 1;
+	// win->var->length += 1;
+	while (tmp--)
 	{
-		test.x = x;
-		test.y = y;
+		i = 0;
 		// usleep(mul);
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, color);
+		pixel_put_img(win, x, y, COLOR);
+		// if (mul)
+		// 	mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, 0x000000);
 		y += win->var->d_y;
 		win->var->err += 2 * win->var->len_x;
 		if (win->var->err > 0)
@@ -63,8 +59,12 @@ void	draw_vert_line(t_win *win, int dot_x, int dot_y, int color)
 			win->var->err -= 2 * win->var->len_y;
 			x += win->var->d_x;
 		}
-		if (win->flag)
-			mlx_loop_hook(win->mlx_ptr, lalala, &test);
+		if (mul)
+		{
+			pixel_put_img(win, x, y, 0xFF0000);
+			mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+			// usleep(mul);
+		}
 	}
 }
 
@@ -72,23 +72,23 @@ void	draw_horiz_line(t_win *win, int dot_x, int dot_y, int color)
 {
 	int x;
 	int y;
+	int i;
 	int mul;
-	t_fu test;
 
 	x = dot_x;
 	y = dot_y;
-	mul = win->flag == 1 ? 10 : 0;
+	// color = color != COLOR ? 0xFF0000 : COLOR;
+	mul = color != COLOR ? 100 : 0;
+	dprintf(my_fd, "mul = %d\n", mul);
 	win->var->err = win->var->len_x * -1;
 	win->var->length += 1;
-	test.color = color;
-	test.mlx_ptr = win->mlx_ptr;
-	test.win_ptr = win->win_ptr;
 	while (win->var->length--)
 	{
-		test.x = x;
-		test.y = y;
-		// usleep(mul);
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, color);
+		i = 0;
+		// mlx_pixel_put(win->mlx_ptr, win->win_ptr, 701, 701, COLOR);
+		pixel_put_img(win, x, y, COLOR);
+		// if (mul)
+		// 	mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, 0x000000);
 		x += win->var->d_x;
 		win->var->err += 2 * win->var->len_y;
 		if (win->var->err > 0)
@@ -96,8 +96,12 @@ void	draw_horiz_line(t_win *win, int dot_x, int dot_y, int color)
 			win->var->err -= 2 * win->var->len_x;
 			y += win->var->d_y;
 		}
-		if (win->flag)
-			mlx_loop_hook(win->mlx_ptr, lalala, &test);
+		if (mul)
+		{
+			pixel_put_img(win, x, y, 0xFF0000);
+			mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+			// usleep(mul);
+		}
 	}
 }
 
@@ -105,6 +109,7 @@ void	brznh_algo(t_win *win, t_dot start, t_dot end, int color)
 {
 	int		x;
 	int		y;
+	int		mul;
 
 	x = start.x;
 	y = start.y;
@@ -113,10 +118,21 @@ void	brznh_algo(t_win *win, t_dot start, t_dot end, int color)
 	win->var->length = MAX(win->var->len_x, win->var->len_y);
 	win->var->d_x = POS(end.x - start.x);
 	win->var->d_y = POS(end.y - start.y);
+	mul = color != COLOR ? 100 : 0;
 	if (win->var->length == 0)
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, color);
+	{
+		pixel_put_img(win, x, y, color);
+		if (mul)
+		{
+			dprintf(my_fd, "here\n");
+			pixel_put_img(win, x + 1, y + 1, 0xFF0000);
+			// usleep(mul);
+			mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+		}
+	}
 	if (win->var->len_y <= win->var->len_x)
 		draw_horiz_line(win, start.x, start.y, color);
 	else
 		draw_vert_line(win, start.x, start.y, color);
+	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
 }

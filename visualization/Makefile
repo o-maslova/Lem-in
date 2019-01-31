@@ -6,6 +6,8 @@ SRC = ./main.c \
 		./draw.c \
 		./brezenhaim.c \
 		./initial.c \
+		./smaller_x.c \
+		./bigger_x.c \
 		../vertex_staff.c \
 		../parsing.c \
 		../check.c \

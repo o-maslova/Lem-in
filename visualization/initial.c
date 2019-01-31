@@ -28,56 +28,62 @@ void		print_matrix(int fd, t_graph graph)
 	}
 }
 
-void	define_steps(t_win *win)
+void	define_delay(t_win *win)
 {
 	int nb;
-	int tmp;
 	int tens;
-	int res;
 
-	res = 1;
-	tens = 10000000;
-	tmp = ft_digitnum(win->graph->ant_amount);
-	nb = tmp;
-	while (tmp-- > 0)
-		res = res * 10;
-	tens -= res;
-	win->color_step = tens;
-	dprintf(my_fd, "color step = %d\n", win->color_step);
 	tens = 100000;
+	nb = ft_digitnum(win->graph->ant_amount);
 	win->delay = 600000 - (tens * nb);
 	dprintf(my_fd, "delay = %d\n", win->delay);
 }
 
-void	init(t_win **win)
-{
-	(*win)->graph->graph = NULL;
-	(*win)->graph->links = NULL;
-	pars_data(0, &((*win)->graph));
-	(*win)->var = (t_brzhm *)ft_memalloc(sizeof(t_brzhm));
-	define_steps(*win);
-	// (*win)->size_line = WIDTH;
-	// (*win)->bpp = 32;
-	// (*win)->endian = 0;
-	// (*win)->img_ptr = mlx_new_image((*win)->mlx_ptr, WIDTH, HEIGTH);
-	// (*win)->img =
-	// mlx_get_data_addr((*win)->img_ptr, &(*win)->bpp, &(*win)->size_line, &(*win)->endian);
-	(*win)->cell = 10;
-	(*win)->move_side = 0;
-	(*win)->move_up = 0;
-	(*win)->min_up = ((*win)->graph->graph->y * (*win)->cell) + ((*win)->cell / 2) + (*win)->move_up;
-	(*win)->min_down = ((*win)->graph->graph->y * (*win)->cell) + ((*win)->cell / 2) + (*win)->move_up;
-	(*win)->min_left = ((*win)->graph->graph->x * (*win)->cell) + ((*win)->cell / 2) + (*win)->move_side;
-	(*win)->min_right = ((*win)->graph->graph->x * (*win)->cell) + ((*win)->cell / 2) + (*win)->move_side;
+void	make_rooms_arr(t_win *win)
+{	
+	int		i;
+	int		j;
+	t_vert	*tmp;
+
+	i = 0;
+	j = 0;
+	tmp = win->graph->graph;
+	win->rooms = (int **)ft_memalloc(sizeof(int *) * win->graph->rooms);
+	while (tmp)
+	{
+		win->rooms[i] = (int *)ft_memalloc(sizeof(int) * 2);
+		win->rooms[i][0] = tmp->x;
+		win->rooms[i][1] = tmp->y;
+		tmp = tmp->next;
+		i++;
+	}
 }
 
-void		pixel_put_img(t_win *win, int x, int y, int colour)
+void	init(t_win **w)
 {
-	if (x < HEIGTH || y < WIDTH)
-	{
-		colour = mlx_get_color_value(win->mlx_ptr, colour);
-		ft_memcpy(win->img + 4 * WIDTH * y + x * 4, &colour, sizeof(int));
-	}
+	(*w)->graph->graph = NULL;
+	(*w)->graph->links = NULL;
+	pars_data(0, &((*w)->graph));
+	(*w)->var = (t_brzhm *)ft_memalloc(sizeof(t_brzhm));
+	(*w)->color = 0xFF0000;
+	(*w)->ants = (t_ant *)ft_memalloc(sizeof(t_ant) * ((*w)->graph->ant_amount + 1));
+	make_rooms_arr(*w);
+	define_delay(*w);
+	(*w)->size_line = WIDTH;
+	(*w)->bpp = 32;
+	(*w)->endian = 0;
+	(*w)->img_ptr = mlx_new_image((*w)->mlx_ptr, WIDTH, HEIGTH);
+	(*w)->img =
+	mlx_get_data_addr((*w)->img_ptr, &(*w)->bpp, &(*w)->size_line, &(*w)->endian);
+	(*w)->cell = 10;
+	(*w)->move_side = 0;
+	(*w)->move_up = 0;
+}
+
+void		pixel_put_img(t_win *win, int x, int y, int color)
+{
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGTH)
+		*(int*)(win->img + ((x + y * WIDTH) * 4)) = color;
 }
 
 void		matrix_to_default(t_win *win)
@@ -99,27 +105,11 @@ void		matrix_to_default(t_win *win)
 	}
 }
 
-t_dot		search_by_pos(t_vert *graph, int pos)
+t_dot		search_by_pos(int **rooms, int pos)
 {
-	t_vert	*tmp;
-	t_dot	*dot;
+	t_dot	dot;
 
-	dot = NULL;
-	tmp = NULL;
-	if (graph)
-	{
-		tmp = graph;
-		while (tmp)
-		{
-			if (tmp->pos == pos)
-			{
-				dot = (t_dot *)ft_memalloc(sizeof(t_dot));
-				dot->x = tmp->x;
-				dot->y = tmp->y;
-				return (*dot);
-			}
-			tmp = tmp->next;
-		}
-	}
-	return (*dot);
+	dot.x = rooms[pos][0];
+	dot.y = rooms[pos][1];
+	return (dot);
 }
