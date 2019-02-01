@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_degree_of_three.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omaslova <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: omaslova <omaslova@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/30 11:04:26 by omaslova          #+#    #+#             */
-/*   Updated: 2018/03/30 11:08:51 by omaslova         ###   ########.fr       */
+/*   Created: 2019/02/01 15:14:59 by omaslova          #+#    #+#             */
+/*   Updated: 2019/02/01 15:15:22 by omaslova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int		ft_degree_of_three(int num)
 {
-	size_t i;
+	int i;
+	int nb;
 
 	i = 0;
-	if (s)
+	nb = num;
+	while (nb / 3 >= 3)
 	{
-		while (s[i] != '\0')
-			i++;
+		nb = nb / 3;
+		i++;
 	}
 	return (i);
 }

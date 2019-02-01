@@ -83,6 +83,7 @@ SRC = ./ft_memset.c \
 		./ft_isnumstr.c \
 		./ft_emptyline.c \
 		./ft_countchar.c \
+		./ft_degree_of_three.c \
 		./get_next_line.c \
 		./ft_arrdel.c
 

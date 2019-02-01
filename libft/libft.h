@@ -104,6 +104,7 @@ int					ft_digitnum(int num);
 int					ft_isnumstr(char *str);
 int					ft_emptyline(char *str);
 int					ft_countchar(char *str, char c);
+int					ft_degree_of_three(int num);
 int					get_next_line(const int fd, char **line);
 
 #endif

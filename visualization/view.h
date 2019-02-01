@@ -32,6 +32,11 @@
 # define COLOR_STEP win->color_step
 # define DELAY win->delay
 # define RGB 3
+# define R_X win->angle.ang_x
+# define R_Y win->angle.ang_y
+# define R_Z win->angle.ang_z
+# define CEN_X win->edge.cen_x
+# define CEN_Y win->edge.cen_y
 // # define SCALE 
 # define POS(x) (x >= 0 ? 1 : -1)
 # define MAX(x, y) ((x) > (y)) ? (x) : (y)
@@ -46,11 +51,27 @@ typedef struct		s_dot
 
 typedef struct		s_col
 {
-	int				r;
-	int				g;
-	int				b;
+	int				shift;
+	int				degree;
+	int				tmp;
 	int				color;
 }					t_col;
+
+typedef struct		s_ext
+{
+	int				min_x;
+	int				min_y;
+	int				max_x;
+	int				max_y;
+}					t_ext;
+
+
+typedef struct		s_angle
+{
+	double			ang_x;
+	double			ang_y;
+	double			ang_z;
+}					t_angle;
 
 
 typedef struct		s_ant
@@ -59,7 +80,6 @@ typedef struct		s_ant
 	int				num;
 	int				prev_room;
 	int				next_room;
-	char			*name;
 }					t_ant;
 
 typedef struct		s_brzhm
@@ -77,19 +97,19 @@ typedef struct		s_win
 	int				flag;
 	int				width;
 	int				heigth;
-	// int				min_up;
-	// int				min_down;
-	// int				min_left;
-	// int				min_right;
-	int				color;
 	int				delay;
+	t_ext			edge;
+	t_col			color;
+	t_angle			angle;
 	t_graph			*graph;
 	t_brzhm			*var;
 	t_ant			*ants;
-	// t_col			*def_col;
-	int				cel_start;
-	int				cel_end;
+	int				cen_x;
+	int				cen_y;
+	char			**strings;
+	char			*buff;
 	int				**rooms;
+	int				**mod_rooms;
 	int				cell;
 	int				move_side;
 	int				move_up;
@@ -103,18 +123,23 @@ typedef struct		s_win
 }					t_win;
 
 void				init(t_win **win);
-void				matrix_to_default(t_win *win);
+void				matrix_to_default(int **links, int rooms);
+void				to_default(t_win *win);
 void				pixel_put_img(t_win *win, int x, int y, int colour);
-void				brznh_algo(t_win *win, t_dot start, t_dot end, int color);
-void				bigger_x(t_win *win, t_dot first, t_dot second, int color);
-void				smaller_x(t_win *win, t_dot first, t_dot second, int color);
-void				change_value(t_win *win, t_dot *first, t_dot *second);
+void				brznh_algo(t_win *win, int *start, int *end, int color);
+void				bigger_x(t_win *win, int *first, int *second, int color);
+void				smaller_x(t_win *win, int *first, int *second, int color);
+void				change_value(t_win *win, int *room, int i);
+
+void				go(t_win *win);
+void				set_ants_value(t_ant *ants, int lim);
+
 
 void				BresenhamCircle(t_win *win, int x0, int y0, int radius);
 
 void				drawWuLine(t_win *win, t_dot start, t_dot end);
 void				draw_anthill(t_win *win);
 void				draw_links(t_win *win);
-t_dot				search_by_pos(int **rooms, int pos);
+int					*search_by_pos(int **rooms, int pos);
 
 #endif
