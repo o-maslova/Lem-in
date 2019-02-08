@@ -69,11 +69,16 @@ t_path		*create_path(t_graph *graph, t_algo *algo, int *used)
 	return (tmp);
 }
 
-int			add_path(t_path **variants, t_path *path)
+int			add_path(t_graph *graph, t_path **variants, t_path *path)
 {
+	static int	i;
 	t_path		*tmp;
 
 	tmp = NULL;
+	if (i >= 5)
+		i = 0;
+	if (graph->colors)
+		path->path_color = graph->colors[i++];
 	if (!(*variants))
 		*variants = path;
 	else

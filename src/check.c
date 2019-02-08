@@ -26,9 +26,10 @@ void	check_graph(t_graph *graph)
 		tmp = tmp->next;
 	}
 	if (check < 2 || graph->links == NULL)
-	{
 		error_handling(6, NULL, &graph);
-	}
+	write(1, RED, 7);
+	ft_printf("IF YOU WANT COLORFUL OUTPUT YOUR FLAG SHOULD BE -c\n");
+	write(1, YELLOW, 7);
 }
 
 int		check_err(char *line, t_graph **graph, int n, int pos)
@@ -44,10 +45,10 @@ int		check_err(char *line, t_graph **graph, int n, int pos)
 	return (1);
 }
 
-void	check_start_end(t_graph **graph, int n, int fd, char **line)
+void	check_start_end(t_graph **graph, int n, char **line)
 {
-	static int start;
-	static int end;
+	static int	start;
+	static int	end;
 
 	start = n == 1 ? start + 1 : start;
 	end = n == 2 ? end + 1 : end;
@@ -57,9 +58,10 @@ void	check_start_end(t_graph **graph, int n, int fd, char **line)
 		error_handling(2, NULL, graph);
 	ft_printf("%s\n", *line);
 	free(*line);
-	get_next_line(fd, line);
-	if (n == 1 && (*line[0] == '#' || *line[0] == 'L'))
-		error_handling(1, NULL, graph);
-	if (n == 2 && (*line[0] == '#' || *line[0] == 'L'))
-		error_handling(2, NULL, graph);
+	get_next_line(0, line);
+	while (*line[0] == '#')
+	{
+		free(*line);
+		get_next_line(0, line);
+	}
 }

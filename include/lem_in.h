@@ -12,9 +12,14 @@
 
 #ifndef LEM_IN_H
 # define LEM_IN_H
-# include "./libft/ft_printf/ft_printf.h"
+# include "./ft_printf/ft_printf.h"
+# include <stdio.h>
 # define ROOMS graph->rooms
 # define END graph->end_room
+# define RED "\033[0;31m"
+# define YELLOW "\033[0;33m"
+# define WHITE "\033[0;37m"
+# define NC "\033[0m"
 
 typedef struct		s_link
 {
@@ -35,6 +40,7 @@ typedef struct		s_vert
 
 typedef struct		s_path
 {
+	char			*path_color;
 	int				*path;
 	int				p_val;
 	int				ant;
@@ -47,6 +53,8 @@ typedef struct		s_path
 
 typedef struct		s_graph
 {
+	int				c_flag;
+	int				str;
 	int				ant_amount;
 	int				ant_in_string;
 	int				is_neg;
@@ -55,6 +63,7 @@ typedef struct		s_graph
 	int				p_num;
 	int				**links;
 	char			**arr;
+	char			**colors;
 	t_vert			*graph;
 	t_path			*pathes;
 }					t_graph;
@@ -70,7 +79,7 @@ typedef struct		s_algo
 
 t_vert				*vertex_create(t_graph *graph, char **arr, int pos);
 void				add_vertex(t_graph **graph, t_vert **rooms, t_vert *nw);
-int					add_path(t_path **variants, t_path *path);
+int					add_path(t_graph *graph, t_path **variants, t_path *path);
 void				add_node(t_graph **graph, char **arr, int pos);
 void				sort_path(t_path *list);
 t_path				*create_path(t_graph *graph, t_algo *algo_stuff, int *used);
@@ -84,13 +93,13 @@ void				clear_path(t_path **path);
 void				clear_matrix(int **links, int amount);
 void				clear_arr(char **arr);
 void				error_handling(int num, char **arr, t_graph **graph);
-void				check_start_end(t_graph **gr, int n, int fd, char **line);
+void				check_start_end(t_graph **gr, int n, char **line);
 int					check_err(char *line, t_graph **graph, int n, int pos);
 int					check_link(char *line);
 void				check_graph(t_graph *graph);
 void				memory_allocate(t_graph **graph, int *check);
-void				pars_data(int fd, t_graph **graph);
-void				algorithm(t_graph *graph);
+void				pars_data(t_graph **graph);
+void				algorithm(t_graph *graph, t_algo **algo);
 void				ant_output(t_graph *graph);
 
 #endif

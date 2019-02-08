@@ -47,7 +47,7 @@ t_vert		*vertex_create(t_graph *graph, char **arr, int pos)
 			vrt->pos = 0;
 		else
 			vrt->pos = ++i;
-		graph->rooms = vrt->pos;
+		graph->rooms = vrt->pos > 0 ? vrt->pos : i + 1;
 		vrt->next = NULL;
 	}
 	return (vrt);

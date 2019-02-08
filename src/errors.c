@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-void	error(int num)
+void	error_1(int num)
 {
 	if (num == -1)
 		perror("ERROR!\n");
@@ -28,16 +28,12 @@ void	error(int num)
 		perror("ERROR! Wrong data!\n");
 }
 
-void	error_handling(int num, char **arr, t_graph **graph)
+void	error_2(int num)
 {
-	if (num == -1 || num == 0 || num == 1 || num == 2 || num == 3 || num == 4)
-		error(num);
 	if (num == 5)
 		perror("ERROR! Wrong link!\n");
 	if (num == 6)
 		perror("ERROR! Not enough data!\n");
-	if (num == 7)
-		ft_printf("usage: ./lem-in ant_farm_map.txt\n");
 	if (num == 8)
 		ft_printf("ERROR! Duplicate room name.\n");
 	if (num == 9)
@@ -46,12 +42,22 @@ void	error_handling(int num, char **arr, t_graph **graph)
 		ft_printf("ERROR! Link with not existing room.\n");
 	if (num == 11)
 		ft_printf("ERROR! Wrong room name!\n");
+}
+
+void	error_handling(int num, char **arr, t_graph **graph)
+{
+	write(1, RED, 7);
+	if (num == -1 || num == 0 || num == 1 || num == 2 || num == 3 || num == 4)
+		error_1(num);
+	if (num == 5 || num == 6 || num == 8 || num == 9 || num == 10 || num == 11)
+		error_2(num);
 	ft_arrdel(arr);
 	if (graph)
 	{
 		clear_graph(&((*graph)->graph));
+		ft_arrdel((*graph)->colors);
 		free(*graph);
 	}
-	system("leaks lem-in");
+	write(1, NC, 4);
 	exit(0);
 }

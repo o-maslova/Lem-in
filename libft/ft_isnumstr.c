@@ -34,9 +34,9 @@ int		ft_isnumstr(char *str)
 		if (ft_strlen(str) >= 10)
 			if (!is_overflow(str, num))
 				return (0);
-		if (num <= 0 || num > 2147483647)
+		if (num < 0 || num > 2147483647)
 			return (0);
-		if (num == 0 && str[i] == '\0')
+		if (str[i] == '\0')
 			return (0);
 		while (str[i] != '\0')
 		{

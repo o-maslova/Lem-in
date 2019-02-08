@@ -12,13 +12,13 @@
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
-# define BUFF_SIZE_PRINTF 100
+
 # include <stdarg.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <locale.h>
 # include <limits.h>
 # include "../libft.h"
+# define BUFF_SIZE_PRINTF 1000
 
 int		g_k;
 int		g_result;

@@ -12,15 +12,6 @@
 
 #include "lem_in.h"
 
-void	clear_algo(t_algo **algo)
-{
-	free((*algo)->distances);
-	free((*algo)->prev);
-	free((*algo)->visited);
-	free((*algo)->queue);
-	free(*algo);
-}
-
 void	make_name_arr(t_graph *graph)
 {
 	t_vert	*tmp;
@@ -74,38 +65,65 @@ void	start_to_end(t_graph *graph, t_algo *algo, int *used)
 	algo->prev[END] = 0;
 	algo->visited[END] = 1;
 	variant = create_path(graph, algo, used);
-	graph->p_num += add_path(&(graph->pathes), variant);
+	graph->p_num += add_path(graph, &(graph->pathes), variant);
 	algo->visited[END] = 0;
 	algo->distances[END] = 0;
 }
 
-void	algorithm(t_graph *graph)
+void	print_variants(t_graph *graph)
+{
+	int		i;
+	int		j;
+	t_path	*tmp;
+
+	tmp = graph->pathes;
+	ft_putstr("\n---------------------------------------\n");
+	ft_printf("%12POSSIBLE PATHES\n");
+	ft_putstr("---------------------------------------\n");
+	j = 0;
+	while (tmp)
+	{
+		i = -1;
+		write(1, WHITE, 7);
+		ft_printf("%d: ", ++j);
+		write(1, tmp->path_color, 7);
+		while (++i < tmp->p_val - 1)
+			ft_printf("%s, ", graph->arr[tmp->path[i]]);
+		ft_printf("%s\n", graph->arr[tmp->path[i]]);
+		write(1, WHITE, 7);
+		ft_putstr("Rooms in that path: ");
+		ft_putnbr(tmp->p_val);
+		write(1, "\n", 1);
+		write(1, NC, 4);
+		tmp = tmp->next;
+	}
+}
+
+void	algorithm(t_graph *graph, t_algo **algo)
 {
 	t_path	*variant;
-	t_link	*path;
-	t_algo	*algo;
 	int		*used;
 
-	algo = NULL;
-	path = NULL;
 	variant = NULL;
 	check_graph(graph);
 	used = (int *)ft_memalloc(sizeof(int) * ROOMS);
-	initial(&algo, ROOMS);
+	initial(algo, ROOMS);
 	if (graph->links[0][END] == 1)
-		start_to_end(graph, algo, used);
-	while ((variant = deeper(algo, graph, used)) != NULL)
-		graph->p_num += add_path(&(graph->pathes), variant);
+		start_to_end(graph, *algo, used);
+	while ((variant = deeper(*algo, graph, used)) != NULL)
+		graph->p_num += add_path(graph, &(graph->pathes), variant);
 	if (graph->pathes != NULL)
 	{
 		sort_path(graph->pathes);
 		make_name_arr(graph);
+		if (graph->c_flag)
+			print_variants(graph);
 		define_ant_and_path(graph);
 		ant_output(graph);
+		write(1, "\n", 1);
 		clear_arr(graph->arr);
 	}
 	else
 		perror("ERROR! Not enough data!\n");
-	clear_algo(&algo);
 	free(used);
 }

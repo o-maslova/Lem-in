@@ -53,7 +53,7 @@ int		making_links(char *line, t_graph **graph, int **links)
 	return (res);
 }
 
-int		list_fulling(int fd, t_graph **graph, char **line, int pos)
+int		list_fulling(t_graph **graph, char **line, int pos)
 {
 	char	**arr;
 	int		w_amount;
@@ -61,7 +61,7 @@ int		list_fulling(int fd, t_graph **graph, char **line, int pos)
 	arr = NULL;
 	if (pos == 1 || pos == 2)
 	{
-		check_start_end(graph, pos, fd, line);
+		check_start_end(graph, pos, line);
 	}
 	w_amount = ft_countchar(*line, ' ');
 	if (w_amount != 2 && *(line[0]) == '#')
@@ -78,7 +78,7 @@ int		list_fulling(int fd, t_graph **graph, char **line, int pos)
 	return (1);
 }
 
-int		parsing(int fd, t_graph **graph, char **line)
+int		parsing(t_graph **graph, char **line)
 {
 	int			i;
 	int			w_amount;
@@ -87,9 +87,9 @@ int		parsing(int fd, t_graph **graph, char **line)
 	i = 0;
 	w_amount = ft_countchar(*line, ' ');
 	if ((ft_strcmp(*line, "##start")) == 0)
-		i = list_fulling(fd, graph, line, 1);
+		i = list_fulling(graph, line, 1);
 	else if ((ft_strcmp(*line, "##end")) == 0)
-		i = list_fulling(fd, graph, line, 2);
+		i = list_fulling(graph, line, 2);
 	else if (!ft_strchr(*line, '#') && ft_strchr(*line, '-') && w_amount == 0)
 	{
 		if (check == 0)
@@ -97,34 +97,34 @@ int		parsing(int fd, t_graph **graph, char **line)
 		i = making_links(*line, graph, (*graph)->links);
 	}
 	else if (check == 0)
-		i = list_fulling(fd, graph, line, 0);
+		i = list_fulling(graph, line, 0);
 	else if (*line[0] != '#')
 		i = -1;
 	return (i);
 }
 
-void	pars_data(int fd, t_graph **graph)
+void	pars_data(t_graph **graph)
 {
 	int			i;
 	char		*line;
 
 	i = 0;
-	get_next_line(fd, &line);
+	get_next_line(0, &line);
 	if (!line)
 		return ;
 	while (*line == '#')
 	{
 		free(line);
-		get_next_line(fd, &line);
+		get_next_line(0, &line);
 	}
-	if ((i = ft_isnumstr(line)) <= 0)
-		error_handling(i, NULL, graph);
 	(*graph)->ant_amount = ft_atoi(line);
+	if ((i = ft_isnumstr(line)) <= 0 || (*graph)->ant_amount == 0)
+		error_handling(i, NULL, graph);
 	ft_printf("%d\n", (*graph)->ant_amount);
 	free(line);
-	while (get_next_line(fd, &line) > 0)
+	while (get_next_line(0, &line) > 0)
 	{
-		i = parsing(fd, graph, &line);
+		i = parsing(graph, &line);
 		ft_printf("%s\n", line);
 		free(line);
 		if (i < 0)

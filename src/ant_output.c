@@ -17,7 +17,21 @@ void	if_out(t_graph *graph, t_path *tmp, int *done_with, int ant)
 	tmp->path[tmp->j] = -tmp->path[tmp->j];
 	if (tmp->path[tmp->j] == graph->end_room)
 		*done_with += 1;
-	ft_printf("L%d-%s ", ant, graph->arr[tmp->path[tmp->j]]);
+	if (graph->c_flag == 1)
+	{
+		write(1, RED, 7);
+		write(1, "L", 1);
+		write(1, NC, 4);
+		ft_printf("%d-", ant);
+		write(1, tmp->path_color, 7);
+	}
+	else
+	{
+		write(1, NC, 4);
+		ft_printf("L%d-", ant);
+	}
+	ft_printf("%s ", graph->arr[tmp->path[tmp->j]]);
+	write(1, NC, 4);
 }
 
 int		out_it(t_graph *graph, int ant, int lim)
@@ -29,6 +43,7 @@ int		out_it(t_graph *graph, int ant, int lim)
 	done_with = 0;
 	that_ant = lim + 1;
 	ft_printf("\n");
+	graph->str++;
 	while (that_ant <= ant && graph->ant_in_string > 0)
 	{
 		tmp = graph->pathes;
